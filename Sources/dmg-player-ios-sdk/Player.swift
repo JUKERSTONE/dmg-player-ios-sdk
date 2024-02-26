@@ -3,9 +3,12 @@ import WebKit
 
 
 // TrackPlayerSDK.swift
-public class TrackPlayerSDK: NSObject {
+@available(iOS 13.0, *)
+public class TrackPlayerSDK: NSObject, ObservableObject {
     public var webView: WKWebView
-    private var queue: [Track] = []
+    private var index: Int = 0
+    @Published var nowPlaying: String? // The current playing ISRC
+    @Published var queue: [String] = [] // The queue of ISRCs
     
     public override init() {
         let config = WKWebViewConfiguration()
@@ -42,17 +45,28 @@ public class TrackPlayerSDK: NSObject {
                     print("Error fetching data: \(error)")
                 }
             }
-        
-        
     }
     
-    public func queueNext(track: Track) {
-        queue.insert(track, at: 0)
+    public func updateNowPlaying() {
+           guard index < queue.count else { return }
+           playNow(isrc: queue[index])
+       }
+       
+       // Add method to go to the next video
+    public func next() {
+       guard index + 1 < queue.count else { return }
+       index += 1
+       updateNowPlaying()
     }
     
-    public func queue(track: Track) {
-        queue.append(track)
-    }
+    
+//    public func queueNext(track: Track) {
+//        queue.insert(track, at: 0)
+//    }
+//
+//    public func queue(track: Track) {
+//        queue.append(track)
+//    }
     
 //    public func removeFromQueue(track: Track) {
 //        webView.load(URLRequest(url: track.url))
@@ -60,6 +74,7 @@ public class TrackPlayerSDK: NSObject {
 }
 
 // Make sure to conform to WKNavigationDelegate if needed.
+@available(iOS 13.0, *)
 extension TrackPlayerSDK: WKNavigationDelegate {
     public func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
         // Inject JavaScript here after page load

@@ -20,3 +20,36 @@ public struct WebView: UIViewRepresentable {
         // Leave this empty if you don't need to update the view
     }
 }
+
+// WebViewContainer.swift
+@available(iOS 13.0, *)
+struct WebViewContainer: View {
+    @ObservedObject var trackPlayerSDK: TrackPlayerSDK
+    let numberOfWebViews: Int
+
+    var body: some View {
+        VStack {
+            ForEach(0..<numberOfWebViews, id: \.self) { index in
+                Group { // Wrap the conditional content in a Group to ensure a View is always returned
+                    if index == 0 {
+                        // First WebView shows the nowPlaying
+                        WebView(sdk: trackPlayerSDK) // Assuming this is the correct initializer usage
+                    } else {
+                        // Other WebViews show the queued items
+                        let queueIndex = index - 1
+                        if queueIndex < trackPlayerSDK.queue.count {
+                            WebView(sdk: trackPlayerSDK) // Assuming this is the correct initializer usage
+                        }
+                    }
+                }
+            }
+        }
+        .onReceive(trackPlayerSDK.$nowPlaying) { _ in
+            // Handle nowPlaying update if needed
+        }
+        .onReceive(trackPlayerSDK.$queue) { _ in
+            // Handle queue update if needed
+        }
+    }
+}
+
