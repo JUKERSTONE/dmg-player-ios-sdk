@@ -4,7 +4,6 @@ import Foundation
 import SwiftUI
 import WebKit
 
-
 @available(iOS 13.0, *)
 public struct WebView: UIViewRepresentable {
     private let sdk: TrackPlayerSDK
