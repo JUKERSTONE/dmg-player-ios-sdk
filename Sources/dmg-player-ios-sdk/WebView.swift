@@ -27,7 +27,7 @@ public struct WebViewContainer: View {
     @ObservedObject var trackPlayerSDK: TrackPlayerSDK
     let numberOfWebViews: Int
 
-    var body: some View {
+    public var body: some View {
         VStack {
             ForEach(0..<numberOfWebViews, id: \.self) { index in
                 if index == 0 {
