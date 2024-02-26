@@ -47,26 +47,17 @@ public class TrackPlayerSDK: NSObject, ObservableObject {
             }
     }
     
-    public func updateNowPlaying() {
-           guard index < queue.count else { return }
-           playNow(isrc: queue[index])
-       }
-       
-       // Add method to go to the next video
-    public func next() {
-       guard index + 1 < queue.count else { return }
-       index += 1
-       updateNowPlaying()
+    public func nowPlaying(isrc: String) {
+        nowPlaying = isrc
     }
-    
-    
-//    public func queueNext(track: Track) {
-//        queue.insert(track, at: 0)
-//    }
-//
-//    public func queue(track: Track) {
-//        queue.append(track)
-//    }
+
+    public func queueNext(isrc: String) {
+        queue.insert(isrc, at: 0)
+    }
+
+    public func queue(isrc: String) {
+        queue.append(isrc)
+    }
     
 //    public func removeFromQueue(track: Track) {
 //        webView.load(URLRequest(url: track.url))
