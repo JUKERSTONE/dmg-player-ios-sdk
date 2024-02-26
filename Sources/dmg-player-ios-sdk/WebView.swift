@@ -27,6 +27,10 @@ public struct WebViewContainer: View {
     @ObservedObject var trackPlayerSDK: TrackPlayerSDK
     let numberOfWebViews: Int
 
+    // While the struct is public, the initializer is internal by default.
+    // SwiftUI views benefit from memberwise initializers created automatically,
+    // which are internal. You don't usually need to define a public initializer.
+    
     public var body: some View {
         VStack {
             ForEach(0..<numberOfWebViews, id: \.self) { index in
@@ -46,4 +50,3 @@ public struct WebViewContainer: View {
         }
     }
 }
-
