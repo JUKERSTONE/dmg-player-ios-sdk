@@ -26,6 +26,11 @@ public struct WebView: UIViewRepresentable {
 public struct WebViewContainer: View {
     @ObservedObject var trackPlayerSDK: TrackPlayerSDK
     let numberOfWebViews: Int
+    
+    public init(trackPlayerSDK: TrackPlayerSDK, numberOfWebViews: Int) {
+        self.trackPlayerSDK = trackPlayerSDK
+        self.numberOfWebViews = numberOfWebViews
+    }
 
     // While the struct is public, the initializer is internal by default.
     // SwiftUI views benefit from memberwise initializers created automatically,
