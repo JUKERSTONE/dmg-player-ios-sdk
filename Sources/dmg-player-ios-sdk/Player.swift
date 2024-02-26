@@ -31,6 +31,7 @@ public class TrackPlayerSDK: NSObject {
                            // Decode the data into your structured model
                            let responseData = try JSONDecoder().decode(ResponseData.self, from: data)
                            let url = responseData.trak.youtube
+                            print("Error decoding data: \(url)")
                             self.webView.load(URLRequest(url: url))
                            } catch {
                                // Handle decoding error
