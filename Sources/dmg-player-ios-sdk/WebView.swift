@@ -23,7 +23,7 @@ public struct WebView: UIViewRepresentable {
 
 // WebViewContainer.swift
 @available(iOS 13.0, *)
-struct WebViewContainer: View {
+public struct WebViewContainer: View {
     @ObservedObject var trackPlayerSDK: TrackPlayerSDK
     let numberOfWebViews: Int
 
