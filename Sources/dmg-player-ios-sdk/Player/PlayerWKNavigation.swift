@@ -1,41 +1,15 @@
 import SwiftUI
 import WebKit
 
-// Make sure to conform to WKNavigationDelegate if needed.
 @available(iOS 13.0, *)
 extension TrackPlayerSDK: WKNavigationDelegate {
     public func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
-        
-        print(webView)
         
         // Inject JavaScript for both active and inactive web views
         let jsCodeCommon = """
             if (!window.trakStarVideo) {
                 window.trakStarVideo = document.getElementsByTagName('video')[0];
             }
-            
-            if (window.trakStarVideo) {
-                window.trakStarVideo.requestPictureInPicture().then(() => {
-                    const message = {
-                        eventType: 'enablePiP',
-                        data: 'PiP initiated successfully.'
-                    };
-                    window.ReactNativeWebView.postMessage(JSON.stringify(message));
-                }).catch(error => {
-                    const message = {
-                        eventType: 'enablePiP',
-                        data: 'PiP initiation failed: ' + error.message
-                    };
-                    window.ReactNativeWebView.postMessage(JSON.stringify(message));
-                });
-            } else {
-                const message = {
-                    eventType: 'enablePiP',
-                    data: 'No video element found.'
-                };
-                window.ReactNativeWebView.postMessage(JSON.stringify(message));
-            };
-            window.trakStarVideo = document.getElementsByTagName('video')[0];
             
             window.trakStarVideo.addEventListener('loadedmetadata', () => {
                 window.ReactNativeWebView.postMessage(JSON.stringify({
@@ -74,6 +48,21 @@ extension TrackPlayerSDK: WKNavigationDelegate {
                 // Unmute and play the video
                 window.trakStarVideo.muted = false;
                 window.trakStarVideo.play();
+                
+                // Request Picture-in-Picture mode if the WebView is active
+                window.trakStarVideo.requestPictureInPicture().then(() => {
+                    const message = {
+                        eventType: 'enablePiP',
+                        data: 'PiP initiated successfully.'
+                    };
+                    window.ReactNativeWebView.postMessage(JSON.stringify(message));
+                }).catch(error => {
+                    const message = {
+                        eventType: 'enablePiP',
+                        data: 'PiP initiation failed: ' + error.message
+                    };
+                    window.ReactNativeWebView.postMessage(JSON.stringify(message));
+                });
             """
             let jsCode = jsCodeCommon + jsCodeActive
             webView.evaluateJavaScript(jsCode, completionHandler: nil)
@@ -87,11 +76,9 @@ extension TrackPlayerSDK: WKNavigationDelegate {
             let jsCode = jsCodeCommon + jsCodeInactive
             webView.evaluateJavaScript(jsCode, completionHandler: nil)
         }
+        
+        
     }
 
-    
     // Implement other WKNavigationDelegate methods as needed
 }
-
-
-
