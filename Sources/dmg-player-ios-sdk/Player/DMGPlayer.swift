@@ -28,8 +28,6 @@ public class TrackPlayerSDK: NSObject, ObservableObject, WKScriptMessageHandler 
 
         self.activeWebView = WKWebView(frame: .zero, configuration: config)
         self.inactiveWebView = WKWebView(frame: .zero, configuration: config)
-        self.activeWebView.navigationDelegate = self
-        self.inactiveWebView.navigationDelegate = self
 
         setupVideoEndListener(webView: activeWebView)
         setupVideoEndListener(webView: inactiveWebView)
