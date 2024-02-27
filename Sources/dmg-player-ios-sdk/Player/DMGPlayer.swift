@@ -26,7 +26,8 @@ public class TrackPlayerSDK: NSObject, ObservableObject, WKScriptMessageHandler 
         userContentController.add(self, name: "videoEnded")
         userContentController.add(self, name: "videoCurrentTime")
         config.userContentController = userContentController
-
+        config.allowsInlineMediaPlayback = true
+        
         self.primaryWebView = WKWebView(frame: .zero, configuration: config)
         self.secondaryWebView = WKWebView(frame: .zero, configuration: config)
         self.primaryWebView.navigationDelegate = self
