@@ -72,6 +72,10 @@ public class ViewController: UIViewController, WKScriptMessageHandler {
 public struct WebViewWrapper: UIViewRepresentable {
     @ObservedObject var sdk: TrackPlayerSDK
     
+    public init(sdk: TrackPlayerSDK) {
+            self.sdk = sdk
+        }
+    
     public func makeUIView(context: Context) -> UIView {
         // Create a container view to hold both web views
         let containerView = UIView()
