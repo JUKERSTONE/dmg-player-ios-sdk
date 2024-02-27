@@ -6,8 +6,8 @@ import WebKit
 extension TrackPlayerSDK: WKNavigationDelegate {
     public func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
         
-        print(activeWebView)
-        print(inactiveWebView)
+        print(activeWebView, "active check")
+        print(inactiveWebView, "active check1")
         
         // Inject JavaScript for both active and inactive web views
         let jsCodeCommon = """
@@ -73,8 +73,8 @@ extension TrackPlayerSDK: WKNavigationDelegate {
             // Inject JavaScript for the active web view
             let jsCodeActive = """
                 // Unmute and play the video
-                document.querySelector('video').muted = false;
-                document.querySelector('video').play();
+                window.trakStarVideo.muted = false;
+                window.trakStarVideo.play();
             """
             let jsCode = jsCodeCommon + jsCodeActive
             webView.evaluateJavaScript(jsCode, completionHandler: nil)
@@ -82,8 +82,8 @@ extension TrackPlayerSDK: WKNavigationDelegate {
             // Inject JavaScript for the inactive web view
             let jsCodeInactive = """
                 // Mute and pause the video
-                document.querySelector('video').muted = true;
-                document.querySelector('video').pause();
+                window.trakStarVideo.muted = true;
+                window.trakStarVideo.pause();
             """
             let jsCode = jsCodeCommon + jsCodeInactive
             webView.evaluateJavaScript(jsCode, completionHandler: nil)
