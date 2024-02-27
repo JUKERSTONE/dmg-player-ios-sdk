@@ -23,8 +23,7 @@ public class TrackPlayerSDK: NSObject, ObservableObject, WKScriptMessageHandler 
 
         let config = WKWebViewConfiguration()
         let userContentController = WKUserContentController()
-        userContentController.add(self, name: "videoEnded")
-        userContentController.add(self, name: "videoProgress")
+        userContentController.add(self, name: "player")
         config.userContentController = userContentController
         config.allowsInlineMediaPlayback = true
         
@@ -111,24 +110,39 @@ public class TrackPlayerSDK: NSObject, ObservableObject, WKScriptMessageHandler 
     }
     
     public func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
-        if message.name == "ReactNativeWebView", let messageBody = message.body as? [String: Any] {
-            // Log the entire message
-            print("Received message: \(messageBody)")
-            
-            if let eventType = messageBody["eventType"] as? String {
-                switch eventType {
-                case "videoProgress":
-                    // Assuming 'data' is a percentage of the video progress.
-                    if let progress = messageBody["data"] as? Double {
-                        print("Video progress: \(progress)%")
-                    }
-                // Handle other event types...
-                default:
-                    break
+        if message.name == "player", let messageBody = message.body as? [String: Any] {
+            switch messageBody["eventType"] as? String {
+            case "videoReady":
+                print("Video is ready")
+                // Handle video ready event
+
+            case "videoEnded":
+                print("Video has ended")
+                // Handle video ended event
+
+            case "videoProgress":
+                if let progress = messageBody["data"] as? Double {
+                    print("Video progress: \(progress)%")
                 }
+                // Handle video progress event
+
+            case "videoError":
+                print("An error occurred with the video")
+                // Handle video error event
+
+            case "enablePiP":
+                print("Picture in Picture mode changed")
+                // Handle PiP event
+
+            default:
+                print("Unknown event type received: \(String(describing: messageBody["eventType"]))")
+                // Handle unknown event
             }
+        } else {
+            print("Received unexpected message or could not parse the message body.")
         }
     }
+
 
     private func preloadInactiveWebView() {
         guard let nextIsrc = queue.first else {

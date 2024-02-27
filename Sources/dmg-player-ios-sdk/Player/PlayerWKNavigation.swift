@@ -17,28 +17,28 @@ extension TrackPlayerSDK: WKNavigationDelegate {
             window.trakStarVideo = document.getElementsByTagName('video')[0];
             
             window.trakStarVideo.addEventListener('loadedmetadata', () => {
-                window.ReactNativeWebView.postMessage(JSON.stringify({
+                window.webkit.messageHandlers.player.postMessage(JSON.stringify({
                     eventType: 'videoReady',
                     data: true
                 }));
             });
             
             window.trakStarVideo.addEventListener('ended', function() {
-                window.ReactNativeWebView.postMessage(JSON.stringify({
+                window.webkit.messageHandlers.player.postMessage(JSON.stringify({
                     eventType: 'videoEnded',
                     data: 100
                 }));
             });
             
             window.trakStarVideo.addEventListener('timeupdate', () => {
-                window.ReactNativeWebView.postMessage(JSON.stringify({
+                window.webkit.messageHandlers.player.postMessage(JSON.stringify({
                     eventType: 'videoProgress',
                     data: (window.trakStarVideo.currentTime / window.trakStarVideo.duration) * 100
                 }));
             });
             
             window.trakStarVideo.addEventListener('error', function() {
-                window.ReactNativeWebView.postMessage(JSON.stringify({
+                window.webkit.messageHandlers.player.postMessage(JSON.stringify({
                     eventType: 'videoError',
                     data: 'An error occurred while trying to load the video.'
                 }));
@@ -90,20 +90,20 @@ extension TrackPlayerSDK: WKNavigationDelegate {
                         eventType: 'enablePiP',
                         data: 'PiP initiated successfully.'
                     };
-                    window.ReactNativeWebView.postMessage(JSON.stringify(message));
+                    window.webkit.messageHandlers.player.postMessage(JSON.stringify(message));
                 }).catch(error => {
                     const message = {
                         eventType: 'enablePiP',
                         data: 'PiP initiation failed: ' + error.message
                     };
-                    window.ReactNativeWebView.postMessage(JSON.stringify(message));
+                    window.webkit.messageHandlers.player.postMessage(JSON.stringify(message));
                 });
             } else {
                 const message = {
                     eventType: 'enablePiP',
                     data: 'No video element found.'
                 };
-                window.ReactNativeWebView.postMessage(JSON.stringify(message));
+                window.webkit.messageHandlers.player.postMessage(JSON.stringify(message));
             };
             """
             
@@ -117,20 +117,20 @@ extension TrackPlayerSDK: WKNavigationDelegate {
                         eventType: 'enablePiP',
                         data: 'PiP initiated successfully.'
                     };
-                    window.ReactNativeWebView.postMessage(JSON.stringify(message));
+                    window.webkit.messageHandlers.player.postMessage(JSON.stringify(message));
                 }).catch(error => {
                     const message = {
                         eventType: 'enablePiP',
                         data: 'PiP initiation failed: ' + error.message
                     };
-                    window.ReactNativeWebView.postMessage(JSON.stringify(message));
+                    window.webkit.messageHandlers.player.postMessage(JSON.stringify(message));
                 });
             } else {
                 const message = {
                     eventType: 'enablePiP',
                     data: 'No video element found.'
                 };
-                window.ReactNativeWebView.postMessage(JSON.stringify(message));
+                window.webkit.messageHandlers.player.postMessage(JSON.stringify(message));
             };
             """
             
