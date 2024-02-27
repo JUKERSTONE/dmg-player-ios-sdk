@@ -6,8 +6,8 @@ import WebKit
 extension TrackPlayerSDK: WKNavigationDelegate {
     public func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
         
-        print(activeWebView, "active check")
-        print(inactiveWebView, "active check1")
+        print(webView)
+        print(webView == activeWebView)
         
         // Inject JavaScript for both active and inactive web views
         let jsCodeCommon = """
