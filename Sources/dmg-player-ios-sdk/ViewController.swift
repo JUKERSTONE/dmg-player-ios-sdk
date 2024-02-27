@@ -1,7 +1,7 @@
 import UIKit
 import WebKit
 
-class ViewController: UIViewController, WKScriptMessageHandler {
+public class ViewController: UIViewController, WKScriptMessageHandler {
     
     var activeWebView: WKWebView!
     var inactiveWebView: WKWebView!
