@@ -11,14 +11,11 @@ public struct WebViewWrapper: UIViewRepresentable {
         }
     
     public func makeUIView(context: Context) -> UIView {
-        // Create a container view to hold both web views
         let containerView = UIView()
         
-        // Add the active web view
         let activeWebView = sdk.activeWebView
         containerView.addSubview(activeWebView)
         
-        // Add constraints for the active web view
         activeWebView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             activeWebView.topAnchor.constraint(equalTo: containerView.topAnchor),
@@ -27,11 +24,9 @@ public struct WebViewWrapper: UIViewRepresentable {
             activeWebView.centerXAnchor.constraint(equalTo: containerView.centerXAnchor) // Center horizontally
         ])
 
-        // Add the inactive web view
         let inactiveWebView = sdk.inactiveWebView
         containerView.addSubview(inactiveWebView)
 
-        // Add constraints for the inactive web view
         inactiveWebView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             inactiveWebView.topAnchor.constraint(equalTo: activeWebView.bottomAnchor, constant: 8), // Add spacing between the web views
@@ -40,12 +35,22 @@ public struct WebViewWrapper: UIViewRepresentable {
             inactiveWebView.centerXAnchor.constraint(equalTo: containerView.centerXAnchor) // Center horizontally
         ])
         
-        // Return the container view
         return containerView
     }
     
     public func updateUIView(_ uiView: UIView, context: Context) {
-        // Update the UI view if needed
-        // This method will be called whenever SwiftUI thinks the view needs to be updated
+        // Observe changes to the queue property
+        let queuePublisher = sdk.$queue
+        
+        // Sink to receive updates
+        queuePublisher.sink { updatedQueue in
+            // Check if the queue has been updated
+            if sdk.index < updatedQueue.count {
+                let isrc = updatedQueue[sdk.index]
+                sdk.preloadNextVideo(isrc: isrc)
+            } else {
+                print("Index out of range")
+            }
+        }
     }
 }
