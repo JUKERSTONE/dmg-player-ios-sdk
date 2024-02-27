@@ -52,7 +52,7 @@ extension TrackPlayerSDK: WKNavigationDelegate {
             let jsCodeActive = """
                 // Unmute and play the video
                 window.trakStarVideo.muted = true;
-                window.trakStarVideo.paused();
+                window.trakStarVideo.pause();
             """
             let jsCode = jsCodeCommon + jsCodeActive
             webView.evaluateJavaScript(jsCode, completionHandler: nil)
