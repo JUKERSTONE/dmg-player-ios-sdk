@@ -18,27 +18,9 @@ public struct WebViewWrapper: UIViewRepresentable {
         let activeWebView = sdk.activeWebView
         containerView.addSubview(activeWebView)
         
-        // Add constraints for the active web view
-        activeWebView.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            activeWebView.topAnchor.constraint(equalTo: containerView.topAnchor),
-            activeWebView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
-            activeWebView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
-            activeWebView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor)
-        ])
-        
         // Add the inactive web view
         let inactiveWebView = sdk.inactiveWebView
         containerView.addSubview(inactiveWebView)
-        
-        // Add constraints for the inactive web view
-        inactiveWebView.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            inactiveWebView.topAnchor.constraint(equalTo: containerView.topAnchor),
-            inactiveWebView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
-            inactiveWebView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
-            inactiveWebView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor)
-        ])
         
         // Return the container view
         return containerView
