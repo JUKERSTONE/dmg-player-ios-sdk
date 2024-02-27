@@ -122,21 +122,22 @@ public class TrackPlayerSDK: NSObject, ObservableObject, WKScriptMessageHandler 
                                 if progressData > 80.0 && !self.hasPreloadedNextWebview {
                                     self.preloadInactiveWebView() // Call your preload function here
                                     self.hasPreloadedNextWebview = true // Set the flag to true after preloading
+                                    print(progressData)
                                 }
                             } else {
-                                print("Progress data is not a double or not present in the message body.")
+//                                print("Progress data is not a double or not present in the message body.")
                             }
                         default:
                             print("Unknown event type received: \(eventType)")
                     }
                 } else {
-                    print("The 'eventType' is not a string or not present in the message body.")
+//                    print("The 'eventType' is not a string or not present in the message body.")
                 }
             } else {
-                print("The message body is not a dictionary or not in the expected format: \(message.body)")
+//                print("The message body is not a dictionary or not in the expected format: \(message.body)")
             }
         } else {
-            print("Received a message from an unexpected handler: \(message.name)")
+//            print("Received a message from an unexpected handler: \(message.name)")
         }
     }
 
