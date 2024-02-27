@@ -16,10 +16,9 @@ public struct WebView: UIViewRepresentable {
     public func updateUIView(_ uiView: WKWebView, context: Context) {
         // Here you would load the content based on the isrc passed to the WebView
         // For example, you might tell the sdk to load the video based on the isrc
-        sdk.playNow(isrc: isrc)
+        sdk.playNow(isrc: sdk.nowPlaying)
     }
 }
-
 
 // WebViewContainer.swift
 @available(iOS 13.0, *)
@@ -48,7 +47,7 @@ public struct WebViewContainer: View {
                     // Other WebViews show the queued items
                     let queueIndex = index - 1
                     if queueIndex < trackPlayerSDK.queue.count {
-                        WebView(isrc: trackPlayerSDK.queue[queueIndex], sdk: trackPlayerSDK)
+                        WebView(isrc: trackPlayerSDK.queue[queueIndex], sdk: trackPlayerSDK).frame(width: 200, height: 60)
                     }
                 }
             }

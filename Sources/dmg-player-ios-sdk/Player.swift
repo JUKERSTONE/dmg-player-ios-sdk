@@ -7,7 +7,7 @@ import WebKit
 public class TrackPlayerSDK: NSObject, ObservableObject {
     public var webView: WKWebView
     private var index: Int = 0
-    @Published var nowPlaying: String? // The current playing ISRC
+    @Published var nowPlaying: String = "" // The current playing ISRC
     @Published var queue: [String] = [] // The queue of ISRCs
     
     public override init() {
