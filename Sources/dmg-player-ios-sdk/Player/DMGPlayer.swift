@@ -112,33 +112,48 @@ public class TrackPlayerSDK: NSObject, ObservableObject, WKScriptMessageHandler 
     
     public func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
         if message.name == "player" {
-            if let messageBody = message.body as? [String: Any] {
-                if let eventType = messageBody["eventType"] as? String {
-                    // Handle known events
-                    switch eventType {
-                        case "videoProgress":
-                            if let progressData = messageBody["data"] as? Double {
-                                // Process the progress data
-                                if progressData > 80.0 && !self.hasPreloadedNextWebview {
-                                    self.preloadInactiveWebView() // Call your preload function here
-                                    self.hasPreloadedNextWebview = true // Set the flag to true after preloading
+            print("Received message from web: \(message.body)")
+
+            // First, check if the message body is a string
+            if let messageString = message.body as? String {
+                // Try to convert the string to data and then to a [String: Any] dictionary
+                if let data = messageString.data(using: .utf8) {
+                    do {
+                        // Attempt to deserialize the JSON string into a [String: Any] dictionary
+                        if let messageBody = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] {
+                            // Now we can safely check for the eventType
+                            if let eventType = messageBody["eventType"] as? String {
+                                // Handle known events
+                                switch eventType {
+                                case "videoProgress":
+                                    if let progressData = messageBody["data"] as? Double {
+                                        // Process the progress data
+                                        if progressData > 80.0 && !self.hasPreloadedNextWebview {
+                                            self.preloadInactiveWebView() // Call your preload function here
+                                            self.hasPreloadedNextWebview = true // Set the flag to true after preloading
+                                        }
+                                    }
+                                default:
+                                    print("Unknown event type received: \(eventType)")
                                 }
                             } else {
-                                print("Progress data is not a double or not present in the message body.")
+                                print("The 'eventType' is not a string or not present in the message body.")
                             }
-                        default:
-                            print("Unknown event type received: \(eventType)")
+                        } else {
+                            print("The message body is not a dictionary or not in the expected format.")
+                        }
+                    } catch {
+                        print("Failed to deserialize JSON string: \(error)")
                     }
-                } else {
-                    print("The 'eventType' is not a string or not present in the message body.")
                 }
             } else {
-                print("The message body is not a dictionary or not in the expected format: \(message.body)")
+                print("The message body is not a string.")
             }
         } else {
             print("Received a message from an unexpected handler: \(message.name)")
         }
     }
+
 
 
 
