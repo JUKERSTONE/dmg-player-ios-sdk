@@ -57,12 +57,14 @@ public class ViewController: UIViewController, WKScriptMessageHandler {
 
 @available(iOS 13.0, *)
 struct WebViewWrapper: UIViewControllerRepresentable {
+    let sdk: TrackPlayerSDK
     func makeUIViewController(context: Context) -> ViewController {
         return ViewController()
     }
     
     func updateUIViewController(_ uiViewController: ViewController, context: Context) {
         // Update your view controller here if needed
+        sdk.playNow(isrc: sdk.nowPlaying)
     }
 }
 
