@@ -47,17 +47,42 @@ extension TrackPlayerSDK: WKNavigationDelegate {
         """
         
         // Check if the webView is the activeWebView
-        if isPrimaryActive == true && webView == secondaryWebView  {
+        if isPrimaryActive == true {
             // Inject JavaScript for the active web view
             let jsCodeActive = """
                 // Unmute and play the video
                 window.trakStarVideo.muted = false;
                 window.trakStarVideo.play();
             """
+            let jsCodeInactive = """
+                // Unmute and play the video
+                window.trakStarVideo.muted = true;
+                window.trakStarVideo.pause();
+            """
             let jsCode = jsCodeCommon + jsCodeActive
-            webView.evaluateJavaScript(jsCode, completionHandler: nil)
-        } else if isPrimaryActive == true && webView == primaryWebView {
+            let jsCode2 = jsCodeCommon + jsCodeInactive
+            primaryWebView.evaluateJavaScript(jsCode, completionHandler: nil)
+            secondaryWebView.evaluateJavaScript(jsCode2, completionHandler: nil)
+        } else {
             // Inject JavaScript for the inactive web view
+            let jsCodeActive = """
+                // Unmute and play the video
+                window.trakStarVideo.muted = false;
+                window.trakStarVideo.play();
+            """
+            let jsCodeInactive = """
+                // Unmute and play the video
+                window.trakStarVideo.muted = true;
+                window.trakStarVideo.pause();
+            """
+            let jsCode = jsCodeCommon + jsCodeActive
+            let jsCode2 = jsCodeCommon + jsCodeInactive
+    
+            primaryWebView.evaluateJavaScript(jsCode2, completionHandler: nil)
+            secondaryWebView.evaluateJavaScript(jsCode, completionHandler: nil)
+        }
+        
+        if isPrimaryActive == true && webView == primaryWebView {
             let jsCodeInactive = """
             if (window.trakStarVideo) {
                 window.trakStarVideo.requestPictureInPicture().then(() => {
@@ -73,9 +98,6 @@ extension TrackPlayerSDK: WKNavigationDelegate {
                     };
                     window.ReactNativeWebView.postMessage(JSON.stringify(message));
                 });
-            
-                window.trakStarVideo.muted = false;
-                window.trakStarVideo.play();
             } else {
                 const message = {
                     eventType: 'enablePiP',
@@ -84,45 +106,34 @@ extension TrackPlayerSDK: WKNavigationDelegate {
                 window.ReactNativeWebView.postMessage(JSON.stringify(message));
             };
             """
+            
             let jsCode = jsCodeCommon + jsCodeInactive
             webView.evaluateJavaScript(jsCode, completionHandler: nil)
         } else if isPrimaryActive == false && webView == secondaryWebView {
-            // Inject JavaScript for the inactive web view
             let jsCodeInactive = """
-              if (window.trakStarVideo) {
-                  window.trakStarVideo.requestPictureInPicture().then(() => {
-                      const message = {
-                          eventType: 'enablePiP',
-                          data: 'PiP initiated successfully.'
-                      };
-                      window.ReactNativeWebView.postMessage(JSON.stringify(message));
-                  }).catch(error => {
-                      const message = {
-                          eventType: 'enablePiP',
-                          data: 'PiP initiation failed: ' + error.message
-                      };
-                      window.ReactNativeWebView.postMessage(JSON.stringify(message));
-                  });
+            if (window.trakStarVideo) {
+                window.trakStarVideo.requestPictureInPicture().then(() => {
+                    const message = {
+                        eventType: 'enablePiP',
+                        data: 'PiP initiated successfully.'
+                    };
+                    window.ReactNativeWebView.postMessage(JSON.stringify(message));
+                }).catch(error => {
+                    const message = {
+                        eventType: 'enablePiP',
+                        data: 'PiP initiation failed: ' + error.message
+                    };
+                    window.ReactNativeWebView.postMessage(JSON.stringify(message));
+                });
+            } else {
+                const message = {
+                    eventType: 'enablePiP',
+                    data: 'No video element found.'
+                };
+                window.ReactNativeWebView.postMessage(JSON.stringify(message));
+            };
+            """
             
-                window.trakStarVideo.muted = false;
-                window.trakStarVideo.play();
-              } else {
-                  const message = {
-                      eventType: 'enablePiP',
-                      data: 'No video element found.'
-                  };
-                  window.ReactNativeWebView.postMessage(JSON.stringify(message));
-              };
-            """
-            let jsCode = jsCodeCommon + jsCodeInactive
-            webView.evaluateJavaScript(jsCode, completionHandler: nil)
-        } else if isPrimaryActive == false && webView == primaryWebView {
-            // Inject JavaScript for the inactive web view
-            let jsCodeInactive = """
-                // Mute and pause the video
-                window.trakStarVideo.muted = true;
-                window.trakStarVideo.pause();
-            """
             let jsCode = jsCodeCommon + jsCodeInactive
             webView.evaluateJavaScript(jsCode, completionHandler: nil)
         }
