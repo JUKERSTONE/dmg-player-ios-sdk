@@ -170,28 +170,32 @@ public class TrackPlayerSDK: NSObject, ObservableObject, WKScriptMessageHandler 
         inactiveWebView.load(request)
         
         // Execute JavaScript to mute and pause the video
-        let script = """
-            var video = document.querySelector('video');
-            if (video) {
-                video.muted = true;
-                video.pause();
-            }
-        """
+//        let script = """
+//            var video = document.querySelector('video');
+//            if (video) {
+//                video.muted = true;
+//                video.pause();
+//            }
+//        """
+        
+        let script = "window.trakStarVideo.muted = true; window.trakStarVideo.pause();"
+        
+        
         inactiveWebView.evaluateJavaScript(script, completionHandler: nil)
     }
 
     
-    private func setupVideoProgressListener(webView: WKWebView) {
-        let script = """
-            window.trakStarVideo.addEventListener('timeupdate', () => {
-                window.webkit.messageHandlers.videoProgress.postMessage({
-                    eventType: 'videoProgress',
-                    data: (window.trakStarVideo.currentTime / window.trakStarVideo.duration) * 100
-                });
-            });
-        """
-        webView.evaluateJavaScript(script, completionHandler: nil)
-    }
+//    private func setupVideoProgressListener(webView: WKWebView) {
+//        let script = """
+//            window.trakStarVideo.addEventListener('timeupdate', () => {
+//                window.webkit.messageHandlers.videoProgress.postMessage({
+//                    eventType: 'videoProgress',
+//                    data: (window.trakStarVideo.currentTime / window.trakStarVideo.duration) * 100
+//                });
+//            });
+//        """
+//        webView.evaluateJavaScript(script, completionHandler: nil)
+//    }
 
     
     
@@ -214,13 +218,13 @@ public class TrackPlayerSDK: NSObject, ObservableObject, WKScriptMessageHandler 
 
     private func playActiveWebView() {
         // Unmute and play the video in the new activeWebView
-        let script = "document.querySelector('video').muted = false; document.querySelector('video').play();"
+        let script = "window.trakStarVideo.muted = false; window.trakStarVideo.play();"
         activeWebView.evaluateJavaScript(script, completionHandler: nil)
     }
 
     
     private func muteAndPause(webView: WKWebView) {
-        let script = "document.querySelector('video').muted = true; document.querySelector('video').pause();"
+        let script = "window.trakStarVideo.muted = true; window.trakStarVideo.pause();"
         webView.evaluateJavaScript(script, completionHandler: nil)
     }
     
