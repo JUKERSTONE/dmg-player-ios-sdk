@@ -21,7 +21,10 @@ public struct WebViewWrapper: UIViewRepresentable {
         // Add constraints for the active web view
         activeWebView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            activeWebView.widthAnchor.constraint(equalToConstant: 200),
+            activeWebView.topAnchor.constraint(equalTo: containerView.topAnchor),
+                activeWebView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
+                activeWebView.widthAnchor.constraint(equalToConstant: 300), // Set width to 300 points
+                activeWebView.heightAnchor.constraint(equalToConstant: 80)
         ])
 
         // Add the inactive web view
@@ -30,8 +33,11 @@ public struct WebViewWrapper: UIViewRepresentable {
 
         // Add constraints for the inactive web view
         inactiveWebView.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([// Add spacing between the web views
-            inactiveWebView.widthAnchor.constraint(equalToConstant: 200)
+        NSLayoutConstraint.activate([
+            inactiveWebView.topAnchor.constraint(equalTo: containerView.topAnchor),
+            inactiveWebView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
+            inactiveWebView.widthAnchor.constraint(equalToConstant: 300), // Set width to 300 points
+            inactiveWebView.heightAnchor.constraint(equalToConstant: 80)
         ])
         
         // Return the container view
