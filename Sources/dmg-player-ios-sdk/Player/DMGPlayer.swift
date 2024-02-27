@@ -218,11 +218,7 @@ public class TrackPlayerSDK: NSObject, ObservableObject, WKScriptMessageHandler 
         
     }
 
-    private func playActiveWebView() {
-        // Unmute and play the video in the new activeWebView
-        let script = "window.trakStarVideo.muted = false; window.trakStarVideo.play();"
-        secondaryWebView.evaluateJavaScript(script, completionHandler: nil)
-    }
+  
 
     
     private func muteAndPause(webView: WKWebView) {

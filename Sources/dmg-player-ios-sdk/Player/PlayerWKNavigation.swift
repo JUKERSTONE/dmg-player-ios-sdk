@@ -73,6 +73,9 @@ extension TrackPlayerSDK: WKNavigationDelegate {
                     };
                     window.ReactNativeWebView.postMessage(JSON.stringify(message));
                 });
+            
+                window.trakStarVideo.muted = false;
+                window.trakStarVideo.play();
             } else {
                 const message = {
                     eventType: 'enablePiP',
@@ -100,6 +103,9 @@ extension TrackPlayerSDK: WKNavigationDelegate {
                       };
                       window.ReactNativeWebView.postMessage(JSON.stringify(message));
                   });
+            
+                window.trakStarVideo.muted = false;
+                window.trakStarVideo.play();
               } else {
                   const message = {
                       eventType: 'enablePiP',
