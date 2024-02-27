@@ -51,8 +51,8 @@ extension TrackPlayerSDK: WKNavigationDelegate {
             // Inject JavaScript for the active web view
             let jsCodeActive = """
                 // Unmute and play the video
-                window.trakStarVideo.muted = false;
-                window.trakStarVideo.play();
+                window.trakStarVideo.muted = true;
+                window.trakStarVideo.paused();
             """
             let jsCode = jsCodeCommon + jsCodeActive
             webView.evaluateJavaScript(jsCode, completionHandler: nil)
