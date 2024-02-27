@@ -120,9 +120,9 @@ public class TrackPlayerSDK: NSObject, ObservableObject, WKScriptMessageHandler 
                             if let progressData = messageBody["data"] as? Double {
                                 // Process the progress data
                                 if progressData > 80.0 && !self.hasPreloadedNextWebview {
+                                    print(progressData, "heree")
                                     self.preloadInactiveWebView() // Call your preload function here
                                     self.hasPreloadedNextWebview = true // Set the flag to true after preloading
-                                    print(progressData)
                                 }
                             } else {
 //                                print("Progress data is not a double or not present in the message body.")
