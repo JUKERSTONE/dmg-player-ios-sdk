@@ -1,15 +1,20 @@
 import SwiftUI
 import WebKit
 
+// Make sure to conform to WKNavigationDelegate if needed.
 @available(iOS 13.0, *)
 extension TrackPlayerSDK: WKNavigationDelegate {
     public func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
+        
+        print(webView)
         
         // Inject JavaScript for both active and inactive web views
         let jsCodeCommon = """
             if (!window.trakStarVideo) {
                 window.trakStarVideo = document.getElementsByTagName('video')[0];
             }
+            
+            window.trakStarVideo = document.getElementsByTagName('video')[0];
             
             window.trakStarVideo.addEventListener('loadedmetadata', () => {
                 window.ReactNativeWebView.postMessage(JSON.stringify({
@@ -42,14 +47,19 @@ extension TrackPlayerSDK: WKNavigationDelegate {
         """
         
         // Check if the webView is the activeWebView
-        if isPrimaryActive == false && webView == secondaryWebView {
+        if isPrimaryActive == true && webView == secondaryWebView  {
             // Inject JavaScript for the active web view
             let jsCodeActive = """
                 // Unmute and play the video
                 window.trakStarVideo.muted = false;
                 window.trakStarVideo.play();
-                
-                // Request Picture-in-Picture mode if the WebView is active
+            """
+            let jsCode = jsCodeCommon + jsCodeActive
+            webView.evaluateJavaScript(jsCode, completionHandler: nil)
+        } else if isPrimaryActive == true && webView == primaryWebView {
+            // Inject JavaScript for the inactive web view
+            let jsCodeInactive = """
+            if (window.trakStarVideo) {
                 window.trakStarVideo.requestPictureInPicture().then(() => {
                     const message = {
                         eventType: 'enablePiP',
@@ -63,10 +73,44 @@ extension TrackPlayerSDK: WKNavigationDelegate {
                     };
                     window.ReactNativeWebView.postMessage(JSON.stringify(message));
                 });
+            } else {
+                const message = {
+                    eventType: 'enablePiP',
+                    data: 'No video element found.'
+                };
+                window.ReactNativeWebView.postMessage(JSON.stringify(message));
+            };
             """
-            let jsCode = jsCodeCommon + jsCodeActive
+            let jsCode = jsCodeCommon + jsCodeInactive
             webView.evaluateJavaScript(jsCode, completionHandler: nil)
-        } else if isPrimaryActive == true && webView == secondaryWebView {
+        } else if isPrimaryActive == false && webView == secondaryWebView {
+            // Inject JavaScript for the inactive web view
+            let jsCodeInactive = """
+              if (window.trakStarVideo) {
+                  window.trakStarVideo.requestPictureInPicture().then(() => {
+                      const message = {
+                          eventType: 'enablePiP',
+                          data: 'PiP initiated successfully.'
+                      };
+                      window.ReactNativeWebView.postMessage(JSON.stringify(message));
+                  }).catch(error => {
+                      const message = {
+                          eventType: 'enablePiP',
+                          data: 'PiP initiation failed: ' + error.message
+                      };
+                      window.ReactNativeWebView.postMessage(JSON.stringify(message));
+                  });
+              } else {
+                  const message = {
+                      eventType: 'enablePiP',
+                      data: 'No video element found.'
+                  };
+                  window.ReactNativeWebView.postMessage(JSON.stringify(message));
+              };
+            """
+            let jsCode = jsCodeCommon + jsCodeInactive
+            webView.evaluateJavaScript(jsCode, completionHandler: nil)
+        } else if isPrimaryActive == false && webView == primaryWebView {
             // Inject JavaScript for the inactive web view
             let jsCodeInactive = """
                 // Mute and pause the video
@@ -76,9 +120,11 @@ extension TrackPlayerSDK: WKNavigationDelegate {
             let jsCode = jsCodeCommon + jsCodeInactive
             webView.evaluateJavaScript(jsCode, completionHandler: nil)
         }
-        
-        
     }
 
+    
     // Implement other WKNavigationDelegate methods as needed
 }
+
+
+
