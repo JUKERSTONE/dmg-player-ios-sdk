@@ -110,7 +110,7 @@ public class TrackPlayerSDK: NSObject, ObservableObject, WKScriptMessageHandler 
     }
     
     public func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
-        if message.name == "handlerName" {
+        if message.name == "player" {
             print("Received message from web: \(message.body)")
             if let messageBody = message.body as? [String: Any] {
                 if let eventType = messageBody["eventType"] as? String {
