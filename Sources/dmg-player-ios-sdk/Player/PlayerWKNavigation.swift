@@ -62,8 +62,7 @@ extension TrackPlayerSDK: WKNavigationDelegate {
             if (window.trakStarVideo) {
                 window.trakStarVideo.requestPictureInPicture().then(() => {
             
-                    window.trakStarVideo.muted = false;
-                    window.trakStarVideo.play();
+                
             
                     const message = {
                         eventType: 'enablePiP',
