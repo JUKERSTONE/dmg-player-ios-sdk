@@ -48,22 +48,19 @@ extension TrackPlayerSDK: WKNavigationDelegate {
         
         // Check if the webView is the activeWebView
         if isPrimaryActive == true && webView == secondaryWebView  {
-            // Inject JavaScript for the active web view
-            let jsCodeActive = """
-                // Unmute and play the video
-                window.trakStarVideo.muted = true;
-                window.trakStarVideo.pause();
-            """
-            let jsCode = jsCodeCommon + jsCodeActive
-            webView.evaluateJavaScript(jsCode, completionHandler: nil)
+//            // Inject JavaScript for the active web view
+//            let jsCodeActive = """
+//                // Unmute and play the video
+//                window.trakStarVideo.muted = false;
+//                window.trakStarVideo.play();
+//            """
+//            let jsCode = jsCodeCommon + jsCodeActive
+//            webView.evaluateJavaScript(jsCode, completionHandler: nil)
         } else if isPrimaryActive == true && webView == primaryWebView {
             // Inject JavaScript for the inactive web view
             let jsCodeInactive = """
             if (window.trakStarVideo) {
                 window.trakStarVideo.requestPictureInPicture().then(() => {
-            
-                
-            
                     const message = {
                         eventType: 'enablePiP',
                         data: 'PiP initiated successfully.'
@@ -91,12 +88,11 @@ extension TrackPlayerSDK: WKNavigationDelegate {
             let jsCodeInactive = """
               if (window.trakStarVideo) {
                   window.trakStarVideo.requestPictureInPicture().then(() => {
-                    
-                    const message = {
+                      const message = {
                           eventType: 'enablePiP',
                           data: 'PiP initiated successfully.'
-                    };
-                    window.ReactNativeWebView.postMessage(JSON.stringify(message));
+                      };
+                      window.ReactNativeWebView.postMessage(JSON.stringify(message));
                   }).catch(error => {
                       const message = {
                           eventType: 'enablePiP',
@@ -115,14 +111,14 @@ extension TrackPlayerSDK: WKNavigationDelegate {
             let jsCode = jsCodeCommon + jsCodeInactive
             webView.evaluateJavaScript(jsCode, completionHandler: nil)
         } else if isPrimaryActive == false && webView == primaryWebView {
-            // Inject JavaScript for the inactive web view
-            let jsCodeInactive = """
-                // Mute and pause the video
-                window.trakStarVideo.muted = true;
-                window.trakStarVideo.pause();
-            """
-            let jsCode = jsCodeCommon + jsCodeInactive
-            webView.evaluateJavaScript(jsCode, completionHandler: nil)
+//            // Inject JavaScript for the inactive web view
+//            let jsCodeInactive = """
+//                // Mute and pause the video
+//                window.trakStarVideo.muted = true;
+//                window.trakStarVideo.pause();
+//            """
+//            let jsCode = jsCodeCommon + jsCodeInactive
+//            webView.evaluateJavaScript(jsCode, completionHandler: nil)
         }
     }
 
