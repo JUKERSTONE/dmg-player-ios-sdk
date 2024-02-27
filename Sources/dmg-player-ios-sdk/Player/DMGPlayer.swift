@@ -110,40 +110,27 @@ public class TrackPlayerSDK: NSObject, ObservableObject, WKScriptMessageHandler 
     }
     
     public func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
-        
-            if message.name == "player", let messageBody = message.body as? [String: Any] {
-            print(messageBody["eventType"])
-            switch messageBody["eventType"] as? String {
-            case "videoReady":
-                print("Video is ready")
-                // Handle video ready event
-
-            case "videoEnded":
-                print("Video has ended")
-                // Handle video ended event
-
-            case "videoProgress":
-                if let progress = messageBody["data"] as? Double {
-                    print("Video progress: \(progress)%")
+        if message.name == "handlerName" {
+            print("Received message from web: \(message.body)")
+            if let messageBody = message.body as? [String: Any] {
+                if let eventType = messageBody["eventType"] as? String {
+                    // Handle known events
+                    switch eventType {
+                    // Your event handling cases here...
+                    default:
+                        print("Unknown event type received: \(eventType)")
+                    }
+                } else {
+                    print("The 'eventType' is not a string or not present in the message body.")
                 }
-                // Handle video progress event
-
-            case "videoError":
-                print("An error occurred with the video")
-                // Handle video error event
-
-            case "enablePiP":
-                print("Picture in Picture mode changed")
-                // Handle PiP event
-
-            default:
-                print("Unknown event type received: \(String(describing: messageBody["eventType"]))")
-                // Handle unknown event
+            } else {
+                print("The message body is not a dictionary or not in the expected format: \(message.body)")
             }
         } else {
-            print("Received unexpected message or could not parse the message body.")
+            print("Received a message from an unexpected handler: \(message.name)")
         }
     }
+
 
 
     private func preloadInactiveWebView() {
