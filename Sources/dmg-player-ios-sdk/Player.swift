@@ -69,6 +69,8 @@ public class TrackPlayerSDK: NSObject, ObservableObject, WKScriptMessageHandler 
                             print("The data received could not be converted to a string.")
                             return
                         }
+                        
+                        print(urlStringWithQuotes)
                         // Remove quotation marks from the string
                         let urlString = urlStringWithQuotes.trimmingCharacters(in: CharacterSet(charactersIn: "\""))
                         
