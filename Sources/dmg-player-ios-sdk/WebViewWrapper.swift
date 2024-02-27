@@ -18,9 +18,27 @@ public struct WebViewWrapper: UIViewRepresentable {
         let activeWebView = sdk.activeWebView
         containerView.addSubview(activeWebView)
         
+        // Add constraints for the active web view
+        activeWebView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            activeWebView.topAnchor.constraint(equalTo: containerView.topAnchor),
+            activeWebView.widthAnchor.constraint(equalToConstant: 200), // Set width to 200 points
+            activeWebView.heightAnchor.constraint(equalTo: activeWebView.widthAnchor, multiplier: 9.0/16.0), // Maintain aspect ratio
+            activeWebView.centerXAnchor.constraint(equalTo: containerView.centerXAnchor) // Center horizontally
+        ])
+
         // Add the inactive web view
         let inactiveWebView = sdk.inactiveWebView
         containerView.addSubview(inactiveWebView)
+
+        // Add constraints for the inactive web view
+        inactiveWebView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            inactiveWebView.topAnchor.constraint(equalTo: activeWebView.bottomAnchor, constant: 8), // Add spacing between the web views
+            inactiveWebView.widthAnchor.constraint(equalToConstant: 200), // Match width with active web view
+            inactiveWebView.heightAnchor.constraint(equalTo: activeWebView.heightAnchor), // Match height with active web view
+            inactiveWebView.centerXAnchor.constraint(equalTo: containerView.centerXAnchor) // Center horizontally
+        ])
         
         // Return the container view
         return containerView
