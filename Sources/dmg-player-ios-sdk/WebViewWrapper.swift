@@ -22,9 +22,9 @@ public struct WebViewWrapper: UIViewRepresentable {
         activeWebView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             activeWebView.topAnchor.constraint(equalTo: containerView.topAnchor),
-                activeWebView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
-                activeWebView.widthAnchor.constraint(equalToConstant: 300), // Set width to 300 points
-                activeWebView.heightAnchor.constraint(equalToConstant: 80)
+            activeWebView.widthAnchor.constraint(equalToConstant: 200), // Set width to 200 points
+            activeWebView.heightAnchor.constraint(equalTo: activeWebView.widthAnchor, multiplier: 9.0/16.0), // Maintain aspect ratio
+            activeWebView.centerXAnchor.constraint(equalTo: containerView.centerXAnchor) // Center horizontally
         ])
 
         // Add the inactive web view
@@ -34,10 +34,10 @@ public struct WebViewWrapper: UIViewRepresentable {
         // Add constraints for the inactive web view
         inactiveWebView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            inactiveWebView.topAnchor.constraint(equalTo: containerView.topAnchor),
-            inactiveWebView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
-            inactiveWebView.widthAnchor.constraint(equalToConstant: 300), // Set width to 300 points
-            inactiveWebView.heightAnchor.constraint(equalToConstant: 80)
+            inactiveWebView.topAnchor.constraint(equalTo: activeWebView.bottomAnchor, constant: 8), // Add spacing between the web views
+            inactiveWebView.widthAnchor.constraint(equalToConstant: 200),
+            inactiveWebView.heightAnchor.constraint(equalTo: activeWebView.heightAnchor), // Match height with active web view
+            inactiveWebView.centerXAnchor.constraint(equalTo: containerView.centerXAnchor) // Center horizontally
         ])
         
         // Return the container view
