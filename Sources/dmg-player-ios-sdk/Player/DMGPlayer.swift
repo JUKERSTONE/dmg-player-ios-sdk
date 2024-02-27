@@ -199,7 +199,7 @@ public class TrackPlayerSDK: NSObject, ObservableObject, WKScriptMessageHandler 
     private func switchPlayer(toSecondary : Bool) {
         
         // Mute and pause the active player
-        muteAndPause(webView: primaryWebView)
+//        muteAndPause(webView: primaryWebView)
         
         primaryWebView.loadHTMLString("<html></html>", baseURL: nil)
         
