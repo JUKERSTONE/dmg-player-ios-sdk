@@ -23,7 +23,7 @@ public struct WebViewWrapper: UIViewRepresentable {
         NSLayoutConstraint.activate([
             activeWebView.topAnchor.constraint(equalTo: containerView.topAnchor),
             activeWebView.widthAnchor.constraint(equalToConstant: 200), // Set width to 200 points
-            activeWebView.heightAnchor.constraint(equalTo: activeWebView.widthAnchor, multiplier: 9.0/16.0), // Maintain aspect ratio
+            activeWebView.heightAnchor.constraint(equalToConstant: 80), // Maintain aspect ratio
             activeWebView.centerXAnchor.constraint(equalTo: containerView.centerXAnchor) // Center horizontally
         ])
 
