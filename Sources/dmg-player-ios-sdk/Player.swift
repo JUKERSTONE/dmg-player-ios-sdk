@@ -248,5 +248,4 @@ extension TrackPlayerSDK: WKNavigationDelegate {
 }
 
 
-struct ResponseData: String
 
