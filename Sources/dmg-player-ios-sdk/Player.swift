@@ -73,13 +73,13 @@ public class TrackPlayerSDK: NSObject, ObservableObject, WKScriptMessageHandler 
                         print(urlStringWithQuotes)
                         // Remove quotation marks from the string
                         let urlString = urlStringWithQuotes.trimmingCharacters(in: CharacterSet(charactersIn: "\""))
-                        
+                        print(urlString, "here")
                         // Validate if the cleaned string is a valid URL
                         guard let videoURL = URL(string: urlString) else {
                             print("The cleaned string is not a valid URL: \(urlString)")
                             return
                         }
-                        
+                        print(videoURL, "heere")
                         // Load the URL in the WebView
                         DispatchQueue.main.async { [weak self] in
                             self?.loadVideoInActiveWebView(url: videoURL)
