@@ -13,26 +13,26 @@ public struct WebViewWrapper: UIViewRepresentable {
     public func makeUIView(context: Context) -> UIView {
         let containerView = UIView()
         
-        let activeWebView = sdk.activeWebView
-        containerView.addSubview(activeWebView)
+        let primaryWebView = sdk.primaryWebView
+        containerView.addSubview(primaryWebView)
         
-        activeWebView.translatesAutoresizingMaskIntoConstraints = false
+        primaryWebView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            activeWebView.topAnchor.constraint(equalTo: containerView.topAnchor),
-            activeWebView.widthAnchor.constraint(equalToConstant: 200), // Set width to 200 points
-            activeWebView.heightAnchor.constraint(equalToConstant: 80), // Maintain aspect ratio
-            activeWebView.centerXAnchor.constraint(equalTo: containerView.centerXAnchor) // Center horizontally
+            primaryWebView.topAnchor.constraint(equalTo: containerView.topAnchor),
+            primaryWebView.widthAnchor.constraint(equalToConstant: 200), // Set width to 200 points
+            primaryWebView.heightAnchor.constraint(equalToConstant: 80), // Maintain aspect ratio
+            primaryWebView.centerXAnchor.constraint(equalTo: containerView.centerXAnchor) // Center horizontally
         ])
 
-        let inactiveWebView = sdk.inactiveWebView
-        containerView.addSubview(inactiveWebView)
+        let secondaryWebView = sdk.secondaryWebView
+        containerView.addSubview(secondaryWebView)
 
-        inactiveWebView.translatesAutoresizingMaskIntoConstraints = false
+        secondaryWebView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            inactiveWebView.topAnchor.constraint(equalTo: activeWebView.bottomAnchor, constant: 8), // Add spacing between the web views
-            inactiveWebView.widthAnchor.constraint(equalToConstant: 200),
-            inactiveWebView.heightAnchor.constraint(equalTo: activeWebView.heightAnchor), // Match height with active web view
-            inactiveWebView.centerXAnchor.constraint(equalTo: containerView.centerXAnchor) // Center horizontally
+            secondaryWebView.topAnchor.constraint(equalTo: secondaryWebView.bottomAnchor, constant: 8), // Add spacing between the web views
+            secondaryWebView.widthAnchor.constraint(equalToConstant: 200),
+            secondaryWebView.heightAnchor.constraint(equalTo: secondaryWebView.heightAnchor), // Match height with active web view
+            secondaryWebView.centerXAnchor.constraint(equalTo: containerView.centerXAnchor) // Center horizontally
         ])
         
         return containerView
