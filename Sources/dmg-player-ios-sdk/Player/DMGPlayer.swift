@@ -259,9 +259,9 @@ public class TrackPlayerSDK: NSObject, ObservableObject, WKScriptMessageHandler 
                     
                     // Load the URL in the WebView
                     if self?.isPrimaryActive == true {
-                        self?.loadVideoInPrimaryWebView(url: videoURL)
-                    } else {
                         self?.loadVideoInSecondaryWebView(url: videoURL)
+                    } else {
+                        self?.loadVideoInPrimaryWebView(url: videoURL)
                     }
                 case .failure(let error):
                     print("Error fetching data: \(error)")
