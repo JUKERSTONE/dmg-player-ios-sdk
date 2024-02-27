@@ -7,7 +7,6 @@ import WebKit
 public class TrackPlayerSDK: NSObject, ObservableObject, WKScriptMessageHandler {
     public var primaryWebView: WKWebView
     public var secondaryWebView: WKWebView
-    @Published var hasPreloadedNextWebview: Bool = false
     @Published var isPrimaryActive: Bool = true
     @Published var index: Int = 0
     @Published var nowPlaying: String = ""
@@ -111,28 +110,29 @@ public class TrackPlayerSDK: NSObject, ObservableObject, WKScriptMessageHandler 
         webView.evaluateJavaScript(script, completionHandler: nil)
     }
     
-    func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
-            if message.name == "ReactNativeWebView", let messageBody = message.body as? [String: Any] {
-                // Handle the message
-                if let eventType = messageBody["eventType"] as? String {
-                    switch eventType {
-//                    case "videoReady":
-//                        // Handle video ready event
-//                    case "videoEnded":
-//                        // Handle video ended event
-                    case "videoProgress":
-                        if let progress = messageBody["data"] as? Double {
-                           print("Video progress: \(progress)%")
+    public func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
+        if message.name == "videoEnded" {
+            if let messageBody = message.body as? String, messageBody == "ended" {
+                DispatchQueue.main.async {
+                    self.switchPlayer(toSecondary: !self.isPrimaryActive)
+                }
+            }
+        } else if message.name == "videoProgress" {
+            if let messageBody = message.body as? [String: Any], let eventType = messageBody["eventType"] as? String {
+                if eventType == "videoProgress" {
+                    // Handle video progress message
+                    if let progressData = messageBody["data"] as? Double {
+                        // Process the progress data
+                        if progressData > 80.0 {
+                            // Preload the inactive web view
+                            print("Preloading inactive web view")
                         }
-//                    case "videoError":
-//                        // Handle video error event
-                    default:
-                        break
                     }
                 }
             }
         }
-    
+    }
+\    
     private func preloadInactiveWebView() {
         guard let nextIsrc = queue.first else {
             print("Queue is empty")
