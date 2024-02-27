@@ -20,7 +20,7 @@ public class TrackPlayerSDK: NSObject, ObservableObject {
     public func playNow(isrc: String) {
         let apiService = APIService.shared
         let urlString = "https://europe-west1-trx-traklist.cloudfunctions.net/TRX_DEVELOPER/trx/music/\(isrc)"
-            
+            print(urlString)
         guard let url = URL(string: urlString) else {
             print("Invalid URL")
             return

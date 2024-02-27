@@ -42,13 +42,13 @@ public struct WebViewContainer: View {
                 if index == 0 {
                     // First WebView shows the nowPlaying
                     if let nowPlaying = trackPlayerSDK.nowPlaying {
-                        WebView(isrc: nowPlaying, sdk: trackPlayerSDK).frame(width: 200, height: 60).padding(10)
+                        WebView(isrc: nowPlaying, sdk: trackPlayerSDK).frame(width: 200, height: 60)
                     }
                 } else {
                     // Other WebViews show the queued items
                     let queueIndex = index - 1
                     if queueIndex < trackPlayerSDK.queue.count {
-                        WebView(isrc: trackPlayerSDK.queue[queueIndex], sdk: trackPlayerSDK).frame(width: 200, height: 60).padding(10)
+                        WebView(isrc: trackPlayerSDK.queue[queueIndex], sdk: trackPlayerSDK).frame(width: 200, height: 60)
                     }
                 }
             }
