@@ -54,16 +54,34 @@ public class TrackPlayerSDK: NSObject, ObservableObject, WKScriptMessageHandler 
                 DispatchQueue.main.async {
                     switch result {
                     case .success(let data):
-                        print(data, "here")
-                        do {
-                            let responseData = try JSONDecoder().decode(ResponseData.self, from: data)
-                            if let videoURL = URL(string: responseData.url) {
-                                self?.loadVideoInActiveWebView(url: videoURL)
-                            } else {
-                                print("Invalid video URL")
-                            }
-                        } catch {
-                            print("Error decoding data: \(error)")
+//                        print(data, "here")
+//                        do {
+//                            let responseData = try JSONDecoder().decode(ResponseData.self, from: data)
+//                            if let videoURL = URL(string: responseData.url) {
+//                                self?.loadVideoInActiveWebView(url: videoURL)
+//                            } else {
+//                                print("Invalid video URL")
+//                            }
+//                        } catch {
+//                            print("Error decoding data: \(error)")
+//                        }
+                        guard let urlStringWithQuotes = String(data: data, encoding: .utf8) else {
+                            print("The data received could not be converted to a string.")
+                            return
+                        }
+                        // Remove quotation marks from the string
+                        let urlString = urlStringWithQuotes.trimmingCharacters(in: CharacterSet(charactersIn: "\""))
+                        
+                        // Validate if the cleaned string is a valid URL
+                        guard let videoURL = URL(string: urlString) else {
+                            print("The cleaned string is not a valid URL: \(urlString)")
+                            return
+                        }
+                        
+                        // Load the URL in the WebView
+                        DispatchQueue.main.async { [weak self] in
+                            self?.loadVideoInActiveWebView(url: videoURL)
+
                         }
                     case .failure(let error):
                         print("Error fetching data: \(error)")
@@ -230,7 +248,5 @@ extension TrackPlayerSDK: WKNavigationDelegate {
 }
 
 
-struct ResponseData: Decodable {
-    let url: String
-}
+struct ResponseData: String
 
