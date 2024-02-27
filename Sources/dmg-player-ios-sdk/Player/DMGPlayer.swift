@@ -18,7 +18,6 @@ public class TrackPlayerSDK: NSObject, ObservableObject, WKScriptMessageHandler 
         self.activeWebView = WKWebView()
         self.inactiveWebView = WKWebView()
 
-        // Now call super.init()
         super.init()
 
         let config = WKWebViewConfiguration()
@@ -86,9 +85,9 @@ public class TrackPlayerSDK: NSObject, ObservableObject, WKScriptMessageHandler 
         print(queue)
     }
     
-//    public func removeFromQueue(track: Track) {
-//        webView.load(URLRequest(url: track.url))
-//    }
+    public func removeFromQueue(isrc: String) {
+        print(queue)
+    }
     
     private func loadVideoInActiveWebView(url: URL) {
             let request = URLRequest(url: url)
