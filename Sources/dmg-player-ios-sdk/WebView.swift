@@ -16,7 +16,7 @@ public struct WebView: UIViewRepresentable {
     public func updateUIView(_ uiView: WKWebView, context: Context) {
         // Here you would load the content based on the isrc passed to the WebView
         // For example, you might tell the sdk to load the video based on the isrc
-        sdk.playNow(isrc: sdk.nowPlaying)
+        sdk.playNow(isrc: "CA5KR2269973")
     }
 }
 
