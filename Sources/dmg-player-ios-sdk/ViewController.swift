@@ -57,7 +57,12 @@ public class ViewController: UIViewController, WKScriptMessageHandler {
 
 @available(iOS 13.0, *)
 public struct WebViewWrapper: UIViewControllerRepresentable {
-    let sdk: TrackPlayerSDK
+    @ObservedObject var sdk: TrackPlayerSDK
+    
+    public init(sdk: TrackPlayerSDK) {
+            self.sdk = sdk
+        }
+    
     public func makeUIViewController(context: Context) -> ViewController {
         return ViewController()
     }
