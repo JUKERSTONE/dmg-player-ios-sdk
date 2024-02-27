@@ -110,7 +110,9 @@ public class TrackPlayerSDK: NSObject, ObservableObject, WKScriptMessageHandler 
     }
     
     public func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
-        if message.name == "player", let messageBody = message.body as? [String: Any] {
+        
+            if message.name == "player", let messageBody = message.body as? [String: Any] {
+            print(messageBody["eventType"])
             switch messageBody["eventType"] as? String {
             case "videoReady":
                 print("Video is ready")
