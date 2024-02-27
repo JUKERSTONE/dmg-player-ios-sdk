@@ -46,10 +46,6 @@ public class TrackPlayerSDK: NSObject, ObservableObject {
                 }
             }
     }
-    
-    public func nowPlaying(isrc: String) {
-        nowPlaying = isrc
-    }
 
     public func queueNext(isrc: String) {
         queue.insert(isrc, at: 0)
@@ -57,6 +53,10 @@ public class TrackPlayerSDK: NSObject, ObservableObject {
 
     public func queue(isrc: String) {
         queue.append(isrc)
+    }
+    
+    public func printQueue() {
+        print(queue)
     }
     
 //    public func removeFromQueue(track: Track) {
