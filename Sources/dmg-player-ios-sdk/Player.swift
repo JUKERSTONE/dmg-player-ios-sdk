@@ -261,11 +261,6 @@ public class TrackPlayerSDK: NSObject, ObservableObject, WKScriptMessageHandler 
             }
         }
     }
-        
-        private func loadVideoInInactiveWebView(url: URL) {
-            let request = URLRequest(url: url)
-            inactiveWebView.load(request)
-        }
 
     public func queueNext(isrc: String) {
         queue.insert(isrc, at: 0)
