@@ -7,8 +7,8 @@ public struct WebViewWrapper: UIViewRepresentable {
     @ObservedObject var sdk: TrackPlayerSDK
     
     public init(sdk: TrackPlayerSDK) {
-            self.sdk = sdk
-        }
+        self.sdk = sdk
+    }
     
     public func makeUIView(context: Context) -> UIView {
         // Create a container view to hold both web views
@@ -40,7 +40,10 @@ public struct WebViewWrapper: UIViewRepresentable {
             inactiveWebView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor)
         ])
         
-        // Return the container view
+        // Set up message handlers for both active and inactive web views
+        activeWebView.configuration.userContentController.add(context.coordinator, name: "activeWebViewEvent")
+        inactiveWebView.configuration.userContentController.add(context.coordinator, name: "inactiveWebViewEvent")
+        
         return containerView
     }
     
@@ -48,5 +51,31 @@ public struct WebViewWrapper: UIViewRepresentable {
         // Update the UI view if needed
         // This method will be called whenever SwiftUI thinks the view needs to be updated
     }
+    
+    public func makeCoordinator() -> Coordinator {
+        Coordinator(self)
+    }
+    
+    public class Coordinator: NSObject, WKScriptMessageHandler {
+        var parent: WebViewWrapper
+        
+        init(_ parent: WebViewWrapper) {
+            self.parent = parent
+        }
+        
+        public func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
+            // Handle messages received from both active and inactive web views
+            if message.name == "activeWebViewEvent" {
+                // Handle message received from the active web view
+                let body = message.body as? String ?? ""
+                print("Received message from active web view: \(body)")
+                // Process the message and take appropriate actions
+            } else if message.name == "inactiveWebViewEvent" {
+                // Handle message received from the inactive web view
+                let body = message.body as? String ?? ""
+                print("Received message from inactive web view: \(body)")
+                // Process the message and take appropriate actions
+            }
+        }
+    }
 }
-

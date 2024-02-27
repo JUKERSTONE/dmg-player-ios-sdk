@@ -119,12 +119,12 @@ public class TrackPlayerSDK: NSObject, ObservableObject, WKScriptMessageHandler 
         // This is just a placeholder call; implement based on your app's logic
         muteAndPause(webView: inactiveWebView)
         
-        if index < queue.count {
-            let nextIsrc = queue[index]
-            playNow(isrc: nextIsrc)
-        } else {
-            print("Index out of range")
-        }
+//        if index < queue.count {
+//            let nextIsrc = queue[index]
+//            playNow(isrc: nextIsrc)
+//        } else {
+//            print("Index out of range")
+//        }
         
         // Load next video or perform other setup for the new active web view
     }
