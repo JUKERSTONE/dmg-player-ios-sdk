@@ -65,7 +65,11 @@ public class TrackPlayerSDK: NSObject, ObservableObject, WKScriptMessageHandler 
                         }
                     
                         DispatchQueue.main.async { [weak self] in
-                            self?.loadVideoInPrimaryWebView(url: videoURL)
+                            if self?.isPrimaryActive == true {
+                                self?.loadVideoInPrimaryWebView(url: videoURL)
+                            } else {
+                            	self?.loadVideoInSecondaryWebView(url: videoURL)
+                            }
 
                         }
                     case .failure(let error):
@@ -94,7 +98,12 @@ public class TrackPlayerSDK: NSObject, ObservableObject, WKScriptMessageHandler 
     private func loadVideoInPrimaryWebView(url: URL) {
             let request = URLRequest(url: url)
             primaryWebView.load(request)
-        }
+    }
+    
+    private func loadVideoInSecondaryWebView(url: URL) {
+            let request = URLRequest(url: url)
+            secondaryWebView.load(request)
+    }
     
     private func setupVideoEndListener(webView: WKWebView) {
         let script = "var videos = document.querySelectorAll('video'); for (var i = 0; i < videos.length; i++) { videos[i].onended = function() { window.webkit.messageHandlers.videoEnded.postMessage('ended'); }; }"
@@ -167,24 +176,6 @@ public class TrackPlayerSDK: NSObject, ObservableObject, WKScriptMessageHandler 
         }
     }
 
-    private func loadVideoInInactiveWebView(url: URL) {
-        let request = URLRequest(url: url)
-        secondaryWebView.load(request)
-        
-        // Execute JavaScript to mute and pause the video
-//        let script = """
-//            var video = document.querySelector('video');
-//            if (video) {
-//                video.muted = true;
-//                video.pause();
-//            }
-//        """
-        
-        let script = "window.trakStarVideo.muted = true; window.trakStarVideo.pause();"
-        
-        
-        secondaryWebView.evaluateJavaScript(script, completionHandler: nil)
-    }
 
     
 //    private func setupVideoProgressListener(webView: WKWebView) {
