@@ -1,10 +1,11 @@
+// Module.swift
+
 import SwiftUI
 import WebKit
 
 
-// TrackPlayerSDK.swift
 @available(iOS 13.0, *)
-public class TrackPlayerSDK: NSObject, ObservableObject, WKScriptMessageHandler {
+public class DMGPlayerSDK: NSObject, ObservableObject, WKScriptMessageHandler {
     public var primaryWebView: WKWebView
     public var secondaryWebView: WKWebView
     @Published var hasPreloadedNextWebview: Bool = true
@@ -56,7 +57,6 @@ public class TrackPlayerSDK: NSObject, ObservableObject, WKScriptMessageHandler 
                             return
                         }
                         
-                        print(urlStringWithQuotes)
                         let urlString = urlStringWithQuotes.trimmingCharacters(in: CharacterSet(charactersIn: "\""))
                      
                         guard let videoURL = URL(string: urlString) else {

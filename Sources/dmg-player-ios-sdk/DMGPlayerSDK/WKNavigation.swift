@@ -1,14 +1,13 @@
+// WKNavigation.swift
+
 import SwiftUI
 import WebKit
 
 // Make sure to conform to WKNavigationDelegate if needed.
 @available(iOS 13.0, *)
-extension TrackPlayerSDK: WKNavigationDelegate {
+extension DMGPlayerSDK: WKNavigationDelegate {
     public func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
         
-        print(webView)
-        
-        // Inject JavaScript for both active and inactive web views
         let jsCodeCommon = """
             if (!window.trakStarVideo) {
                 window.trakStarVideo = document.getElementsByTagName('video')[0];
@@ -46,9 +45,7 @@ extension TrackPlayerSDK: WKNavigationDelegate {
             true;
         """
         
-        // Check if the webView is the activeWebView
         if isPrimaryActive == true {
-            // Inject JavaScript for the active web view
             let jsCodeActive = """
                 // Unmute and play the video
                 window.trakStarVideo.muted = false;
@@ -64,7 +61,6 @@ extension TrackPlayerSDK: WKNavigationDelegate {
             primaryWebView.evaluateJavaScript(jsCode, completionHandler: nil)
             secondaryWebView.evaluateJavaScript(jsCode2, completionHandler: nil)
         } else {
-            // Inject JavaScript for the inactive web view
             let jsCodeActive = """
                 // Unmute and play the video
                 window.trakStarVideo.muted = false;
@@ -138,9 +134,6 @@ extension TrackPlayerSDK: WKNavigationDelegate {
             webView.evaluateJavaScript(jsCode, completionHandler: nil)
         }
     }
-
-    
-    // Implement other WKNavigationDelegate methods as needed
 }
 
 

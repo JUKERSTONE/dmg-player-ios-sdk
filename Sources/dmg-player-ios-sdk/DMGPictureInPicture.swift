@@ -1,12 +1,13 @@
+// DMGPictureInPicture.swift
 
 import SwiftUI
 import WebKit
 
 @available(iOS 13.0, *)
-public struct WebViewWrapper: UIViewRepresentable {
-    @ObservedObject var sdk: TrackPlayerSDK
+public struct DMGPictureInPicture: UIViewRepresentable {
+    @ObservedObject var sdk: DMGPlayerSDK
     
-    public init(sdk: TrackPlayerSDK) {
+    public init(sdk: DMGPlayerSDK) {
             self.sdk = sdk
         }
     
