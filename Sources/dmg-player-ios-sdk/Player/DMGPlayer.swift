@@ -7,7 +7,7 @@ import WebKit
 public class TrackPlayerSDK: NSObject, ObservableObject, WKScriptMessageHandler {
     public var primaryWebView: WKWebView
     public var secondaryWebView: WKWebView
-    @Published var isPrimaryPlayer: Bool = true
+    @Published var isPrimaryActive: Bool = true
     @Published var index: Int = 0
     @Published var nowPlaying: String = ""
     @Published var queue: [String] = []
@@ -104,7 +104,7 @@ public class TrackPlayerSDK: NSObject, ObservableObject, WKScriptMessageHandler 
         if message.name == "videoEnded" {
             if let messageBody = message.body as? String, messageBody == "ended" {
                 DispatchQueue.main.async {
-                    self.switchPlayer(toSecondary: !self.isPrimaryPlayer)
+                    self.switchPlayer(toSecondary: !self.isPrimaryActive)
                 }
             }
         } else if message.name == "videoCurrentTime" {
