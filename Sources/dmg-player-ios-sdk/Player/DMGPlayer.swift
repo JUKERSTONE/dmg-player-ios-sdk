@@ -7,6 +7,7 @@ import WebKit
 public class TrackPlayerSDK: NSObject, ObservableObject, WKScriptMessageHandler {
     public var primaryWebView: WKWebView
     public var secondaryWebView: WKWebView
+    @Published var hasPreloadedNextWebview: Bool = true
     @Published var isPrimaryActive: Bool = true
     @Published var index: Int = 0
     @Published var nowPlaying: String = ""
@@ -116,9 +117,18 @@ public class TrackPlayerSDK: NSObject, ObservableObject, WKScriptMessageHandler 
                 if let eventType = messageBody["eventType"] as? String {
                     // Handle known events
                     switch eventType {
-                    // Your event handling cases here...
-                    default:
-                        print("Unknown event type received: \(eventType)")
+                        case "videoProgress":
+                            if let progressData = messageBody["data"] as? Double {
+                                // Process the progress data
+                                if progressData > 80.0 && !self.hasPreloadedNextWebview {
+                                    self.preloadInactiveWebView() // Call your preload function here
+                                    self.hasPreloadedNextWebview = true // Set the flag to true after preloading
+                                }
+                            } else {
+                                print("Progress data is not a double or not present in the message body.")
+                            }
+                        default:
+                            print("Unknown event type received: \(eventType)")
                     }
                 } else {
                     print("The 'eventType' is not a string or not present in the message body.")
@@ -130,6 +140,7 @@ public class TrackPlayerSDK: NSObject, ObservableObject, WKScriptMessageHandler 
             print("Received a message from an unexpected handler: \(message.name)")
         }
     }
+
 
 
 
@@ -168,9 +179,9 @@ public class TrackPlayerSDK: NSObject, ObservableObject, WKScriptMessageHandler 
                     
                     // Load the URL in the inactive WebView
                         if self?.isPrimaryActive == true {
-                            self?.loadVideoInPrimaryWebView(url: videoURL)
-                        } else {
                             self?.loadVideoInSecondaryWebView(url: videoURL)
+                        } else {
+                            self?.loadVideoInPrimaryWebView(url: videoURL)
                         }
                     
                 case .failure(let error):
