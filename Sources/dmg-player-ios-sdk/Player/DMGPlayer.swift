@@ -203,10 +203,11 @@ public class TrackPlayerSDK: NSObject, ObservableObject, WKScriptMessageHandler 
         
         primaryWebView.loadHTMLString("<html></html>", baseURL: nil)
         
-  
+        isPrimaryActive = false
         
         // Play the newly active player
-        playActiveWebView()
+        let currentISRC = queue[index] // Get the isrc at the current index of the queue
+        playNow(isrc: currentISRC)
         
         // Reset the index for the queue
         index = (index + 1) % queue.count
