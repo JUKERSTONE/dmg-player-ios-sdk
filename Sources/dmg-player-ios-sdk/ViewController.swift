@@ -1,17 +1,18 @@
 import UIKit
+import SwiftUI
 import WebKit
 
 public class ViewController: UIViewController, WKScriptMessageHandler {
     
-    var activeWebView: WKWebView!
-    var inactiveWebView: WKWebView!
+    public var activeWebView: WKWebView!
+    public var inactiveWebView: WKWebView!
 
-    override func viewDidLoad() {
+    public override func viewDidLoad() {
         super.viewDidLoad()
         setupWebViews()
     }
 
-    func setupWebViews() {
+    public func setupWebViews() {
         let webConfiguration = WKWebViewConfiguration()
         let userContentController = WKUserContentController()
         userContentController.add(self, name: "videoEnded")
@@ -20,29 +21,27 @@ public class ViewController: UIViewController, WKScriptMessageHandler {
         activeWebView = WKWebView(frame: .zero, configuration: webConfiguration)
         inactiveWebView = WKWebView(frame: .zero, configuration: webConfiguration)
 
-        // Add web views to the view hierarchy and set up constraints as needed
-        // For example:
-        // self.view.addSubview(activeWebView)
-        // self.view.addSubview(inactiveWebView)
-        // ... Set up constraints or frame here ...
+        self.view.addSubview(activeWebView)
+        self.view.addSubview(inactiveWebView)
+        // Set up constraints or frame here
     }
 
-    func preloadNextVideoInInactiveWebView(url: URL) {
+    public func preloadNextVideoInInactiveWebView(url: URL) {
         inactiveWebView.load(URLRequest(url: url))
         muteAndPause(webView: inactiveWebView)
     }
 
-    func muteAndPause(webView: WKWebView) {
+    public func muteAndPause(webView: WKWebView) {
         let script = "document.querySelector('video').muted = true; document.querySelector('video').pause();"
         webView.evaluateJavaScript(script, completionHandler: nil)
     }
 
-    func setupVideoEndListener(webView: WKWebView) {
+    public func setupVideoEndListener(webView: WKWebView) {
         let script = "var videos = document.querySelectorAll('video'); for (var i = 0; i < videos.length; i++) { videos[i].onended = function() { window.webkit.messageHandlers.videoEnded.postMessage('ended'); }; }"
         webView.evaluateJavaScript(script, completionHandler: nil)
     }
 
-    func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
+    public func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
         if message.name == "videoEnded", let messageBody = message.body as? String, messageBody == "ended" {
             DispatchQueue.main.async {
                 self.switchActiveAndInactiveWebViews()
@@ -50,14 +49,20 @@ public class ViewController: UIViewController, WKScriptMessageHandler {
         }
     }
 
-    func switchActiveAndInactiveWebViews() {
-        // Swap the references
+    public func switchActiveAndInactiveWebViews() {
         (activeWebView, inactiveWebView) = (inactiveWebView, activeWebView)
-
-        // Prepare the new inactive web view (now active) as needed, e.g., unmute
-        // This may involve loading new content, adjusting UI, etc.
-        
-        // Ensure the new inactive web view is muted and paused for its next video
         muteAndPause(webView: inactiveWebView)
     }
 }
+
+@available(iOS 13.0, *)
+struct WebViewWrapper: UIViewControllerRepresentable {
+    func makeUIViewController(context: Context) -> ViewController {
+        return ViewController()
+    }
+    
+    func updateUIViewController(_ uiViewController: ViewController, context: Context) {
+        // Update your view controller here if needed
+    }
+}
+

@@ -48,13 +48,13 @@ public class TrackPlayerSDK: NSObject, ObservableObject, WKScriptMessageHandler 
             guard let url = URL(string: urlString) else {
                 print("Invalid URL")
                 return
-                return
             }
             
             apiService.fetchData(from: url) { [weak self] result in
                 DispatchQueue.main.async {
                     switch result {
                     case .success(let data):
+                        print(data, "here")
                         do {
                             let responseData = try JSONDecoder().decode(ResponseData.self, from: data)
                             if let videoURL = URL(string: responseData.url) {
