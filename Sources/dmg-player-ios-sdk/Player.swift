@@ -203,6 +203,8 @@ public class TrackPlayerSDK: NSObject, ObservableObject, WKScriptMessageHandler 
         // Mute and pause the active player
         muteAndPause(webView: activeWebView)
         
+        activeWebView.loadHTMLString("<html></html>", baseURL: nil)
+        
         // Swap the references
         (activeWebView, inactiveWebView) = (inactiveWebView, activeWebView)
         
