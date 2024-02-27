@@ -32,7 +32,7 @@ extension TrackPlayerSDK: WKNavigationDelegate {
             
             window.trakStarVideo.addEventListener('timeupdate', () => {
                 window.ReactNativeWebView.postMessage(JSON.stringify({
-                    eventType: 'videoCurrentTime',
+                    eventType: 'videoProgress',
                     data: (window.trakStarVideo.currentTime / window.trakStarVideo.duration) * 100
                 }));
             });

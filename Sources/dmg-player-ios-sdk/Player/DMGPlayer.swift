@@ -24,7 +24,7 @@ public class TrackPlayerSDK: NSObject, ObservableObject, WKScriptMessageHandler 
         let config = WKWebViewConfiguration()
         let userContentController = WKUserContentController()
         userContentController.add(self, name: "videoEnded")
-        userContentController.add(self, name: "videoCurrentTime")
+        userContentController.add(self, name: "videoProgress")
         config.userContentController = userContentController
         config.allowsInlineMediaPlayback = true
         
@@ -117,15 +117,15 @@ public class TrackPlayerSDK: NSObject, ObservableObject, WKScriptMessageHandler 
                     self.switchPlayer(toSecondary: !self.isPrimaryActive)
                 }
             }
-        } else if message.name == "videoCurrentTime" {
+        } else if message.name == "videoProgress" {
             if let messageBody = message.body as? [String: Any], let eventType = messageBody["eventType"] as? String {
-                if eventType == "videoCurrentTime" {
+                if eventType == "videoProgress" {
                     // Handle video progress message
                     if let progressData = messageBody["data"] as? Double {
                         // Process the progress data
                         if progressData > 80.0 {
                             // Preload the inactive web view
-                            preloadInactiveWebView()
+                            print("Preloading inactive web view")
                         }
                     }
                 }
