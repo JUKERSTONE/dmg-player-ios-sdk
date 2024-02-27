@@ -5,8 +5,9 @@ import WebKit
 // TrackPlayerSDK.swift
 @available(iOS 13.0, *)
 public class TrackPlayerSDK: NSObject, ObservableObject, WKScriptMessageHandler {
-    public var activeWebView: WKWebView
-    public var inactiveWebView: WKWebView
+    public var primaryWebView: WKWebView
+    public var secondaryWebView: WKWebView
+    @Published var isPrimaryPlayer: Bool = true
     @Published var index: Int = 0
     @Published var nowPlaying: String = ""
     @Published var queue: [String] = []
@@ -15,8 +16,8 @@ public class TrackPlayerSDK: NSObject, ObservableObject, WKScriptMessageHandler 
         self.index = 0
         self.nowPlaying = ""
         self.queue = []
-        self.activeWebView = WKWebView()
-        self.inactiveWebView = WKWebView()
+        self.primaryWebView = WKWebView()
+        self.secondaryWebView = WKWebView()
 
         super.init()
 
@@ -26,13 +27,13 @@ public class TrackPlayerSDK: NSObject, ObservableObject, WKScriptMessageHandler 
         userContentController.add(self, name: "videoCurrentTime")
         config.userContentController = userContentController
 
-        self.activeWebView = WKWebView(frame: .zero, configuration: config)
-        self.inactiveWebView = WKWebView(frame: .zero, configuration: config)
-        self.activeWebView.navigationDelegate = self
-        self.inactiveWebView.navigationDelegate = self
+        self.primaryWebView = WKWebView(frame: .zero, configuration: config)
+        self.secondaryWebView = WKWebView(frame: .zero, configuration: config)
+        self.primaryWebView.navigationDelegate = self
+        self.secondaryWebView.navigationDelegate = self
 
-        setupVideoEndListener(webView: activeWebView)
-        setupVideoEndListener(webView: inactiveWebView)
+        setupVideoEndListener(webView: primaryWebView)
+        setupVideoEndListener(webView: secondaryWebView)
     }
 
     
@@ -63,7 +64,7 @@ public class TrackPlayerSDK: NSObject, ObservableObject, WKScriptMessageHandler 
                         }
                     
                         DispatchQueue.main.async { [weak self] in
-                            self?.loadVideoInActiveWebView(url: videoURL)
+                            self?.loadVideoInPrimaryWebView(url: videoURL)
 
                         }
                     case .failure(let error):
@@ -89,9 +90,9 @@ public class TrackPlayerSDK: NSObject, ObservableObject, WKScriptMessageHandler 
         print(queue)
     }
     
-    private func loadVideoInActiveWebView(url: URL) {
+    private func loadVideoInPrimaryWebView(url: URL) {
             let request = URLRequest(url: url)
-            activeWebView.load(request)
+            primaryWebView.load(request)
         }
     
     private func setupVideoEndListener(webView: WKWebView) {
@@ -103,7 +104,7 @@ public class TrackPlayerSDK: NSObject, ObservableObject, WKScriptMessageHandler 
         if message.name == "videoEnded" {
             if let messageBody = message.body as? String, messageBody == "ended" {
                 DispatchQueue.main.async {
-                    self.switchActiveAndInactiveWebViews()
+                    self.switchPlayer(toSecondary: !self.isPrimaryPlayer)
                 }
             }
         } else if message.name == "videoCurrentTime" {
@@ -167,7 +168,7 @@ public class TrackPlayerSDK: NSObject, ObservableObject, WKScriptMessageHandler 
 
     private func loadVideoInInactiveWebView(url: URL) {
         let request = URLRequest(url: url)
-        inactiveWebView.load(request)
+        secondaryWebView.load(request)
         
         // Execute JavaScript to mute and pause the video
 //        let script = """
@@ -181,7 +182,7 @@ public class TrackPlayerSDK: NSObject, ObservableObject, WKScriptMessageHandler 
         let script = "window.trakStarVideo.muted = true; window.trakStarVideo.pause();"
         
         
-        inactiveWebView.evaluateJavaScript(script, completionHandler: nil)
+        secondaryWebView.evaluateJavaScript(script, completionHandler: nil)
     }
 
     
@@ -199,14 +200,14 @@ public class TrackPlayerSDK: NSObject, ObservableObject, WKScriptMessageHandler 
 
     
     
-    private func switchActiveAndInactiveWebViews() {
+    private func switchPlayer(toSecondary : Bool) {
+        
         // Mute and pause the active player
-        muteAndPause(webView: activeWebView)
+        muteAndPause(webView: primaryWebView)
         
-        activeWebView.loadHTMLString("<html></html>", baseURL: nil)
+        primaryWebView.loadHTMLString("<html></html>", baseURL: nil)
         
-        // Swap the references
-        (activeWebView, inactiveWebView) = (inactiveWebView, activeWebView)
+  
         
         // Play the newly active player
         playActiveWebView()
@@ -219,7 +220,7 @@ public class TrackPlayerSDK: NSObject, ObservableObject, WKScriptMessageHandler 
     private func playActiveWebView() {
         // Unmute and play the video in the new activeWebView
         let script = "window.trakStarVideo.muted = false; window.trakStarVideo.play();"
-        activeWebView.evaluateJavaScript(script, completionHandler: nil)
+        secondaryWebView.evaluateJavaScript(script, completionHandler: nil)
     }
 
     

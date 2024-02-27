@@ -7,7 +7,6 @@ extension TrackPlayerSDK: WKNavigationDelegate {
     public func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
         
         print(webView)
-        print(webView == activeWebView)
         
         // Inject JavaScript for both active and inactive web views
         let jsCodeCommon = """
@@ -68,26 +67,26 @@ extension TrackPlayerSDK: WKNavigationDelegate {
             true;
         """
         
-//        // Check if the webView is the activeWebView
-//        if webView == activeWebView {
-//            // Inject JavaScript for the active web view
-//            let jsCodeActive = """
-//                // Unmute and play the video
-//                window.trakStarVideo.muted = false;
-//                window.trakStarVideo.play();
-//            """
-//            let jsCode = jsCodeCommon + jsCodeActive
-//            webView.evaluateJavaScript(jsCode, completionHandler: nil)
-//        } else {
-//            // Inject JavaScript for the inactive web view
-//            let jsCodeInactive = """
-//                // Mute and pause the video
-//                window.trakStarVideo.muted = true;
-//                window.trakStarVideo.pause();
-//            """
-//            let jsCode = jsCodeCommon + jsCodeInactive
-//            webView.evaluateJavaScript(jsCode, completionHandler: nil)
-//        }
+        // Check if the webView is the activeWebView
+        if isPrimaryPlayer == true {
+            // Inject JavaScript for the active web view
+            let jsCodeActive = """
+                // Unmute and play the video
+                window.trakStarVideo.muted = false;
+                window.trakStarVideo.play();
+            """
+            let jsCode = jsCodeCommon + jsCodeActive
+            webView.evaluateJavaScript(jsCode, completionHandler: nil)
+        } else {
+            // Inject JavaScript for the inactive web view
+            let jsCodeInactive = """
+                // Mute and pause the video
+                window.trakStarVideo.muted = true;
+                window.trakStarVideo.pause();
+            """
+            let jsCode = jsCodeCommon + jsCodeInactive
+            webView.evaluateJavaScript(jsCode, completionHandler: nil)
+        }
     }
 
     
