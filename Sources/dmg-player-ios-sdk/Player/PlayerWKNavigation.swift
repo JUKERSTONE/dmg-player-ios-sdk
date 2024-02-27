@@ -42,7 +42,7 @@ extension TrackPlayerSDK: WKNavigationDelegate {
         """
         
         // Check if the webView is the activeWebView
-        if isPrimaryActive == true && webView == primaryWebView {
+        if isPrimaryActive == true {
             // Inject JavaScript for the active web view
             let jsCodeActive = """
                 // Unmute and play the video
@@ -66,7 +66,7 @@ extension TrackPlayerSDK: WKNavigationDelegate {
             """
             let jsCode = jsCodeCommon + jsCodeActive
             webView.evaluateJavaScript(jsCode, completionHandler: nil)
-        } else if isPrimaryActive == false && webView == secondaryWebView {
+        } else if isPrimaryActive == false {
             // Inject JavaScript for the inactive web view
             let jsCodeInactive = """
                 // Mute and pause the video

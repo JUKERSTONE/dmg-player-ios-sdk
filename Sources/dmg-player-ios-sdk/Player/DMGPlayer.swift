@@ -206,8 +206,12 @@ public class TrackPlayerSDK: NSObject, ObservableObject, WKScriptMessageHandler 
         isPrimaryActive = false
         
         // Play the newly active player
-        let currentISRC = queue[index] // Get the isrc at the current index of the queue
-        playNow(isrc: currentISRC)
+//        let currentISRC = queue[index] // Get the isrc at the current index of the queue
+//        playNow(isrc: currentISRC)
+
+        if !queue.isEmpty {
+            queue.removeFirst()
+        }
         
         // Reset the index for the queue
         index = (index + 1) % queue.count
