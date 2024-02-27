@@ -2,10 +2,23 @@ import UIKit
 import SwiftUI
 import WebKit
 
+@available(iOS 13.0, *)
 public class ViewController: UIViewController, WKScriptMessageHandler {
     
     public var activeWebView: WKWebView!
     public var inactiveWebView: WKWebView!
+    public var sdk: TrackPlayerSDK  // Add this property
+       
+       // Modify the initializer to accept TrackPlayerSDK
+       public init(sdk: TrackPlayerSDK) {
+           self.sdk = sdk
+           super.init(nibName: nil, bundle: nil)
+       }
+       
+       // Add required initializer for UIViewController
+       required init?(coder: NSCoder) {
+           fatalError("init(coder:) has not been implemented")
+       }
 
     public override func viewDidLoad() {
         super.viewDidLoad()
@@ -64,7 +77,7 @@ public struct WebViewWrapper: UIViewControllerRepresentable {
         }
     
     public func makeUIViewController(context: Context) -> ViewController {
-        return ViewController()
+        return ViewController(sdk : sdk)
     }
     
     public func updateUIViewController(_ uiViewController: ViewController, context: Context) {
