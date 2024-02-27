@@ -6,6 +6,9 @@ import WebKit
 extension TrackPlayerSDK: WKNavigationDelegate {
     public func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
         
+        print(activeWebView)
+        print(inactiveWebView)
+        
         // Inject JavaScript for both active and inactive web views
         let jsCodeCommon = """
             if (!window.trakStarVideo) {
