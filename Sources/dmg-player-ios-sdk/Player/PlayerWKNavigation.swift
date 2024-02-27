@@ -61,6 +61,10 @@ extension TrackPlayerSDK: WKNavigationDelegate {
             let jsCodeInactive = """
             if (window.trakStarVideo) {
                 window.trakStarVideo.requestPictureInPicture().then(() => {
+            
+                    window.trakStarVideo.muted = false;
+                    window.trakStarVideo.play();
+            
                     const message = {
                         eventType: 'enablePiP',
                         data: 'PiP initiated successfully.'
@@ -88,11 +92,15 @@ extension TrackPlayerSDK: WKNavigationDelegate {
             let jsCodeInactive = """
               if (window.trakStarVideo) {
                   window.trakStarVideo.requestPictureInPicture().then(() => {
-                      const message = {
+                       
+                    window.trakStarVideo.muted = false;
+                    window.trakStarVideo.play();
+                    
+                    const message = {
                           eventType: 'enablePiP',
                           data: 'PiP initiated successfully.'
-                      };
-                      window.ReactNativeWebView.postMessage(JSON.stringify(message));
+                    };
+                    window.ReactNativeWebView.postMessage(JSON.stringify(message));
                   }).catch(error => {
                       const message = {
                           eventType: 'enablePiP',
