@@ -119,6 +119,13 @@ public class TrackPlayerSDK: NSObject, ObservableObject, WKScriptMessageHandler 
         // This is just a placeholder call; implement based on your app's logic
         muteAndPause(webView: inactiveWebView)
         
+        if index < queue.count {
+            let nextIsrc = queue[index]
+            playNow(isrc: nextIsrc)
+        } else {
+            print("Index out of range")
+        }
+        
         // Load next video or perform other setup for the new active web view
     }
     
@@ -126,41 +133,6 @@ public class TrackPlayerSDK: NSObject, ObservableObject, WKScriptMessageHandler 
         let script = "document.querySelector('video').muted = true; document.querySelector('video').pause();"
         webView.evaluateJavaScript(script, completionHandler: nil)
     }
-    
-//    public func playNow(isrc: String) {
-//        // Determine which webview is currently active and use it to play the requested ISRC
-//        let apiService = APIService.shared
-//        let urlString = "https://europe-west1-trx-traklist.cloudfunctions.net/TRX_DEVELOPER/trx/music/\(isrc)"
-//        print(urlString)
-//        guard let url = URL(string: urlString) else {
-//            print("Invalid URL")
-//            return
-//        }
-//        
-//        apiService.fetchData(from: url) { [weak self] result in
-//            guard let self = self else { return }
-//            
-//            switch result {
-//            case .success(let data):
-//                do {
-//                    let responseData = try JSONDecoder().decode(ResponseData.self, from: data)
-//                    DispatchQueue.main.async {
-//                        // Load the video in the active webview
-//                        self.activeWebView.load(URLRequest(url: responseData.trak.youtube))
-//                        
-//                        // Prepare the next video in the queue by preloading it in the inactive webview
-//                        if let nextIsrc = self.queue.first {
-//                            self.preloadNextVideo(isrc: nextIsrc)
-//                        }
-//                    }
-//                } catch {
-//                    print("Error decoding data: \(error)")
-//                }
-//            case .failure(let error):
-//                print("Error fetching data: \(error)")
-//            }
-//        }
-//    }
     
     private func preloadNextVideo(isrc: String) {
             // Similar logic to playNow, but for the inactive webview
