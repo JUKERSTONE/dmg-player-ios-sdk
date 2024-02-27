@@ -111,28 +111,25 @@ public class TrackPlayerSDK: NSObject, ObservableObject, WKScriptMessageHandler 
     }
     
     public func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
-        if message.name == "videoEnded" {
-            if let messageBody = message.body as? String, messageBody == "ended" {
-                DispatchQueue.main.async {
-                    self.switchPlayer(toSecondary: !self.isPrimaryActive)
-                }
-            }
-        } else if message.name == "videoProgress" {
-            if let messageBody = message.body as? [String: Any], let eventType = messageBody["eventType"] as? String {
-                if eventType == "videoProgress" {
-                    // Handle video progress message
-                    if let progressData = messageBody["data"] as? Double {
-                        // Process the progress data
-                        if progressData > 80.0 {
-                            // Preload the inactive web view
-                            print("Preloading inactive web view")
-                        }
+        if message.name == "ReactNativeWebView", let messageBody = message.body as? [String: Any] {
+            // Log the entire message
+            print("Received message: \(messageBody)")
+            
+            if let eventType = messageBody["eventType"] as? String {
+                switch eventType {
+                case "videoProgress":
+                    // Assuming 'data' is a percentage of the video progress.
+                    if let progress = messageBody["data"] as? Double {
+                        print("Video progress: \(progress)%")
                     }
+                // Handle other event types...
+                default:
+                    break
                 }
             }
         }
     }
-\    
+
     private func preloadInactiveWebView() {
         guard let nextIsrc = queue.first else {
             print("Queue is empty")
