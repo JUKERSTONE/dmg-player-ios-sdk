@@ -130,5 +130,17 @@ public func buildInactiveJavaScript() -> String {
     """
 }
 
+public func buildPauseJavaScript() -> String {
+    return """
+    window.trakStarVideo.muted = true;
+    window.trakStarVideo.pause();
+    """
+}
 
+public func buildPlayJavaScript() -> String {
+    return """
+    window.trakStarVideo.muted = false;
+    window.trakStarVideo.play();
+    """
+}
 

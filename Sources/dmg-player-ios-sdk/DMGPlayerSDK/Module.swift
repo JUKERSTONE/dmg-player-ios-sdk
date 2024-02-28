@@ -92,23 +92,40 @@ public class DMGPlayerSDK: NSObject, ObservableObject, WKScriptMessageHandler {
     }
     
     public func removeFromQueue(isrc: String) {
-        print(queue)
+        queue = queue.filter { $0 != isrc }
     }
+
     
     public func pause() {
-        print(queue)
+        if isPrimaryActive {
+            primaryWebView.evaluateJavaScript(buildPauseJavaScript(), completionHandler: nil)
+        } else {
+            secondaryWebView.evaluateJavaScript(buildPauseJavaScript(), completionHandler: nil)
+        }
     }
     
     public func play() {
-        print(queue)
+        if isPrimaryActive {
+            primaryWebView.evaluateJavaScript(buildPlayJavaScript(), completionHandler: nil)
+        } else {
+            secondaryWebView.evaluateJavaScript(buildPlayJavaScript(), completionHandler: nil)
+        }
     }
     
     public func next() {
-        print(index)
-    }
-    
+            if index < queue.count - 1 {
+                index += 1
+            } else {
+                print("Reached the end of the queue.")
+            }
+        }
+        
     public func previous() {
-        print(index)
+        if index > 0 {
+            index -= 1
+        } else {
+            print("Reached the beginning of the queue.")
+        }
     }
 }
 
