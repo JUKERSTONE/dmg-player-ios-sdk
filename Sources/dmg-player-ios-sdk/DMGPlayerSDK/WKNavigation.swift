@@ -6,12 +6,11 @@ import WebKit
 @available(iOS 13.0, *)
 extension DMGPlayerSDK: WKNavigationDelegate {
     public func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
-        // Inject the common JavaScript code into both web views
-        let jsCodeCommon = buildCommonJavaScript()
         
-        if !hasPreloadedNextWebview {
-            webView.loadHTMLString("<html><html>", baseURL: nil)
-        }
+        if hasPreloadedNextWebview {
+            
+        
+        let jsCodeCommon = buildCommonJavaScript()
         
         // Evaluate JavaScript based on which web view is active
         if isPrimaryActive {
@@ -25,7 +24,7 @@ extension DMGPlayerSDK: WKNavigationDelegate {
         // Additional code if needed for Picture in Picture or other features
     }
     
-    private func buildCommonJavaScript() -> String {
+     func buildCommonJavaScript() -> String {
         // JavaScript code that is common to both active and inactive web views
         let jsCodeCommon = """
             if (!window.trakStarVideo) {
@@ -67,7 +66,7 @@ extension DMGPlayerSDK: WKNavigationDelegate {
         return jsCodeCommon
     }
     
-    private func buildActiveJavaScript() -> String {
+     func buildActiveJavaScript() -> String {
         // JavaScript code to unmute and play the video
         return """
         // Unmute and play the video
@@ -89,12 +88,14 @@ extension DMGPlayerSDK: WKNavigationDelegate {
         """
     }
     
-    private func buildInactiveJavaScript() -> String {
-        // JavaScript code to mute and pause the video
-        return """
+         func buildInactiveJavaScript() -> String {
+            // JavaScript code to mute and pause the video
+            return """
         // Mute and pause the video
         window.trakStarVideo.muted = true;
         window.trakStarVideo.pause();
         """
+            
+        }
     }
 }
