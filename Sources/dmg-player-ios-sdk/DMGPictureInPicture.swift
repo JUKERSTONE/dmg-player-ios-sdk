@@ -47,6 +47,8 @@ public struct DMGPictureLicense: UIViewRepresentable {
                 let nextUp = updatedQueue[1]
                 sdk.updatedPreload(isrc: nextUp)
             } else {
+                let current = updatedQueue[0]
+                sdk.playNow(isrc: current)
                 print("Queue does not have a second element")
             }
         }
