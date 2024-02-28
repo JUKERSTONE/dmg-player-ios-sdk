@@ -32,8 +32,8 @@ public struct DMGPictureLicense: UIViewRepresentable {
         NSLayoutConstraint.activate([
             secondaryWebView.topAnchor.constraint(equalTo: secondaryWebView.bottomAnchor, constant: 8), // Add spacing between the web views
             secondaryWebView.widthAnchor.constraint(equalToConstant: 200),
-            secondaryWebView.heightAnchor.constraint(equalTo: secondaryWebView.heightAnchor), // Match height with active web view
-            secondaryWebView.centerXAnchor.constraint(equalTo: containerView.centerXAnchor) // Center horizontally
+            secondaryWebView.heightAnchor.constraint(equalToConstant: 80), // Match height with active web view
+            secondaryWebView.centerXAnchor.constraint(equalTo: containerView.leadingAnchor) // Center horizontally
         ])
         
         return containerView

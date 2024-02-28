@@ -128,10 +128,10 @@ extension DMGPlayerSDK {
                     }
 
                     // Load the URL in the WebView
-                    if self.isPrimaryActive == true {
-                        self.loadVideoInSecondaryWebView(url: videoURL)
+                    if self?.isPrimaryActive == true {
+                        self?.loadVideoInSecondaryWebView(url: videoURL)
                     } else {
-                        self.loadVideoInPrimaryWebView(url: videoURL)
+                        self?.loadVideoInPrimaryWebView(url: videoURL)
                     }
                 case .failure(let error):
                     print("Error fetching data: \(error)")
