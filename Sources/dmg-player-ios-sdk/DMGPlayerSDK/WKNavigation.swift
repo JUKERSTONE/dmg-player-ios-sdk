@@ -3,11 +3,26 @@
 import SwiftUI
 import WebKit
 
-// Make sure to conform to WKNavigationDelegate if needed.
 @available(iOS 13.0, *)
 extension DMGPlayerSDK: WKNavigationDelegate {
     public func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
+        // Inject the common JavaScript code into both web views
+        let jsCodeCommon = buildCommonJavaScript()
         
+        // Evaluate JavaScript based on which web view is active
+        if isPrimaryActive {
+            primaryWebView.evaluateJavaScript(jsCodeCommon + buildActiveJavaScript(), completionHandler: nil)
+            secondaryWebView.evaluateJavaScript(jsCodeCommon + buildInactiveJavaScript(), completionHandler: nil)
+        } else {
+            primaryWebView.evaluateJavaScript(jsCodeCommon + buildInactiveJavaScript(), completionHandler: nil)
+            secondaryWebView.evaluateJavaScript(jsCodeCommon + buildActiveJavaScript(), completionHandler: nil)
+        }
+        
+        // Additional code if needed for Picture in Picture or other features
+    }
+    
+    private func buildCommonJavaScript() -> String {
+        // JavaScript code that is common to both active and inactive web views
         let jsCodeCommon = """
             if (!window.trakStarVideo) {
                 window.trakStarVideo = document.getElementsByTagName('video')[0];
@@ -45,96 +60,37 @@ extension DMGPlayerSDK: WKNavigationDelegate {
             true;
         """
         
-        if isPrimaryActive == true {
-            let jsCodeActive = """
-                // Unmute and play the video
-                window.trakStarVideo.muted = false;
-                window.trakStarVideo.play();
-            """
-            let jsCodeInactive = """
-                // Unmute and play the video
-                window.trakStarVideo.muted = true;
-                window.trakStarVideo.pause();
-            """
-            let jsCode = jsCodeCommon + jsCodeActive
-            let jsCode2 = jsCodeCommon + jsCodeInactive
-            primaryWebView.evaluateJavaScript(jsCode, completionHandler: nil)
-            secondaryWebView.evaluateJavaScript(jsCode2, completionHandler: nil)
-        } else {
-            let jsCodeActive = """
-                // Unmute and play the video
-                window.trakStarVideo.muted = false;
-                window.trakStarVideo.play();
-            """
-            let jsCodeInactive = """
-                // Unmute and play the video
-                window.trakStarVideo.muted = true;
-                window.trakStarVideo.pause();
-            """
-            let jsCode = jsCodeCommon + jsCodeActive
-            let jsCode2 = jsCodeCommon + jsCodeInactive
+        return jsCodeCommon
+    }
     
-            primaryWebView.evaluateJavaScript(jsCode2, completionHandler: nil)
-            secondaryWebView.evaluateJavaScript(jsCode, completionHandler: nil)
-        }
-        
-        if isPrimaryActive == true && webView == primaryWebView {
-            let jsCodeInactive = """
-            if (window.trakStarVideo) {
-                window.trakStarVideo.requestPictureInPicture().then(() => {
-                    const message = {
-                        eventType: 'enablePiP',
-                        data: 'PiP initiated successfully.'
-                    };
-                    window.webkit.messageHandlers.player.postMessage(JSON.stringify(message));
-                }).catch(error => {
-                    const message = {
-                        eventType: 'enablePiP',
-                        data: 'PiP initiation failed: ' + error.message
-                    };
-                    window.webkit.messageHandlers.player.postMessage(JSON.stringify(message));
-                });
-            } else {
-                const message = {
-                    eventType: 'enablePiP',
-                    data: 'No video element found.'
-                };
-                window.webkit.messageHandlers.player.postMessage(JSON.stringify(message));
+    private func buildActiveJavaScript() -> String {
+        // JavaScript code to unmute and play the video
+        return """
+        // Unmute and play the video
+        window.trakStarVideo.muted = false;
+        window.trakStarVideo.play();
+        window.trakStarVideo.requestPictureInPicture().then(() => {
+            const message = {
+                eventType: 'enablePiP',
+                data: 'PiP initiated successfully.'
             };
-            """
-            
-            let jsCode = jsCodeCommon + jsCodeInactive
-            webView.evaluateJavaScript(jsCode, completionHandler: nil)
-        } else if isPrimaryActive == false && webView == secondaryWebView {
-            let jsCodeInactive = """
-            if (window.trakStarVideo) {
-                window.trakStarVideo.requestPictureInPicture().then(() => {
-                    const message = {
-                        eventType: 'enablePiP',
-                        data: 'PiP initiated successfully.'
-                    };
-                    window.webkit.messageHandlers.player.postMessage(JSON.stringify(message));
-                }).catch(error => {
-                    const message = {
-                        eventType: 'enablePiP',
-                        data: 'PiP initiation failed: ' + error.message
-                    };
-                    window.webkit.messageHandlers.player.postMessage(JSON.stringify(message));
-                });
-            } else {
-                const message = {
-                    eventType: 'enablePiP',
-                    data: 'No video element found.'
-                };
-                window.webkit.messageHandlers.player.postMessage(JSON.stringify(message));
+            window.webkit.messageHandlers.player.postMessage(JSON.stringify(message));
+        }).catch(error => {
+            const message = {
+                eventType: 'enablePiP',
+                data: 'PiP initiation failed: ' + error.message
             };
-            """
-            
-            let jsCode = jsCodeCommon + jsCodeInactive
-            webView.evaluateJavaScript(jsCode, completionHandler: nil)
-        }
+            window.webkit.messageHandlers.player.postMessage(JSON.stringify(message));
+        });
+        """
+    }
+    
+    private func buildInactiveJavaScript() -> String {
+        // JavaScript code to mute and pause the video
+        return """
+        // Mute and pause the video
+        window.trakStarVideo.muted = true;
+        window.trakStarVideo.pause();
+        """
     }
 }
-
-
-
