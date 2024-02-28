@@ -101,16 +101,7 @@ extension DMGPlayerSDK {
             };
             """
         
-        if isPrimaryActive && webView == primaryWebView {
-            webView.evaluateJavaScript(script, completionHandler: nil)
-        } else if !isPrimaryActive && webView == primaryWebView {
-            webView.loadHTMLString("<html><html>", baseURL: nil)
-        } else if !isPrimaryActive && webView == secondaryWebView {
-            webView.evaluateJavaScript(script, completionHandler: nil)
-        } else if isPrimaryActive && webView == secondaryWebView {
-            webView.loadHTMLString("<html><html>", baseURL: nil)
-        }
-        
+        webView.evaluateJavaScript(script, completionHandler: nil)
     }
     
     func updatedPreload(isrc: String) {
