@@ -58,7 +58,7 @@ extension DMGPlayerSDK {
                     }
                    
                     primaryWebView.loadHTMLString("<html><html>", baseURL: nil)
-//                    self.play(webView: self.secondaryWebView)
+                    self.play(webView: self.secondaryWebView)
                 } else if self.isPrimaryActive == false && self.hasPreloadedNextWebview {
                     self.isPrimaryActive = true
                     self.hasPreloadedNextWebview = false
@@ -70,7 +70,7 @@ extension DMGPlayerSDK {
                     }
                     
                     secondaryWebView.loadHTMLString("<html><html>", baseURL: nil)
-//                    self.play(webView: self.primaryWebView)
+                    self.play(webView: self.primaryWebView)
                 }
             default:
                 print("Unknown event type received: \(eventType)")
