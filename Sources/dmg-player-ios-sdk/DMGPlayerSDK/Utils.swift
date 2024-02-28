@@ -6,106 +6,14 @@ import WebKit
 @available(iOS 13.0, *)
 extension DMGPlayerSDK {
     func loadVideoInPrimaryWebView(url: URL) {
-            // Prepare the JavaScript to be injected into the primary web view
-            let primaryScript = WKUserScript(
-                source: buildActiveJavaScript(),
-                injectionTime: .atDocumentEnd,
-                forMainFrameOnly: true
-            )
-            
-            // Prepare the JavaScript to be injected into the secondary web view
-            let secondaryScript = WKUserScript(
-                source: buildInactiveJavaScript(),
-                injectionTime: .atDocumentEnd,
-                forMainFrameOnly: true
-            )
-
-            // Clear any existing scripts in the primary web view to avoid duplicates
-            primaryWebView.configuration.userContentController.removeAllUserScripts()
-
-            // Inject the active script into the primary web view's content controller
-            primaryWebView.configuration.userContentController.addUserScript(primaryScript)
-
-            // Load the URL request in the primary web view
             let request = URLRequest(url: url)
             primaryWebView.load(request)
-            
-            // Inject the inactive JavaScript into the secondary web view
-            // Note that this does not load a new request into the secondary web view
-            // It simply injects the script so that it will be executed with the next load or according to the script content
-            injectJavaScript(webView: secondaryWebView, script: buildInactiveJavaScript())
-        }
+    }
     
     func loadVideoInSecondaryWebView(url: URL) {
-            // Prepare the JavaScript to be injected into the primary web view
-            let secondaryScript = WKUserScript(
-                source: buildActiveJavaScript(),
-                injectionTime: .atDocumentEnd,
-                forMainFrameOnly: true
-            )
-            
-            // Prepare the JavaScript to be injected into the secondary web view
-            let primaryScript = WKUserScript(
-                source: buildInactiveJavaScript(),
-                injectionTime: .atDocumentEnd,
-                forMainFrameOnly: true
-            )
-
-            // Clear any existing scripts in the primary web view to avoid duplicates
-            secondaryWebView.configuration.userContentController.removeAllUserScripts()
-
-            // Inject the active script into the primary web view's content controller
-        secondaryWebView.configuration.userContentController.addUserScript(primaryScript)
-
-            // Load the URL request in the primary web view
             let request = URLRequest(url: url)
-        secondaryWebView.load(request)
-            
-            // Inject the inactive JavaScript into the secondary web view
-            // Note that this does not load a new request into the secondary web view
-            // It simply injects the script so that it will be executed with the next load or according to the script content
-            injectJavaScript(webView: primaryWebView, script: buildInactiveJavaScript())
-        }
-        
-        // Function to directly inject JavaScript into a web view
-        private func injectJavaScript(webView: WKWebView, script: String) {
-            webView.evaluateJavaScript(script, completionHandler: { (result, error) in
-                if let error = error {
-                    print("Error injecting JavaScript into secondary web view: \(error)")
-                } else {
-                    print("Inactive JavaScript injected successfully into secondary web view.")
-                }
-            })
-        }
-        
-        // Function to load video in secondary web view and set it as active
-//        func loadVideoInSecondaryWebView(url: URL) {
-//            // Set inactive JS for primary web view
-//            let primaryScript = WKUserScript(
-//                source: buildInactiveJavaScript(),
-//                injectionTime: .atDocumentEnd,
-//                forMainFrameOnly: true
-//            )
-//
-//            // Set active JS for secondary web view
-//            let secondaryScript = WKUserScript(
-//                source: buildActiveJavaScript(),
-//                injectionTime: .atDocumentEnd,
-//                forMainFrameOnly: true
-//            )
-//
-//            // Clear any existing scripts to avoid duplicates
-//            primaryWebView.configuration.userContentController.removeAllUserScripts()
-//            secondaryWebView.configuration.userContentController.removeAllUserScripts()
-//
-//            // Inject the scripts into the web views' content controllers
-//            primaryWebView.configuration.userContentController.addUserScript(primaryScript)
-//            secondaryWebView.configuration.userContentController.addUserScript(secondaryScript)
-//
-//            // Load the URL request in secondary web view
-//            let request = URLRequest(url: url)
-//            secondaryWebView.load(request)
-//        }
+            secondaryWebView.load(request)
+    }
 
     func preloadNextWebView() {
         guard index + 1 < queue.count else {

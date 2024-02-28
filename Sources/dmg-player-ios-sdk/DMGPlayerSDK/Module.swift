@@ -29,8 +29,8 @@ public class DMGPlayerSDK: NSObject, ObservableObject, WKScriptMessageHandler {
         
         self.primaryWebView = WKWebView(frame: .zero, configuration: config)
         self.secondaryWebView = WKWebView(frame: .zero, configuration: config)
-//        self.primaryWebView.navigationDelegate = self
-//        self.secondaryWebView.navigationDelegate = self
+        self.primaryWebView.navigationDelegate = self
+        self.secondaryWebView.navigationDelegate = self
     }
 
     

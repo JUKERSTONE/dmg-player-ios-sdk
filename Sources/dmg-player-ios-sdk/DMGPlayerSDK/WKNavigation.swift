@@ -9,23 +9,21 @@ extension DMGPlayerSDK: WKNavigationDelegate {
         // Inject the common JavaScript code into both web views
         let jsCodeCommon = buildCommonJavaScript()
         
-        //        // Evaluate JavaScript based on which web view is active
-        //        if isPrimaryActive {
-        //            primaryWebView.evaluateJavaScript(jsCodeCommon + buildActiveJavaScript(), completionHandler: nil)
-        //            secondaryWebView.evaluateJavaScript(jsCodeCommon + buildInactiveJavaScript(), completionHandler: nil)
-        //        } else {
-        //            primaryWebView.evaluateJavaScript(jsCodeCommon + buildInactiveJavaScript(), completionHandler: nil)
-        //            secondaryWebView.evaluateJavaScript(jsCodeCommon + buildActiveJavaScript(), completionHandler: nil)
-        //        }
-        //
-        //        // Additional code if needed for Picture in Picture or other features
-        //    }
+        // Evaluate JavaScript based on which web view is active
+        if isPrimaryActive {
+            primaryWebView.evaluateJavaScript(jsCodeCommon + buildActiveJavaScript(), completionHandler: nil)
+            secondaryWebView.evaluateJavaScript(jsCodeCommon + buildInactiveJavaScript(), completionHandler: nil)
+        } else {
+            primaryWebView.evaluateJavaScript(jsCodeCommon + buildInactiveJavaScript(), completionHandler: nil)
+            secondaryWebView.evaluateJavaScript(jsCodeCommon + buildActiveJavaScript(), completionHandler: nil)
+        }
         
-        webView.evaluateJavaScript(jsCodeCommon, completionHandler: nil)
-        
-        func buildCommonJavaScript() -> String {
-            // JavaScript code that is common to both active and inactive web views
-            let jsCodeCommon = """
+        // Additional code if needed for Picture in Picture or other features
+    }
+    
+    private func buildCommonJavaScript() -> String {
+        // JavaScript code that is common to both active and inactive web views
+        let jsCodeCommon = """
             if (!window.trakStarVideo) {
                 window.trakStarVideo = document.getElementsByTagName('video')[0];
             }
@@ -61,40 +59,38 @@ extension DMGPlayerSDK: WKNavigationDelegate {
             });
             true;
         """
-            
-            return jsCodeCommon
-        }
         
-        //    private func buildActiveJavaScript() -> String {
-        //        // JavaScript code to unmute and play the video
-        //        return """
-        //        // Unmute and play the video
-        //        window.trakStarVideo.muted = false;
-        //        window.trakStarVideo.play();
-        //        window.trakStarVideo.requestPictureInPicture().then(() => {
-        //            const message = {
-        //                eventType: 'enablePiP',
-        //                data: 'PiP initiated successfully.'
-        //            };
-        //            window.webkit.messageHandlers.player.postMessage(JSON.stringify(message));
-        //        }).catch(error => {
-        //            const message = {
-        //                eventType: 'enablePiP',
-        //                data: 'PiP initiation failed: ' + error.message
-        //            };
-        //            window.webkit.messageHandlers.player.postMessage(JSON.stringify(message));
-        //        });
-        //        """
-        //    }
-        //
-        //    private func buildInactiveJavaScript() -> String {
-        //        // JavaScript code to mute and pause the video
-        //        return """
-        //        // Mute and pause the video
-        //        window.trakStarVideo.muted = true;
-        //        window.trakStarVideo.pause();
-        //        """
-        //    }
+        return jsCodeCommon
     }
     
+    private func buildActiveJavaScript() -> String {
+        // JavaScript code to unmute and play the video
+        return """
+        // Unmute and play the video
+        window.trakStarVideo.muted = false;
+        window.trakStarVideo.play();
+        window.trakStarVideo.requestPictureInPicture().then(() => {
+            const message = {
+                eventType: 'enablePiP',
+                data: 'PiP initiated successfully.'
+            };
+            window.webkit.messageHandlers.player.postMessage(JSON.stringify(message));
+        }).catch(error => {
+            const message = {
+                eventType: 'enablePiP',
+                data: 'PiP initiation failed: ' + error.message
+            };
+            window.webkit.messageHandlers.player.postMessage(JSON.stringify(message));
+        });
+        """
+    }
+    
+    private func buildInactiveJavaScript() -> String {
+        // JavaScript code to mute and pause the video
+        return """
+        // Mute and pause the video
+        window.trakStarVideo.muted = true;
+        window.trakStarVideo.pause();
+        """
+    }
 }
