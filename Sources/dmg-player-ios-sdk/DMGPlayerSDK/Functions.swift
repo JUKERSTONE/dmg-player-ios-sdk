@@ -7,7 +7,7 @@ import WebKit
 extension DMGPlayerSDK {
     func loadVideoInPrimaryWebView(url: URL) {
         // Clear any existing user scripts
-        primaryWebView.configuration.userContentController.removeAllUserScripts()
+//        primaryWebView.configuration.userContentController.removeAllUserScripts()
 
         // Create the user script to be injected at the end of document loading
         let activeScript = WKUserScript(source: buildActiveJavaScript(), injectionTime: .atDocumentEnd, forMainFrameOnly: true)
@@ -171,6 +171,7 @@ public func buildActiveJavaScript() -> String {
         };
         window.webkit.messageHandlers.player.postMessage(JSON.stringify(message));
     });
+    
     """
 }
 
