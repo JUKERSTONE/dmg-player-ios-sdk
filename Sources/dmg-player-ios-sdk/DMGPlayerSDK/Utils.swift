@@ -6,14 +6,61 @@ import WebKit
 @available(iOS 13.0, *)
 extension DMGPlayerSDK {
     func loadVideoInPrimaryWebView(url: URL) {
+            // Set active JS for primary web view
+            let primaryScript = WKUserScript(
+                source: buildActiveJavaScript(),
+                injectionTime: .atDocumentEnd,
+                forMainFrameOnly: true
+            )
+            
+            // Set inactive JS for secondary web view
+            let secondaryScript = WKUserScript(
+                source: buildInactiveJavaScript(),
+                injectionTime: .atDocumentEnd,
+                forMainFrameOnly: true
+            )
+
+            // Clear any existing scripts to avoid duplicates
+            primaryWebView.configuration.userContentController.removeAllUserScripts()
+            secondaryWebView.configuration.userContentController.removeAllUserScripts()
+
+            // Inject the scripts into the web views' content controllers
+            primaryWebView.configuration.userContentController.addUserScript(primaryScript)
+            secondaryWebView.configuration.userContentController.addUserScript(secondaryScript)
+
+            // Load the URL request in primary web view
             let request = URLRequest(url: url)
             primaryWebView.load(request)
-    }
-    
-    func loadVideoInSecondaryWebView(url: URL) {
+        }
+        
+        // Function to load video in secondary web view and set it as active
+        func loadVideoInSecondaryWebView(url: URL) {
+            // Set inactive JS for primary web view
+            let primaryScript = WKUserScript(
+                source: buildInactiveJavaScript(),
+                injectionTime: .atDocumentEnd,
+                forMainFrameOnly: true
+            )
+            
+            // Set active JS for secondary web view
+            let secondaryScript = WKUserScript(
+                source: buildActiveJavaScript(),
+                injectionTime: .atDocumentEnd,
+                forMainFrameOnly: true
+            )
+
+            // Clear any existing scripts to avoid duplicates
+            primaryWebView.configuration.userContentController.removeAllUserScripts()
+            secondaryWebView.configuration.userContentController.removeAllUserScripts()
+
+            // Inject the scripts into the web views' content controllers
+            primaryWebView.configuration.userContentController.addUserScript(primaryScript)
+            secondaryWebView.configuration.userContentController.addUserScript(secondaryScript)
+
+            // Load the URL request in secondary web view
             let request = URLRequest(url: url)
             secondaryWebView.load(request)
-    }
+        }
 
     func preloadNextWebView() {
         guard index + 1 < queue.count else {
