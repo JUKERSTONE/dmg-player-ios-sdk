@@ -112,20 +112,20 @@ public class DMGPlayerSDK: NSObject, ObservableObject, WKScriptMessageHandler {
         }
     }
     
-    public func next() {
-            if index < queue.count - 1 {
-                index += 1
-            } else {
-                print("Reached the end of the queue.")
-            }
-        }
-        
-    public func previous() {
-        if index > 0 {
-            index -= 1
-        } else {
-            print("Reached the beginning of the queue.")
-        }
-    }
+//    public func next() {
+//            if index < queue.count - 1 {
+//                index += 1
+//            } else {
+//                print("Reached the end of the queue.")
+//            }
+//        }
+//        
+//    public func previous() {
+//        if index > 0 {
+//            index -= 1
+//        } else {
+//            print("Reached the beginning of the queue.")
+//        }
+//    }
 }
 
