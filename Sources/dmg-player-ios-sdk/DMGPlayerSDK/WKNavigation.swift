@@ -12,9 +12,11 @@ extension DMGPlayerSDK: WKNavigationDelegate {
         // Evaluate JavaScript based on which web view is active
         if isPrimaryActive {
             primaryWebView.evaluateJavaScript(jsCodeCommon + buildActiveJavaScript(), completionHandler: nil)
-            secondaryWebView.evaluateJavaScript(jsCodeCommon + buildInactiveJavaScript(), completionHandler: nil)
+//            secondaryWebView.evaluateJavaScript(jsCodeCommon + buildInactiveJavaScript(), completionHandler: nil)
+            secondaryWebView.loadHTMLString("<html><html>", baseURL: nil)
         } else {
-            primaryWebView.evaluateJavaScript(jsCodeCommon + buildInactiveJavaScript(), completionHandler: nil)
+//            primaryWebView.evaluateJavaScript(jsCodeCommon + buildInactiveJavaScript(), completionHandler: nil)
+            primaryWebView.loadHTMLString("<html><html>", baseURL: nil)
             secondaryWebView.evaluateJavaScript(jsCodeCommon + buildActiveJavaScript(), completionHandler: nil)
         }
         
