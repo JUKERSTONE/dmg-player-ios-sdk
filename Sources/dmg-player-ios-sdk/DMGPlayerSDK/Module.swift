@@ -104,7 +104,7 @@ public class DMGPlayerSDK: NSObject, ObservableObject, WKScriptMessageHandler {
         }
     }
     
-    public func play() {
+    public func resume() {
         if isPrimaryActive {
             primaryWebView.evaluateJavaScript(buildPlayJavaScript(), completionHandler: nil)
         } else {
