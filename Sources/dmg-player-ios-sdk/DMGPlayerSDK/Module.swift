@@ -116,9 +116,11 @@ public class DMGPlayerSDK: NSObject, ObservableObject, WKScriptMessageHandler {
         if index < queue.count - 1 {
             let nextIndex = index + 1
             let isrc = queue[nextIndex]
+            
          
             playNow(isrc: isrc)
             index = nextIndex // Increase index by one
+            queue.remove(at: nextIndex) 
           
         } else {
             print("Reached the end of the queue.")
