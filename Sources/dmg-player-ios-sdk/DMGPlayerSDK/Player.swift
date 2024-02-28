@@ -17,10 +17,12 @@ extension DMGPlayerSDK {
     }
 
     func preloadNextWebView() {
-        guard let nextIsrc = queue.first else {
-            print("Queue is empty")
-            return
-        }
+        guard index < queue.count else {
+                print("Index \(index) out of range")
+                return
+            }
+            
+        let nextIsrc = queue[index]
 
         let apiService = APIService.shared
         let urlString = "https://europe-west1-trx-traklist.cloudfunctions.net/TRX_DEVELOPER/trx/music/\(nextIsrc)"
