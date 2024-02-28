@@ -60,12 +60,6 @@ extension DMGPlayerSDK {
             }
         }
     }
-
-    
-    private func muteAndPause(webView: WKWebView) {
-        let script = "window.trakStarVideo.muted = true; window.trakStarVideo.pause();"
-        webView.evaluateJavaScript(script, completionHandler: nil)
-    }
     
     func play(webView: WKWebView) {
         webView.evaluateJavaScript(buildActiveJavaScript(), completionHandler: nil)
@@ -111,7 +105,6 @@ extension DMGPlayerSDK {
 
 public func buildActiveJavaScript() -> String {
     return """
-    // Unmute and play the video
     window.trakStarVideo.muted = false;
     window.trakStarVideo.play();
     window.trakStarVideo.requestPictureInPicture().then(() => {
@@ -132,7 +125,6 @@ public func buildActiveJavaScript() -> String {
 
 public func buildInactiveJavaScript() -> String {
     return """
-    // Mute and pause the video
     window.trakStarVideo.muted = true;
     window.trakStarVideo.pause();
     """
