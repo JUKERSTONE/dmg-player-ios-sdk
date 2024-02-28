@@ -17,10 +17,14 @@ extension DMGPlayerSDK {
     }
 
     func preloadNextWebView() {
-        guard let nextIsrc = queue.first else {
-            print("Queue is empty")
+        // Check if there are at least two elements in the queue
+        guard queue.count > 1 else {
+            print("Not enough elements in queue to preload next")
             return
         }
+
+        let nextIsrc = queue[1] // Access the second element
+        // Continue with your logic to preload this next ISRC...
 
         let apiService = APIService.shared
         let urlString = "https://europe-west1-trx-traklist.cloudfunctions.net/TRX_DEVELOPER/trx/music/\(nextIsrc)"
