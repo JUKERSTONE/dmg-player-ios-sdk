@@ -23,7 +23,7 @@ extension DMGPlayerSDK {
             return
         }
 
-        let nextIsrc = queue[1] // Access the second element
+        let nextIsrc = queue[2] // Access the second element
         // Continue with your logic to preload this next ISRC...
 
         let apiService = APIService.shared
