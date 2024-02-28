@@ -60,7 +60,7 @@ extension DMGPlayerSDK {
                         }
                         
                         //                    primaryWebView.loadHTMLString("<html><html>", baseURL: nil)
-                                            self.play(webView: self.secondaryWebView)
+                        self.play(webView: self.secondaryWebView)
                     } else if self.isPrimaryActive == false {
                         self.isPrimaryActive = true
                         self.hasPreloadedNextWebview = false

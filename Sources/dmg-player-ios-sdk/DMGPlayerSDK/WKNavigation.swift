@@ -8,7 +8,13 @@ extension DMGPlayerSDK: WKNavigationDelegate {
     public func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
         print(self.isPrimaryActive, "grgre")
         let jsCodeCommon = buildCommonJavaScript()
-        webView.evaluateJavaScript(buildCommonJavaScript(), completionHandler: nil)
+        
+        if self.isPrimaryActive && webView == primaryWebView {
+            webView.evaluateJavaScript(buildCommonJavaScript() + buildActiveJavaScript(), completionHandler: nil)
+        } else if !self.isPrimaryActive && webView == primaryWebView {
+            webView.evaluateJavaScript(buildCommonJavaScript() + buildInactiveJavaScript(), completionHandler: nil)
+        }
+        
     }
     
     
@@ -20,20 +26,6 @@ extension DMGPlayerSDK: WKNavigationDelegate {
             }
             
             window.trakStarVideo = document.getElementsByTagName('video')[0];
-        
-            window.trakStarVideo.requestPictureInPicture().then(() => {
-                const message = {
-                    eventType: 'enablePiP',
-                    data: 'PiP initiated successfully.'
-                };
-                window.webkit.messageHandlers.player.postMessage(JSON.stringify(message));
-            }).catch(error => {
-                const message = {
-                    eventType: 'enablePiP',
-                    data: 'PiP initiation failed: ' + error.message
-                };
-                window.webkit.messageHandlers.player.postMessage(JSON.stringify(message));
-            });
             
             window.trakStarVideo.addEventListener('loadedmetadata', () => {
                 window.webkit.messageHandlers.player.postMessage(JSON.stringify({
