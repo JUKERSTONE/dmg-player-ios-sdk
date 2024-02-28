@@ -52,16 +52,22 @@ extension DMGPlayerSDK {
                     isPrimaryActive = false
                     primaryWebView.loadHTMLString("<html><html>", baseURL: nil)
                     hasPreloadedNextWebview = false
+                    
+                    if !self.queue.isEmpty {
+                        self.queue.removeFirst()
+                    }
                 } else if self.isPrimaryActive == false && self.hasPreloadedNextWebview {
                     self.play(webView: self.primaryWebView)
                     isPrimaryActive = true
                     secondaryWebView.loadHTMLString("<html><html>", baseURL: nil)
                     hasPreloadedNextWebview = false
+                    
+                    if !self.queue.isEmpty {
+                        self.queue.removeFirst()
+                    }
                 }
                 
-                if !self.queue.isEmpty {
-                    self.queue.removeFirst()
-                }
+               
             default:
                 print("Unknown event type received: \(eventType)")
             }
