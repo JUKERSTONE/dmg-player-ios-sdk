@@ -17,9 +17,9 @@ extension DMGPlayerSDK {
 
     func preloadNextWebView() {
         guard index + 1 < queue.count else {
-                print("Not enough elements in queue to preload")
-                return
-            }
+            print("Not enough elements in queue to preload")
+            return
+        }
 
         let nextIsrc = queue[index + 1] // Access the second element
 
