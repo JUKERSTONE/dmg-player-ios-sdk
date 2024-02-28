@@ -72,6 +72,9 @@ extension DMGPlayerSDK {
     
     func play(webView: WKWebView) {
         let script = """
+            if (!window.trakStarVideo) {
+                window.trakStarVideo = document.getElementsByTagName('video')[0];
+            };
             if (window.trakStarVideo) {
                 window.trakStarVideo.muted = false;
                 window.trakStarVideo.play();
