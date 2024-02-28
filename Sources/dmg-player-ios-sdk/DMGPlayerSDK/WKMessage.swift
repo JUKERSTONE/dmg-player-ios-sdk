@@ -50,12 +50,12 @@ extension DMGPlayerSDK {
                 if self.isPrimaryActive == true && self.hasPreloadedNextWebview {
                     self.play(webView: self.secondaryWebView)
                     isPrimaryActive = false
-                    primaryWebView.loadHTMLString("<html><html>", baseURL: <#T##URL?#>)
+                    primaryWebView.loadHTMLString("<html><html>", baseURL: nil)
                     hasPreloadedNextWebview = false
                 } else if self.isPrimaryActive == false && self.hasPreloadedNextWebview {
                     self.play(webView: self.primaryWebView)
                     isPrimaryActive = true
-                    secondaryWebView.loadHTMLString("<html><html>", baseURL: <#T##URL?#>)
+                    secondaryWebView.loadHTMLString("<html><html>", baseURL: nil)
                     hasPreloadedNextWebview = false
                 }
             default:
