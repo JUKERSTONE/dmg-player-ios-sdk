@@ -40,7 +40,7 @@ public class DMGPlayerSDK: NSObject, ObservableObject, WKScriptMessageHandler {
     public func playNow(isrc: String) {
             queue.insert(isrc, at: 0)
         
-            let apiService = APIService.shared  // Assuming APIService is your custom class for making network requests
+            let apiService = APIService.shared
             let urlString = "https://europe-west1-trx-traklist.cloudfunctions.net/TRX_DEVELOPER/trx/music/\(isrc)"
             
             guard let url = URL(string: urlString) else {
@@ -117,13 +117,11 @@ public class DMGPlayerSDK: NSObject, ObservableObject, WKScriptMessageHandler {
             let nextIndex = index + 1
             let isrc = queue[nextIndex]
             
-         
             playNow(isrc: isrc)
-            index = nextIndex // Increase index by one
-            queue.remove(at: nextIndex) 
-          
+            index = nextIndex
+            queue.remove(at: nextIndex)
         } else {
-            print("Reached the end of the queue.")
+            stop()
         }
     }
        

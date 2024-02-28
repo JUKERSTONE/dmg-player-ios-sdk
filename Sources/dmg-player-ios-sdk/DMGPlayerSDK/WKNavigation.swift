@@ -6,7 +6,6 @@ import WebKit
 @available(iOS 13.0, *)
 extension DMGPlayerSDK: WKNavigationDelegate {
     public func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
-        print(self.isPrimaryActive, "grgre")
         let jsCodeCommon = buildCommonJavaScript()
         
         if self.isPrimaryActive && webView == primaryWebView {

@@ -21,7 +21,7 @@ extension DMGPlayerSDK {
             return
         }
 
-        let nextIsrc = queue[index + 1] // Access the second element
+        let nextIsrc = queue[index + 1]
 
         let apiService = APIService.shared
         let urlString = "https://europe-west1-trx-traklist.cloudfunctions.net/TRX_DEVELOPER/trx/music/\(nextIsrc)"

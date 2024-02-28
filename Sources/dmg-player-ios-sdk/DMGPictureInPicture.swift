@@ -20,9 +20,9 @@ public struct DMGPictureLicense: UIViewRepresentable {
         primaryWebView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             primaryWebView.topAnchor.constraint(equalTo: containerView.topAnchor),
-            primaryWebView.widthAnchor.constraint(equalToConstant: 1), // Set width to 200 points
-            primaryWebView.heightAnchor.constraint(equalToConstant: 1), // Maintain aspect ratio
-            primaryWebView.centerXAnchor.constraint(equalTo: containerView.leadingAnchor) // Center horizontally
+            primaryWebView.widthAnchor.constraint(equalToConstant: 1),
+            primaryWebView.heightAnchor.constraint(equalToConstant: 1),
+            primaryWebView.centerXAnchor.constraint(equalTo: containerView.leadingAnchor)
         ])
 
         let secondaryWebView = sdk.secondaryWebView
@@ -30,10 +30,10 @@ public struct DMGPictureLicense: UIViewRepresentable {
 
         secondaryWebView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            secondaryWebView.topAnchor.constraint(equalTo: secondaryWebView.topAnchor), // Add spacing between the web views
+            secondaryWebView.topAnchor.constraint(equalTo: secondaryWebView.topAnchor),
             secondaryWebView.widthAnchor.constraint(equalToConstant: 1),
-            secondaryWebView.heightAnchor.constraint(equalToConstant: 1), // Matåch height with active web view
-            secondaryWebView.centerXAnchor.constraint(equalTo: containerView.leadingAnchor) // Center horizontally
+            secondaryWebView.heightAnchor.constraint(equalToConstant: 1),
+            secondaryWebView.centerXAnchor.constraint(equalTo: containerView.leadingAnchor)
         ])
         
         return containerView
