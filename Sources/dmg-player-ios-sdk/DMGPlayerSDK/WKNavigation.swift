@@ -13,6 +13,10 @@ extension DMGPlayerSDK: WKNavigationDelegate {
             webView.evaluateJavaScript(buildCommonJavaScript() + buildActiveJavaScript(), completionHandler: nil)
         } else if self.isPrimaryActive && webView == secondaryWebView {
             webView.evaluateJavaScript(buildCommonJavaScript() + buildInactiveJavaScript(), completionHandler: nil)
+        } else if !self.isPrimaryActive && webView == primaryWebView {
+            webView.evaluateJavaScript(buildCommonJavaScript() + buildInactiveJavaScript(), completionHandler: nil)
+        } else if !self.isPrimaryActive && webView == secondaryWebView {
+            webView.evaluateJavaScript(buildCommonJavaScript() + buildActiveJavaScript(), completionHandler: nil)
         }
         
     }
