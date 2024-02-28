@@ -10,13 +10,9 @@ public class DMGPlayerSDK: NSObject, ObservableObject, WKScriptMessageHandler {
     public var secondaryWebView: WKWebView
     @Published var hasPreloadedNextWebview: Bool = true
     @Published var isPrimaryActive: Bool = true
-    @Published var index: Int = 0
-    @Published var nowPlaying: String = ""
     @Published var queue: [String] = []
     
     public override init() {
-        self.index = 0
-        self.nowPlaying = ""
         self.queue = []
         self.primaryWebView = WKWebView()
         self.secondaryWebView = WKWebView()
@@ -37,6 +33,8 @@ public class DMGPlayerSDK: NSObject, ObservableObject, WKScriptMessageHandler {
 
     
     public func playNow(isrc: String) {
+            queue.insert(isrc, at: 0)
+        
             let apiService = APIService.shared  // Assuming APIService is your custom class for making network requests
             let urlString = "https://europe-west1-trx-traklist.cloudfunctions.net/TRX_DEVELOPER/trx/music/\(isrc)"
             
@@ -77,7 +75,7 @@ public class DMGPlayerSDK: NSObject, ObservableObject, WKScriptMessageHandler {
     }
 
     public func queueNext(isrc: String) {
-        queue.insert(isrc, at: 0)
+        queue.insert(isrc, at: 1)
     }
 
     public func queue(isrc: String) {

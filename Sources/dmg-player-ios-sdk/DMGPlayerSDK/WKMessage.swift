@@ -58,6 +58,10 @@ extension DMGPlayerSDK {
                     secondaryWebView.loadHTMLString("<html><html>", baseURL: nil)
                     hasPreloadedNextWebview = false
                 }
+                
+                if !self.queue.isEmpty {
+                    self.queue.removeFirst()
+                }
             default:
                 print("Unknown event type received: \(eventType)")
             }

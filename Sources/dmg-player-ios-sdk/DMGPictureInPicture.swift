@@ -46,12 +46,13 @@ public struct DMGPictureLicense: UIViewRepresentable {
         // Sink to receive updates
         queuePublisher.sink { updatedQueue in
             // Check if the queue has been updated
-            if sdk.index < updatedQueue.count {
-                let isrc = updatedQueue[sdk.index]
-                sdk.preloadNextVideo(isrc: isrc)
+            if !updatedQueue.isEmpty {
+                let nextUp = updatedQueue[1]
+                sdk.updatedPreload(isrc: nextUp)
             } else {
-                print("Index out of range")
+                print("Queue is empty")
             }
         }
     }
 }
+
