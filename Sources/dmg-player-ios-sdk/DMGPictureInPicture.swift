@@ -42,15 +42,22 @@ public struct DMGPictureLicense: UIViewRepresentable {
     public func updateUIView(_ uiView: UIView, context: Context) {
         let queuePublisher = sdk.$queue
 
-        queuePublisher.sink { updatedQueue in
-            if updatedQueue.count > 1 {
-                let nextUp = updatedQueue[1]
+        queuePublisher.sink { [weak sdk] updatedQueue in
+            guard let sdk = sdk else { return }
+            
+            if sdk.index + 1 < updatedQueue.count {
+                // If the next index is within bounds, get the next up isrc
+                let nextUp = updatedQueue[sdk.index + 1]
                 sdk.updatedPreload(isrc: nextUp)
             } else {
-                print("Queue does not have a second element")
+                print("No next item to preload")
+                // Optionally, reset index or take other action if at the end of the queue
             }
         }
+        // Note: You must store the subscription from sink to keep it active.
+        // .store(in: &cancellables) or similar based on your setup
     }
+
 
 }
 

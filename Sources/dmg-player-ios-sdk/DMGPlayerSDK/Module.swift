@@ -8,6 +8,7 @@ import WebKit
 public class DMGPlayerSDK: NSObject, ObservableObject, WKScriptMessageHandler {
     public var primaryWebView: WKWebView
     public var secondaryWebView: WKWebView
+    public var index: Int
     @Published var hasPreloadedNextWebview: Bool = true
     @Published var isPrimaryActive: Bool = true
     @Published var queue: [String] = []
@@ -16,6 +17,7 @@ public class DMGPlayerSDK: NSObject, ObservableObject, WKScriptMessageHandler {
         self.queue = []
         self.primaryWebView = WKWebView()
         self.secondaryWebView = WKWebView()
+        self.index = 0
 
         super.init()
 
