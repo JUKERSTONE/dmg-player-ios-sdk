@@ -9,6 +9,7 @@ public class DMGPlayerSDK: NSObject, ObservableObject, WKScriptMessageHandler {
     public var primaryWebView: WKWebView
     public var secondaryWebView: WKWebView
     public var index: Int
+    public var isPaused: Bool
     @Published var hasPreloadedNextWebview: Bool = true
     @Published var isPrimaryActive: Bool = true
     @Published var queue: [String] = []
@@ -19,6 +20,7 @@ public class DMGPlayerSDK: NSObject, ObservableObject, WKScriptMessageHandler {
         self.secondaryWebView = WKWebView()
         self.isPrimaryActive = true
         self.index = 0
+        self.isPaused = false
 
         super.init()
 
@@ -91,6 +93,22 @@ public class DMGPlayerSDK: NSObject, ObservableObject, WKScriptMessageHandler {
     
     public func removeFromQueue(isrc: String) {
         print(queue)
+    }
+    
+    public func pause() {
+        print(queue)
+    }
+    
+    public func play() {
+        print(queue)
+    }
+    
+    public func next() {
+        print(index)
+    }
+    
+    public func previous() {
+        print(index)
     }
 }
 
