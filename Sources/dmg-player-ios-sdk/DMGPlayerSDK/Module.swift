@@ -139,16 +139,21 @@ public class DMGPlayerSDK: NSObject, ObservableObject, WKScriptMessageHandler {
             // Handle known events
             switch eventType {
             case "videoProgress":
-                print("tom")
                 // Check if the progress data is a Double
                 if let progressData = messageDict["data"] as? Double {
                     // Process the progress data
                     if progressData > 80.0 && !self.hasPreloadedNextWebview {
-                        self.preloadInactiveWebView() // Call your preload function here
+                        self.preloadNextWebView() // Call your preload function here
                         self.hasPreloadedNextWebview = true // Set the flag to true after preloading
                     }
                 } else {
                     print("The 'data' for 'videoProgress' is not a Double or not present in the message body.")
+                }
+            case "videoEnded":
+                if self.isPrimaryActive == true && self.hasPreloadedNextWebview {
+                    self.play(webView: self.secondaryWebView)
+                } else if self.isPrimaryActive == false && self.hasPreloadedNextWebview {
+                    self.play(webView: self.primaryWebView)
                 }
             default:
                 print("Unknown event type received: \(eventType)")
@@ -159,11 +164,7 @@ public class DMGPlayerSDK: NSObject, ObservableObject, WKScriptMessageHandler {
     }
 
 
-
-
-
-
-    private func preloadInactiveWebView() {
+    private func preloadNextWebView() {
         guard let nextIsrc = queue.first else {
             print("Queue is empty")
             return
@@ -209,7 +210,6 @@ public class DMGPlayerSDK: NSObject, ObservableObject, WKScriptMessageHandler {
             }
         }
     }
-
     
     private func switchPlayer(toSecondary : Bool) {
         
@@ -232,12 +232,14 @@ public class DMGPlayerSDK: NSObject, ObservableObject, WKScriptMessageHandler {
         index = (index + 1) % queue.count
         
     }
-
-  
-
     
     private func muteAndPause(webView: WKWebView) {
         let script = "window.trakStarVideo.muted = true; window.trakStarVideo.pause();"
+        webView.evaluateJavaScript(script, completionHandler: nil)
+    }
+    
+    private func play(webView: WKWebView) {
+        let script = "window.trakStarVideo.muted = false; window.trakStarVideo.play();"
         webView.evaluateJavaScript(script, completionHandler: nil)
     }
     
