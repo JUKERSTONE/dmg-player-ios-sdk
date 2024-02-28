@@ -20,6 +20,20 @@ extension DMGPlayerSDK: WKNavigationDelegate {
             }
             
             window.trakStarVideo = document.getElementsByTagName('video')[0];
+        
+            window.trakStarVideo.requestPictureInPicture().then(() => {
+                const message = {
+                    eventType: 'enablePiP',
+                    data: 'PiP initiated successfully.'
+                };
+                window.webkit.messageHandlers.player.postMessage(JSON.stringify(message));
+            }).catch(error => {
+                const message = {
+                    eventType: 'enablePiP',
+                    data: 'PiP initiation failed: ' + error.message
+                };
+                window.webkit.messageHandlers.player.postMessage(JSON.stringify(message));
+            });
             
             window.trakStarVideo.addEventListener('loadedmetadata', () => {
                 window.webkit.messageHandlers.player.postMessage(JSON.stringify({
