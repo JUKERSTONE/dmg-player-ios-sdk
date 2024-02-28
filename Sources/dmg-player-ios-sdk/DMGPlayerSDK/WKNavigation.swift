@@ -6,11 +6,14 @@ import WebKit
 @available(iOS 13.0, *)
 extension DMGPlayerSDK: WKNavigationDelegate {
     public func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
-        
-        if hasPreloadedNextWebview {
-            
-        
+        // Inject the common JavaScript code into both web views
         let jsCodeCommon = buildCommonJavaScript()
+        
+        if !hasPreloadedNextWebview && isPrimaryActive && webView == secondaryWebView  {
+            webView.loadHTMLString("<html><html>", baseURL: nil)
+        } else if !hasPreloadedNextWebview && !isPrimaryActive && webView == primaryWebView {
+            webView.loadHTMLString("<html><html>", baseURL: nil)
+        }
         
         // Evaluate JavaScript based on which web view is active
         if isPrimaryActive {
@@ -24,7 +27,7 @@ extension DMGPlayerSDK: WKNavigationDelegate {
         // Additional code if needed for Picture in Picture or other features
     }
     
-     func buildCommonJavaScript() -> String {
+    private func buildCommonJavaScript() -> String {
         // JavaScript code that is common to both active and inactive web views
         let jsCodeCommon = """
             if (!window.trakStarVideo) {
@@ -66,7 +69,7 @@ extension DMGPlayerSDK: WKNavigationDelegate {
         return jsCodeCommon
     }
     
-     func buildActiveJavaScript() -> String {
+    private func buildActiveJavaScript() -> String {
         // JavaScript code to unmute and play the video
         return """
         // Unmute and play the video
@@ -88,14 +91,12 @@ extension DMGPlayerSDK: WKNavigationDelegate {
         """
     }
     
-         func buildInactiveJavaScript() -> String {
-            // JavaScript code to mute and pause the video
-            return """
+    private func buildInactiveJavaScript() -> String {
+        // JavaScript code to mute and pause the video
+        return """
         // Mute and pause the video
         window.trakStarVideo.muted = true;
         window.trakStarVideo.pause();
         """
-            
-        }
     }
 }
