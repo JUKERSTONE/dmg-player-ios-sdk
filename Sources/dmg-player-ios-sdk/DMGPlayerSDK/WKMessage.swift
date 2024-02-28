@@ -56,9 +56,9 @@ extension DMGPlayerSDK {
                     } else {
                         print("Index is at the end of the queue")
                     }
+                   
+                    primaryWebView.loadHTMLString("<html><html>", baseURL: nil)
                     self.play(webView: self.secondaryWebView)
-//                    primaryWebView.loadHTMLString("<html><html>", baseURL: nil)
-                    
                 } else if self.isPrimaryActive == false && self.hasPreloadedNextWebview {
                     self.isPrimaryActive = true
                     self.hasPreloadedNextWebview = false
@@ -68,9 +68,9 @@ extension DMGPlayerSDK {
                         // If the index is already at the end of the queue, print a message
                         print("Index is at the end of the queue")
                     }
+                    
+                    secondaryWebView.loadHTMLString("<html><html>", baseURL: nil)
                     self.play(webView: self.primaryWebView)
-//                    secondaryWebView.loadHTMLString("<html><html>", baseURL: nil)
-                   
                 }
             default:
                 print("Unknown event type received: \(eventType)")
