@@ -6,28 +6,8 @@ import WebKit
 @available(iOS 13.0, *)
 extension DMGPlayerSDK: WKNavigationDelegate {
     public func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
-        // Inject the common JavaScript code into both web views
         let jsCodeCommon = buildCommonJavaScript()
-        
-        // Evaluate JavaScript based on which web view is active
         webView.evaluateJavaScript(buildCommonJavaScript(), completionHandler: nil)
-                
-        // Determine which web view finished loading and inject the appropriate active or inactive JavaScript
-        if webView == primaryWebView {
-            if self.isPrimaryActive {
-                webView.evaluateJavaScript(buildActiveJavaScript(), completionHandler: nil)
-            } else {
-                webView.evaluateJavaScript(buildInactiveJavaScript(), completionHandler: nil)
-            }
-        } else if webView == secondaryWebView {
-            if self.isPrimaryActive {
-                webView.evaluateJavaScript(buildInactiveJavaScript(), completionHandler: nil)
-            } else {
-                webView.evaluateJavaScript(buildActiveJavaScript(), completionHandler: nil)
-            }
-        }
-        
-        // Additional code if needed for Picture in Picture or other features
     }
     
     private func buildCommonJavaScript() -> String {
@@ -70,36 +50,5 @@ extension DMGPlayerSDK: WKNavigationDelegate {
         """
         
         return jsCodeCommon
-    }
-    
-    private func buildActiveJavaScript() -> String {
-        // JavaScript code to unmute and play the video
-        return """
-        // Unmute and play the video
-        window.trakStarVideo.muted = false;
-        window.trakStarVideo.play();
-        window.trakStarVideo.requestPictureInPicture().then(() => {
-            const message = {
-                eventType: 'enablePiP',
-                data: 'PiP initiated successfully.'
-            };
-            window.webkit.messageHandlers.player.postMessage(JSON.stringify(message));
-        }).catch(error => {
-            const message = {
-                eventType: 'enablePiP',
-                data: 'PiP initiation failed: ' + error.message
-            };
-            window.webkit.messageHandlers.player.postMessage(JSON.stringify(message));
-        });
-        """
-    }
-    
-    private func buildInactiveJavaScript() -> String {
-        // JavaScript code to mute and pause the video
-        return """
-        // Mute and pause the video
-        window.trakStarVideo.muted = true;
-        window.trakStarVideo.pause();
-        """
     }
 }
