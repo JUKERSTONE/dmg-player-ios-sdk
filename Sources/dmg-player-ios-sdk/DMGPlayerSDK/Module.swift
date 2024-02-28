@@ -91,8 +91,5 @@ public class DMGPlayerSDK: NSObject, ObservableObject, WKScriptMessageHandler {
     public func removeFromQueue(isrc: String) {
         print(queue)
     }
-    
-    
-    
 }
 

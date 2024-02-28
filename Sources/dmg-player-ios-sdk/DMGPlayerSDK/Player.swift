@@ -3,7 +3,6 @@
 import SwiftUI
 import WebKit
 
-// Make sure to conform to WKNavigationDelegate if needed.
 @available(iOS 13.0, *)
 extension DMGPlayerSDK {
     func loadVideoInPrimaryWebView(url: URL) {
@@ -17,14 +16,12 @@ extension DMGPlayerSDK {
     }
 
     func preloadNextWebView() {
-        // Check if there are at least two elements in the queue
         guard queue.count > 1 else {
             print("Not enough elements in queue to preload next")
             return
         }
 
-        let nextIsrc = queue[2] // Access the second element
-        // Continue with your logic to preload this next ISRC...
+        let nextIsrc = queue[index] // Access the second element
 
         let apiService = APIService.shared
         let urlString = "https://europe-west1-trx-traklist.cloudfunctions.net/TRX_DEVELOPER/trx/music/\(nextIsrc)"
