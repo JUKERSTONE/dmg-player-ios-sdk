@@ -10,9 +10,9 @@ extension DMGPlayerSDK: WKNavigationDelegate {
         let jsCodeCommon = buildCommonJavaScript()
         
         if !hasPreloadedNextWebview && isPrimaryActive && webView == secondaryWebView  {
-            webView.loadHTMLString("<html><html>", baseURL: nil)
+            secondaryWebView.loadHTMLString("<html><html>", baseURL: nil)
         } else if !hasPreloadedNextWebview && !isPrimaryActive && webView == primaryWebView {
-            webView.loadHTMLString("<html><html>", baseURL: nil)
+            primaryWebView.loadHTMLString("<html><html>", baseURL: nil)
         }
         
         // Evaluate JavaScript based on which web view is active
