@@ -9,6 +9,10 @@ extension DMGPlayerSDK: WKNavigationDelegate {
         // Inject the common JavaScript code into both web views
         let jsCodeCommon = buildCommonJavaScript()
         
+        if !hasPreloadedNextWebview {
+            webView.loadHTMLString("<html><html>", baseURL: nil)
+        }
+        
         // Evaluate JavaScript based on which web view is active
         if isPrimaryActive {
             primaryWebView.evaluateJavaScript(jsCodeCommon + buildActiveJavaScript(), completionHandler: nil)
