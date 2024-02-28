@@ -12,9 +12,9 @@ extension DMGPlayerSDK: WKNavigationDelegate {
         // Evaluate JavaScript based on which web view is active
         if isPrimaryActive {
             primaryWebView.evaluateJavaScript(jsCodeCommon + buildActiveJavaScript(), completionHandler: nil)
-            secondaryWebView.evaluateJavaScript(jsCodeCommon + buildInactiveJavaScript(), completionHandler: nil)
+            secondaryWebView.evaluateJavaScript(jsCodeCommon, completionHandler: nil)
         } else {
-            primaryWebView.evaluateJavaScript(jsCodeCommon + buildInactiveJavaScript(), completionHandler: nil)
+            primaryWebView.evaluateJavaScript(jsCodeCommon, completionHandler: nil)
             secondaryWebView.evaluateJavaScript(jsCodeCommon + buildActiveJavaScript(), completionHandler: nil)
         }
         
@@ -85,12 +85,12 @@ extension DMGPlayerSDK: WKNavigationDelegate {
         """
     }
     
-    private func buildInactiveJavaScript() -> String {
-        // JavaScript code to mute and pause the video
-        return """
-        // Mute and pause the video
-        window.trakStarVideo.muted = true;
-        window.trakStarVideo.pause();
-        """
-    }
+//    private func buildInactiveJavaScript() -> String {
+//        // JavaScript code to mute and pause the video
+//        return """
+//        // Mute and pause the video
+//        window.trakStarVideo.muted = true;
+//        window.trakStarVideo.pause();
+//        """
+//    }
 }
