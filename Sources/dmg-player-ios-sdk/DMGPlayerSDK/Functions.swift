@@ -1,4 +1,4 @@
-// WKNavigation.swift
+// Functions.swift
 
 import SwiftUI
 import WebKit
@@ -41,16 +41,13 @@ extension DMGPlayerSDK {
                     }
                     
                     print(urlStringWithQuotes)
-                    // Remove quotation marks from the string
                     let urlString = urlStringWithQuotes.trimmingCharacters(in: CharacterSet(charactersIn: "\""))
                  
-                    // Validate if the cleaned string is a valid URL
                     guard let videoURL = URL(string: urlString) else {
                         print("The cleaned string is not a valid URL: \(urlString)")
                         return
                     }
                     
-                    // Load the URL in the inactive WebView
                         if self?.isPrimaryActive == true {
                             self?.loadVideoInSecondaryWebView(url: videoURL)
                         } else {
@@ -71,34 +68,7 @@ extension DMGPlayerSDK {
     }
     
     func play(webView: WKWebView) {
-        let script = """
-            if (window.trakStarVideo) {
-                window.trakStarVideo.muted = false;
-                window.trakStarVideo.play();
-            
-                window.trakStarVideo.requestPictureInPicture().then(() => {
-                    const message = {
-                        eventType: 'enablePiP',
-                        data: 'PiP initiated successfully.'
-                    };
-                    window.webkit.messageHandlers.player.postMessage(JSON.stringify(message));
-                }).catch(error => {
-                    const message = {
-                        eventType: 'enablePiP',
-                        data: 'PiP initiation failed: ' + error.message
-                    };
-                    window.webkit.messageHandlers.player.postMessage(JSON.stringify(message));
-                });
-            } else {
-                const message = {
-                    eventType: 'enablePiP',
-                    data: 'No video element found.'
-                };
-                window.webkit.messageHandlers.player.postMessage(JSON.stringify(message));
-            };
-            """
-        
-        webView.evaluateJavaScript(script, completionHandler: nil)
+        webView.evaluateJavaScript(buildActiveJavaScript(), completionHandler: nil)
     }
     
     func updatedPreload(isrc: String) {
@@ -119,16 +89,13 @@ extension DMGPlayerSDK {
                         return
                     }
 
-                    // Remove quotation marks from the string
                     let urlString = urlStringWithQuotes.trimmingCharacters(in: CharacterSet(charactersIn: "\""))
 
-                    // Validate if the cleaned string is a valid URL
                     guard let videoURL = URL(string: urlString) else {
                         print("The cleaned string is not a valid URL: \(urlString)")
                         return
                     }
 
-                    // Load the URL in the WebView
                     if self?.isPrimaryActive == true {
                         self?.loadVideoInSecondaryWebView(url: videoURL)
                     } else {
@@ -143,7 +110,6 @@ extension DMGPlayerSDK {
 }
 
 public func buildActiveJavaScript() -> String {
-    // JavaScript code to unmute and play the video
     return """
     // Unmute and play the video
     window.trakStarVideo.muted = false;
@@ -165,7 +131,6 @@ public func buildActiveJavaScript() -> String {
 }
 
 public func buildInactiveJavaScript() -> String {
-    // JavaScript code to mute and pause the video
     return """
     // Mute and pause the video
     window.trakStarVideo.muted = true;

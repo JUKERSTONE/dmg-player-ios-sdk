@@ -1,48 +1,39 @@
-// DMGPlayerSDK+MessageHandling.swift
+// WKMessage.swift
 
 import Foundation
 import WebKit
 
-// MARK: - WKScriptMessageHandler
 @available(iOS 13.0, *)
 extension DMGPlayerSDK {
 
     public func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
         if message.name == "player" {
-            // Attempt to convert the message body directly into a String
             guard let messageString = message.body as? String else {
                 print("The message body is not a string.")
                 return
             }
 
-            // Attempt to convert the string to Data
             guard let jsonData = messageString.data(using: .utf8) else {
                 print("Could not convert message string to Data.")
                 return
             }
 
-            // Attempt to deserialize the JSON string into a dictionary
             guard let messageDict = try? JSONSerialization.jsonObject(with: jsonData, options: []) as? [String: Any] else {
                 print("Failed to deserialize JSON string into a dictionary.")
                 return
             }
 
-            // Now we can safely check for the eventType
             guard let eventType = messageDict["eventType"] as? String else {
                 print("The 'eventType' is not a string or not present in the message body.")
                 return
             }
 
-            // Handle known events
             switch eventType {
             case "videoProgress":
-                // Check if the progress data is a Double
                 if let progressData = messageDict["data"] as? Double {
-                    // Process the progress data
-                    // Check if progress is over 80% and if no other videos are queued up
                     if progressData > 80.0 && queue.count <= 1 && !self.hasPreloadedNextWebview {
-                        self.preloadNextWebView() // Call your preload function here
-                        self.hasPreloadedNextWebview = true // Set the flag to true after preloading
+                        self.preloadNextWebView()
+                        self.hasPreloadedNextWebview = true
                     }
                 } else {
                     print("The 'data' for 'videoProgress' is not a Double or not present in the message body.")
@@ -68,7 +59,6 @@ extension DMGPlayerSDK {
                             primaryWebView.loadHTMLString("<html><html>", baseURL: nil)
                             self.play(webView: self.secondaryWebView)
                         } else {
-                            // If the index is already at the end of the queue, print a message
                             print("Index is at the end of the queue")
                             secondaryWebView.loadHTMLString("<html><html>", baseURL: nil)
                             self.play(webView: self.primaryWebView)
@@ -92,7 +82,6 @@ extension DMGPlayerSDK {
                             secondaryWebView.loadHTMLString("<html><html>", baseURL: nil)
                             self.play(webView: self.primaryWebView)
                         } else {
-                            // If the index is already at the end of the queue, print a message
                             print("Index is at the end of the queue")
                         }
                         

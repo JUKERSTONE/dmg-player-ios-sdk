@@ -23,7 +23,6 @@ extension DMGPlayerSDK: WKNavigationDelegate {
     
     
     private func buildCommonJavaScript() -> String {
-        // JavaScript code that is common to both active and inactive web views
         let jsCodeCommon = """
             if (!window.trakStarVideo) {
                 window.trakStarVideo = document.getElementsByTagName('video')[0];

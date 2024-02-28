@@ -46,16 +46,12 @@ public struct DMGPictureLicense: UIViewRepresentable {
             guard let sdk = sdk else { return }
             
             if sdk.index + 1 < updatedQueue.count {
-                // If the next index is within bounds, get the next up isrc
                 let nextUp = updatedQueue[sdk.index + 1]
                 sdk.updatedPreload(isrc: nextUp)
             } else {
                 print("No next item to preload")
-                // Optionally, reset index or take other action if at the end of the queue
             }
         }
-        // Note: You must store the subscription from sink to keep it active.
-        // .store(in: &cancellables) or similar based on your setup
     }
 
 
