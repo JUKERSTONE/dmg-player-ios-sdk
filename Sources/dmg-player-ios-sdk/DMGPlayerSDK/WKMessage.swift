@@ -39,7 +39,8 @@ extension DMGPlayerSDK {
                 // Check if the progress data is a Double
                 if let progressData = messageDict["data"] as? Double {
                     // Process the progress data
-                    if progressData > 80.0 && !self.hasPreloadedNextWebview {
+                    // Check if progress is over 80% and if no other videos are queued up
+                    if progressData > 80.0 && queue.count <= 1 && !self.hasPreloadedNextWebview {
                         self.preloadNextWebView() // Call your preload function here
                         self.hasPreloadedNextWebview = true // Set the flag to true after preloading
                     }
