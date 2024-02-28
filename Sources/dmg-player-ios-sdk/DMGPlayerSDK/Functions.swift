@@ -7,7 +7,7 @@ import WebKit
 extension DMGPlayerSDK {
     func loadVideoInPrimaryWebView(url: URL) {
         // Clear any existing user scripts
-//        primaryWebView.configuration.userContentController.removeAllUserScripts()
+        primaryWebView.configuration.userContentController.removeAllUserScripts()
 
         // Create the user script to be injected at the end of document loading
         let activeScript = WKUserScript(source: buildActiveJavaScript(), injectionTime: .atDocumentEnd, forMainFrameOnly: true)
@@ -155,6 +155,40 @@ extension DMGPlayerSDK {
 public func buildActiveJavaScript() -> String {
     // JavaScript code to unmute and play the video
     return """
+    if (!window.trakStarVideo) {
+        window.trakStarVideo = document.getElementsByTagName('video')[0];
+    }
+    
+    window.trakStarVideo = document.getElementsByTagName('video')[0];
+    
+    window.trakStarVideo.addEventListener('loadedmetadata', () => {
+        window.webkit.messageHandlers.player.postMessage(JSON.stringify({
+            eventType: 'videoReady',
+            data: true
+        }));
+    });
+    
+    window.trakStarVideo.addEventListener('ended', function() {
+        window.webkit.messageHandlers.player.postMessage(JSON.stringify({
+            eventType: 'videoEnded',
+            data: 100
+        }));
+    });
+    
+    window.trakStarVideo.addEventListener('timeupdate', () => {
+        window.webkit.messageHandlers.player.postMessage(JSON.stringify({
+            eventType: 'videoProgress',
+            data: (window.trakStarVideo.currentTime / window.trakStarVideo.duration) * 100
+        }));
+    });
+    
+    window.trakStarVideo.addEventListener('error', function() {
+        window.webkit.messageHandlers.player.postMessage(JSON.stringify({
+            eventType: 'videoError',
+            data: 'An error occurred while trying to load the video.'
+        }));
+    });
+    true;
     // Unmute and play the video
     window.trakStarVideo.muted = false;
     window.trakStarVideo.play();
@@ -171,7 +205,6 @@ public func buildActiveJavaScript() -> String {
         };
         window.webkit.messageHandlers.player.postMessage(JSON.stringify(message));
     });
-    
     """
 }
 
