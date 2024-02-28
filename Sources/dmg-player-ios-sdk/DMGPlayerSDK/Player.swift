@@ -99,6 +99,46 @@ extension DMGPlayerSDK {
         
         webView.evaluateJavaScript(script, completionHandler: nil)
     }
+    
+    func preloadNextVideo(isrc: String) {
+        let apiService = APIService.shared
+        let urlString = "https://europe-west1-trx-traklist.cloudfunctions.net/TRX_DEVELOPER/trx/music/\(isrc)"
+
+        guard let url = URL(string: urlString) else {
+            print("Invalid URL")
+            return
+        }
+
+        apiService.fetchData(from: url) { [weak self] result in
+            DispatchQueue.main.async {
+                switch result {
+                case .success(let data):
+                    guard let urlStringWithQuotes = String(data: data, encoding: .utf8) else {
+                        print("The data received could not be converted to a string.")
+                        return
+                    }
+
+                    // Remove quotation marks from the string
+                    let urlString = urlStringWithQuotes.trimmingCharacters(in: CharacterSet(charactersIn: "\""))
+
+                    // Validate if the cleaned string is a valid URL
+                    guard let videoURL = URL(string: urlString) else {
+                        print("The cleaned string is not a valid URL: \(urlString)")
+                        return
+                    }
+
+                    // Load the URL in the WebView
+                    if self?.isPrimaryActive == true {
+                        self?.loadVideoInSecondaryWebView(url: videoURL)
+                    } else {
+                        self?.loadVideoInPrimaryWebView(url: videoURL)
+                    }
+                case .failure(let error):
+                    print("Error fetching data: \(error)")
+                }
+            }
+        }
+    }
 }
 
 
