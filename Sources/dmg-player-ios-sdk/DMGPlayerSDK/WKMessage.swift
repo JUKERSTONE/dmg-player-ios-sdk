@@ -49,41 +49,26 @@ extension DMGPlayerSDK {
                 }
             case "videoEnded":
                 if self.isPrimaryActive == true && self.hasPreloadedNextWebview {
-                    if self.isPrimaryActive == true {
-                        isPrimaryActive = false
-                        
-                        self.play(webView: self.secondaryWebView)
-                        primaryWebView.loadHTMLString("<html><html>", baseURL: nil)
-                        hasPreloadedNextWebview = false
+                    self.isPrimaryActive = false
+                    if self.index < self.queue.count - 1 {
+                        self.index += 1
                     } else {
-                        isPrimaryActive = true
-                        if self.index < self.queue.count - 1 {
-                            self.index += 1
-                        } else {
-                            // If the index is already at the end of the queue, print a message
-                            print("Index is at the end of the queue")
-                        }
-                        self.play(webView: self.primaryWebView)
-                        secondaryWebView.loadHTMLString("<html><html>", baseURL: nil)
-                        hasPreloadedNextWebview = false
+                        print("Index is at the end of the queue")
                     }
+                    self.play(webView: self.secondaryWebView)
+                    primaryWebView.loadHTMLString("<html><html>", baseURL: nil)
+                    hasPreloadedNextWebview = false
                 } else if self.isPrimaryActive == false && self.hasPreloadedNextWebview {
-                    self.play(webView: self.primaryWebView)
+                    self.isPrimaryActive = true
                     if self.index < self.queue.count - 1 {
                         self.index += 1
                     } else {
                         // If the index is already at the end of the queue, print a message
                         print("Index is at the end of the queue")
                     }
-                    if self.isPrimaryActive == true {
-                        isPrimaryActive = false
-                        primaryWebView.loadHTMLString("<html><html>", baseURL: nil)
-                        hasPreloadedNextWebview = false
-                    } else {
-                        isPrimaryActive = true
-                        secondaryWebView.loadHTMLString("<html><html>", baseURL: nil)
-                        hasPreloadedNextWebview = false
-                    }
+                    self.play(webView: self.primaryWebView)
+                    secondaryWebView.loadHTMLString("<html><html>", baseURL: nil)
+                    hasPreloadedNextWebview = false
                 }
             default:
                 print("Unknown event type received: \(eventType)")
