@@ -113,13 +113,19 @@ public class DMGPlayerSDK: NSObject, ObservableObject, WKScriptMessageHandler {
     }
     
     public func next() {
-        if !queue.isEmpty {
-            let nextItem = queue.removeFirst() // This pops the first element out of the queue
-            print("Next item: \(nextItem)")
+        if index < queue.count - 1 {
+            let nextIndex = index + 1
+            let isrc = queue[nextIndex]
+         
+            playNow(isrc: isrc)
+            index = nextIndex // Increase index by one
+          
         } else {
-            print("Queue is empty.")
+            print("Reached the end of the queue.")
         }
     }
+
+
 //        
 //    public func previous() {
 //        if index > 0 {
