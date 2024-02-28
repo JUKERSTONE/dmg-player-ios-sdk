@@ -12,33 +12,32 @@ public struct DMGPictureLicense: UIViewRepresentable {
         }
     
     public func makeUIView(context: Context) -> UIView {
-        let containerView = UIView(frame: CGRect(x: 0, y: 0, width: 1, height: 1))
-        containerView.backgroundColor = .clear // Make the background clear
-        containerView.layer.zPosition = -CGFloat.greatestFiniteMagnitude // Set to a very low z-index value
+        let containerView = UIView()
         
-        // Assuming `sdk.primaryWebView` and `sdk.secondaryWebView` are already initialized and configured
         let primaryWebView = sdk.primaryWebView
         containerView.addSubview(primaryWebView)
         
+        primaryWebView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            primaryWebView.topAnchor.constraint(equalTo: 0),
+            primaryWebView.widthAnchor.constraint(equalToConstant: 1), // Set width to 200 points
+            primaryWebView.heightAnchor.constraint(equalToConstant: 1), // Maintain aspect ratio
+            primaryWebView.centerXAnchor.constraint(equalTo: 0) // Center horizontally
+        ])
+
         let secondaryWebView = sdk.secondaryWebView
         containerView.addSubview(secondaryWebView)
-        
-        // Since the container view is 1x1, the web views should also be constrained to match this size.
-        [primaryWebView, secondaryWebView].forEach { webView in
-            webView.translatesAutoresizingMaskIntoConstraints = false
-            NSLayoutConstraint.activate([
-                webView.widthAnchor.constraint(equalTo: containerView.widthAnchor),
-                webView.heightAnchor.constraint(equalTo: containerView.heightAnchor),
-                webView.centerXAnchor.constraint(equalTo: containerView.centerXAnchor),
-                webView.centerYAnchor.constraint(equalTo: containerView.centerYAnchor)
-            ])
-        }
-        
-        // Other setup code, if necessary
+
+        secondaryWebView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            secondaryWebView.topAnchor.constraint(equalTo: 0), // Add spacing between the web views
+            secondaryWebView.widthAnchor.constraint(equalToConstant: 1),
+            secondaryWebView.heightAnchor.constraint(equalToConstant: 1), // Matåch height with active web view
+            secondaryWebView.centerXAnchor.constraint(equalTo: 0) // Center horizontally
+        ])
         
         return containerView
     }
-
     
     public func updateUIView(_ uiView: UIView, context: Context) {
         let queuePublisher = sdk.$queue
