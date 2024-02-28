@@ -6,11 +6,11 @@ import WebKit
 @available(iOS 13.0, *)
 extension DMGPlayerSDK: WKNavigationDelegate {
     public func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
+        print(isPrimaryActive, "grgre")
         let jsCodeCommon = buildCommonJavaScript()
         webView.evaluateJavaScript(buildCommonJavaScript(), completionHandler: nil)
     }
     
-    print(isPrimaryActive, "efefe")
     
     private func buildCommonJavaScript() -> String {
         // JavaScript code that is common to both active and inactive web views
