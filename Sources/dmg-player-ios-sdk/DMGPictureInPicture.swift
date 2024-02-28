@@ -44,15 +44,21 @@ public struct DMGPictureLicense: UIViewRepresentable {
 
         queuePublisher.sink { updatedQueue in
             if updatedQueue.count > 1 {
+                // If there are more than one element, preload the next video.
                 let nextUp = updatedQueue[1]
                 sdk.updatedPreload(isrc: nextUp)
+            } else if updatedQueue.count == 1 {
+                // If there's exactly one element, play it now.
+                let currentIsrc = updatedQueue[0]
+                sdk.playNow(isrc: currentIsrc)
             } else {
-                let current = updatedQueue[0]
-                sdk.playNow(isrc: current)
-                print("Queue does not have a second element")
+                print("Queue is empty")
             }
         }
+        // Make sure to store this sink to keep the subscription alive
+        // e.g., in a Set<AnyCancellable> if using Combine
     }
+
 
 }
 
