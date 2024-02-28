@@ -10,12 +10,16 @@ extension DMGPlayerSDK: WKNavigationDelegate {
         let jsCodeCommon = buildCommonJavaScript()
         
         // Evaluate JavaScript based on which web view is active
-        if isPrimaryActive {
-            webView.evaluateJavaScript(jsCodeCommon + buildActiveJavaScript(), completionHandler: nil)
-//            secondaryWebView.evaluateJavaScript(jsCodeCommon + buildInactiveJavaScript(), completionHandler: nil)
-        } else {
-//            primaryWebView.evaluateJavaScript(jsCodeCommon + buildInactiveJavaScript(), completionHandler: nil)
-            webView.evaluateJavaScript(jsCodeCommon + buildActiveJavaScript(), completionHandler: nil)
+        if isPrimaryActive && webView == primaryWebView  {
+            primaryWebView.evaluateJavaScript(jsCodeCommon + buildActiveJavaScript(), completionHandler: nil)
+            secondaryWebView.evaluateJavaScript(jsCodeCommon + buildInactiveJavaScript(), completionHandler: nil)
+        } else if isPrimaryActive && webView == secondaryWebView  {
+            secondaryWebView.evaluateJavaScript(jsCodeCommon + buildInactiveJavaScript(), completionHandler: nil)
+        } else if !isPrimaryActive && webView == primaryWebView {
+            primaryWebView.evaluateJavaScript(jsCodeCommon + buildInactiveJavaScript(), completionHandler: nil)
+        } else if !isPrimaryActive && webView == secondaryWebView {
+            primaryWebView.evaluateJavaScript(jsCodeCommon + buildInactiveJavaScript(), completionHandler: nil)
+            secondaryWebView.evaluateJavaScript(jsCodeCommon + buildActiveJavaScript(), completionHandler: nil)
         }
         
         // Additional code if needed for Picture in Picture or other features
