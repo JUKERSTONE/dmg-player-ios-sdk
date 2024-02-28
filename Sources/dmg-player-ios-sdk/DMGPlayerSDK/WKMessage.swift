@@ -49,14 +49,16 @@ extension DMGPlayerSDK {
                 }
             case "videoEnded":
                 if self.isPrimaryActive == true && self.hasPreloadedNextWebview {
-                    self.play(webView: self.secondaryWebView)
+                    
                 
                     if self.isPrimaryActive == true {
                         isPrimaryActive = false
+                        self.play(webView: self.secondaryWebView)
                         primaryWebView.loadHTMLString("<html><html>", baseURL: nil)
                         hasPreloadedNextWebview = false
                     } else {
                         isPrimaryActive = true
+                        self.play(webView: self.primaryWebView)
                         secondaryWebView.loadHTMLString("<html><html>", baseURL: nil)
                         hasPreloadedNextWebview = false
                     }
