@@ -126,15 +126,10 @@ public class DMGPlayerSDK: NSObject, ObservableObject, WKScriptMessageHandler {
             print("Reached the end of the queue.")
         }
     }
-
-
-//        
-//    public func previous() {
-//        if index > 0 {
-//            index -= 1
-//        } else {
-//            print("Reached the beginning of the queue.")
-//        }
-//    }
+       
+    public func stop() {
+        primaryWebView.loadHTMLString("", baseURL: nil)
+        secondaryWebView.loadHTMLString("", baseURL: nil)
+    }
 }
 
