@@ -40,19 +40,17 @@ public struct DMGPictureLicense: UIViewRepresentable {
     }
     
     public func updateUIView(_ uiView: UIView, context: Context) {
-        // Observe changes to the queue property
         let queuePublisher = sdk.$queue
-        
-        // Sink to receive updates
+
         queuePublisher.sink { updatedQueue in
-            // Check if the queue has been updated
-            if !updatedQueue.isEmpty {
+            if updatedQueue.count > 1 {
                 let nextUp = updatedQueue[1]
                 sdk.updatedPreload(isrc: nextUp)
             } else {
-                print("Queue is empty")
+                print("Queue does not have a second element")
             }
         }
     }
+
 }
 
