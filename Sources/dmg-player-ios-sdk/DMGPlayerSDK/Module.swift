@@ -208,21 +208,6 @@ public class DMGPlayerSDK: NSObject, ObservableObject, WKScriptMessageHandler {
         }
     }
 
-
-    
-//    private func setupVideoProgressListener(webView: WKWebView) {
-//        let script = """
-//            window.trakStarVideo.addEventListener('timeupdate', () => {
-//                window.webkit.messageHandlers.videoProgress.postMessage({
-//                    eventType: 'videoProgress',
-//                    data: (window.trakStarVideo.currentTime / window.trakStarVideo.duration) * 100
-//                });
-//            });
-//        """
-//        webView.evaluateJavaScript(script, completionHandler: nil)
-//    }
-
-    
     
     private func switchPlayer(toSecondary : Bool) {
         

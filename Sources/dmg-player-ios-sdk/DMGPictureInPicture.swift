@@ -4,7 +4,7 @@ import SwiftUI
 import WebKit
 
 @available(iOS 13.0, *)
-public struct DMGPictureInPicture: UIViewRepresentable {
+public struct DMGPictureLicense: UIViewRepresentable {
     @ObservedObject var sdk: DMGPlayerSDK
     
     public init(sdk: DMGPlayerSDK) {
