@@ -14,11 +14,17 @@ extension DMGPlayerSDK: WKNavigationDelegate {
                 
         // Determine which web view finished loading and inject the appropriate active or inactive JavaScript
         if webView == primaryWebView {
-            // Primary web view finished loading, set as active
-            webView.evaluateJavaScript(buildActiveJavaScript(), completionHandler: nil)
+            if self.isPrimaryActive {
+                webView.evaluateJavaScript(buildActiveJavaScript(), completionHandler: nil)
+            } else {
+                webView.evaluateJavaScript(buildInactiveJavaScript(), completionHandler: nil)
+            }
         } else if webView == secondaryWebView {
-            // Secondary web view finished loading, set as inactive
-            webView.evaluateJavaScript(buildInactiveJavaScript(), completionHandler: nil)
+            if self.isPrimaryActive {
+                webView.evaluateJavaScript(buildInactiveJavaScript(), completionHandler: nil)
+            } else {
+                webView.evaluateJavaScript(buildActiveJavaScript(), completionHandler: nil)
+            }
         }
         
         // Additional code if needed for Picture in Picture or other features
