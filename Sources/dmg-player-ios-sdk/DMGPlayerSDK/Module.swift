@@ -112,50 +112,52 @@ public class DMGPlayerSDK: NSObject, ObservableObject, WKScriptMessageHandler {
     
     public func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
         if message.name == "player" {
-            print("Received message from web: \(message.body)")
-
-            // First, check if the message body is a string
-            if let messageString = message.body as? String {
-                // Try to convert the string to data and then to a [String: Any] dictionary
-                if let data = messageString.data(using: .utf8) {
-                    do {
-                        // Attempt to deserialize the JSON string into a [String: Any] dictionary
-                        if let messageBody = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] {
-                            // Now we can safely check for the eventType
-                            if let eventType = messageBody["eventType"] as? String {
-                                // Handle known events
-                                switch eventType {
-                                case "videoProgress":
-                                    if let progressData = messageBody["data"] as? Double {
-                                        // Process the progress data
-                                        if progressData > 80.0 && !self.hasPreloadedNextWebview {
-                                            print("rgrwgbetrg")
-                                            self.preloadInactiveWebView() // Call your preload function here
-                                            self.hasPreloadedNextWebview = true // Set the flag to true after preloading
-                                        }
-                                    }
-                                case "videoEnded":
-                                    print("done")
-                                default:
-                                    print("Unknown event type received: \(eventType)")
-                                }
-                            } else {
-                                print("The 'eventType' is not a string or not present in the message body.")
-                            }
-                        } else {
-                            print("The message body is not a dictionary or not in the expected format.")
-                        }
-                    } catch {
-                        print("Failed to deserialize JSON string: \(error)")
-                    }
-                }
-            } else {
+            // Attempt to convert the message body directly into a String
+            guard let messageString = message.body as? String else {
                 print("The message body is not a string.")
+                return
+            }
+
+            // Attempt to convert the string to Data
+            guard let jsonData = messageString.data(using: .utf8) else {
+                print("Could not convert message string to Data.")
+                return
+            }
+
+            // Attempt to deserialize the JSON string into a dictionary
+            guard let messageDict = try? JSONSerialization.jsonObject(with: jsonData, options: []) as? [String: Any] else {
+                print("Failed to deserialize JSON string into a dictionary.")
+                return
+            }
+
+            // Now we can safely check for the eventType
+            guard let eventType = messageDict["eventType"] as? String else {
+                print("The 'eventType' is not a string or not present in the message body.")
+                return
+            }
+
+            // Handle known events
+            switch eventType {
+            case "videoProgress":
+                print("tom")
+                // Check if the progress data is a Double
+                if let progressData = messageDict["data"] as? Double {
+                    // Process the progress data
+                    if progressData > 80.0 && !self.hasPreloadedNextWebview {
+                        self.preloadInactiveWebView() // Call your preload function here
+                        self.hasPreloadedNextWebview = true // Set the flag to true after preloading
+                    }
+                } else {
+                    print("The 'data' for 'videoProgress' is not a Double or not present in the message body.")
+                }
+            default:
+                print("Unknown event type received: \(eventType)")
             }
         } else {
             print("Received a message from an unexpected handler: \(message.name)")
         }
     }
+
 
 
 
