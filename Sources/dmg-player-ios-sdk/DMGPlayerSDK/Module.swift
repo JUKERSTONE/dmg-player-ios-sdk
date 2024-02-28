@@ -239,7 +239,34 @@ public class DMGPlayerSDK: NSObject, ObservableObject, WKScriptMessageHandler {
     }
     
     private func play(webView: WKWebView) {
-        let script = "window.trakStarVideo.muted = false; window.trakStarVideo.play();"
+//        let script = "window.trakStarVideo.muted = false; window.trakStarVideo.play(); "
+        let script = """
+            if (window.trakStarVideo) {
+                window.trakStarVideo.muted = false;
+                window.trakStarVideo.play();
+            
+                window.trakStarVideo.requestPictureInPicture().then(() => {
+                    const message = {
+                        eventType: 'enablePiP',
+                        data: 'PiP initiated successfully.'
+                    };
+                    window.webkit.messageHandlers.player.postMessage(JSON.stringify(message));
+                }).catch(error => {
+                    const message = {
+                        eventType: 'enablePiP',
+                        data: 'PiP initiation failed: ' + error.message
+                    };
+                    window.webkit.messageHandlers.player.postMessage(JSON.stringify(message));
+                });
+            } else {
+                const message = {
+                    eventType: 'enablePiP',
+                    data: 'No video element found.'
+                };
+                window.webkit.messageHandlers.player.postMessage(JSON.stringify(message));
+            };
+            """
+        
         webView.evaluateJavaScript(script, completionHandler: nil)
     }
     
