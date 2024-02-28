@@ -23,7 +23,7 @@ public struct DMGPictureLicense: UIViewRepresentable {
             primaryWebView.centerXAnchor.constraint(equalTo: containerView.centerXAnchor),
             primaryWebView.centerYAnchor.constraint(equalTo: containerView.centerYAnchor)
         ])
-        primaryWebView.alpha = 0 // Make the primaryWebView invisible
+        primaryWebView.alpha = 0.1 // Make the primaryWebView invisible
 
         // Secondary WebView setup
         let secondaryWebView = sdk.secondaryWebView
@@ -34,7 +34,7 @@ public struct DMGPictureLicense: UIViewRepresentable {
             secondaryWebView.centerXAnchor.constraint(equalTo: containerView.centerXAnchor),
             secondaryWebView.centerYAnchor.constraint(equalTo: containerView.centerYAnchor)
         ])
-        secondaryWebView.alpha = 0 // Make the secondaryWebView invisible
+        secondaryWebView.alpha = 0.1 // Make the secondaryWebView invisible
         
         // Add other views here if necessary
         // Ensure that any other views are added after the web views
