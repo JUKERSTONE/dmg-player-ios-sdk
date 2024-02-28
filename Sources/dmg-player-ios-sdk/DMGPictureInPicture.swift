@@ -14,33 +14,30 @@ public struct DMGPictureLicense: UIViewRepresentable {
     public func makeUIView(context: Context) -> UIView {
         let containerView = UIView()
         
-        // Primary WebView setup
         let primaryWebView = sdk.primaryWebView
         containerView.addSubview(primaryWebView)
         
         primaryWebView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            primaryWebView.centerXAnchor.constraint(equalTo: containerView.centerXAnchor),
-            primaryWebView.centerYAnchor.constraint(equalTo: containerView.centerYAnchor),
-            primaryWebView.heightAnchor.constraint(equalToConstant: 0) // Set height to zero
+            primaryWebView.topAnchor.constraint(equalTo: containerView.topAnchor),
+            primaryWebView.widthAnchor.constraint(equalToConstant: 10), // Set width to 200 points
+            primaryWebView.heightAnchor.constraint(equalToConstant: 10), // Maintain aspect ratio
+            primaryWebView.centerXAnchor.constraint(equalTo: containerView.centerXAnchor) // Center horizontally
         ])
 
-        // Secondary WebView setup
         let secondaryWebView = sdk.secondaryWebView
         containerView.addSubview(secondaryWebView)
-        
+
         secondaryWebView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            secondaryWebView.centerXAnchor.constraint(equalTo: containerView.centerXAnchor),
-            secondaryWebView.centerYAnchor.constraint(equalTo: containerView.centerYAnchor),
-            secondaryWebView.heightAnchor.constraint(equalToConstant: 0) // Set height to zero
+            secondaryWebView.topAnchor.constraint(equalTo: secondaryWebView.bottomAnchor), // Add spacing between the web views
+            secondaryWebView.widthAnchor.constraint(equalToConstant: 10),
+            secondaryWebView.heightAnchor.constraint(equalToConstant: 10), // Matåch height with active web view
+            secondaryWebView.centerXAnchor.constraint(equalTo: containerView.leadingAnchor) // Center horizontally
         ])
         
-        // The web views are now centered and have no height, but still exist in the view hierarchy
         return containerView
     }
-
-
     
     public func updateUIView(_ uiView: UIView, context: Context) {
         let queuePublisher = sdk.$queue
