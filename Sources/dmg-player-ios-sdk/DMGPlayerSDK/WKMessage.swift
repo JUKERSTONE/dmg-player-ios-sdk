@@ -76,7 +76,6 @@ extension DMGPlayerSDK {
                 } else {
                     if self.isPrimaryActive == true {
                         self.isPrimaryActive = false
-                        self.hasPreloadedNextWebview = false
                         if self.index < self.queue.count - 1 {
                             self.index += 1
                         } else {
@@ -86,7 +85,6 @@ extension DMGPlayerSDK {
                         self.play(webView: self.secondaryWebView)
                     } else if self.isPrimaryActive == false {
                         self.isPrimaryActive = true
-                        self.hasPreloadedNextWebview = false
                         if self.index < self.queue.count - 1 {
                             self.index += 1
                         } else {
