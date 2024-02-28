@@ -16,12 +16,12 @@ extension DMGPlayerSDK {
     }
 
     func preloadNextWebView() {
-        guard queue.count > 1 else {
-            print("Not enough elements in queue to preload next")
-            return
-        }
+        guard index + 1 < queue.count else {
+                print("Not enough elements in queue to preload")
+                return
+            }
 
-        let nextIsrc = queue[index] // Access the second element
+        let nextIsrc = queue[index + 1] // Access the second element
 
         let apiService = APIService.shared
         let urlString = "https://europe-west1-trx-traklist.cloudfunctions.net/TRX_DEVELOPER/trx/music/\(nextIsrc)"
