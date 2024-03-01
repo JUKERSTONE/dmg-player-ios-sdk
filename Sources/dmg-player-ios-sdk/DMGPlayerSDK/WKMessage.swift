@@ -74,6 +74,8 @@ extension DMGPlayerSDK {
                             self.play(webView: self.secondaryWebView)
                         } else {
                             print("Index is at the end of the queue")
+                            secondaryWebView.loadHTMLString("<html><html>", baseURL: nil)
+                            self.play(webView: self.primaryWebView)
                         }
                        
                     } else if self.isPrimaryActive == false {
@@ -84,6 +86,8 @@ extension DMGPlayerSDK {
                             self.play(webView: self.primaryWebView)
                         } else {
                             print("Index is at the end of the queue")
+                            secondaryWebView.loadHTMLString("<html><html>", baseURL: nil)
+                            self.play(webView: self.secondaryWebView)
                         }
                         
                     }
