@@ -39,7 +39,7 @@ extension DMGPlayerSDK {
                     print("The 'data' for 'videoProgress' is not a Double or not present in the message body.")
                 }
             case "videoEnded":
-                
+                print("ended")
                 if self.hasPreloadedNextWebview {
                     if self.isPrimaryActive == true {
                         self.isPrimaryActive = false
