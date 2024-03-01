@@ -62,7 +62,6 @@ extension DMGPlayerSDK {
     }
     
     func play(webView: WKWebView) {
-        print("playing")
         webView.evaluateJavaScript(buildActiveJavaScript(), completionHandler: nil)
     }
     
