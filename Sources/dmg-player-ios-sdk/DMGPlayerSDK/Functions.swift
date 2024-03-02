@@ -31,7 +31,8 @@ extension DMGPlayerSDK {
                     }
 
                     DispatchQueue.main.async { [weak self] in
-                        let request = URLRequest(url: url)
+                        print("playing")
+                        let request = URLRequest(url: videoURL)
                         self?.backgroundWebView.load(request)
                     }
                 case .failure(let error):
