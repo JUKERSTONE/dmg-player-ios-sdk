@@ -62,7 +62,12 @@ extension DMGPlayerSDK {
     }
     
     func play(webView: WKWebView) {
-        webView.evaluateJavaScript(buildActiveJavaScript(), completionHandler: nil)
+//        webView.evaluateJavaScript(buildActiveJavaScript(), completionHandler: nil)
+        webView.evaluateJavaScript(buildActiveJavaScript()) { (result, error) in
+            if error != nil {
+                print("Error during JavaScript execution: \(error?.localizedDescription)")
+            }
+        }
     }
     
     func updatedPreload(isrc: String) {
