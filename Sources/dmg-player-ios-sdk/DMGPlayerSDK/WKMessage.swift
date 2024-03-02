@@ -45,24 +45,24 @@ extension DMGPlayerSDK {
                         self.hasPreloadedNextWebview = false
                         if self.index < self.queue.count - 1 {
                             self.index += 1
+//                            primaryWebView.loadHTMLString("<html><html>", baseURL: nil)
                             self.play(webView: self.secondaryWebView)
-                            primaryWebView.loadHTMLString("<html><html>", baseURL: nil)
                         } else {
                             print("Index is at the end of the queue")
+//                            secondaryWebView.loadHTMLString("<html><html>", baseURL: nil)
                             self.play(webView: self.primaryWebView)
-                            secondaryWebView.loadHTMLString("<html><html>", baseURL: nil)
                         }
                     } else if self.isPrimaryActive == false {
                         self.isPrimaryActive = true
                         self.hasPreloadedNextWebview = false
                         if self.index < self.queue.count - 1 {
                             self.index += 1
-                            primaryWebView.loadHTMLString("<html><html>", baseURL: nil)
+//                            primaryWebView.loadHTMLString("<html><html>", baseURL: nil)
                             self.play(webView: self.secondaryWebView)
                         } else {
                             print("Index is at the end of the queue")
+//                            secondaryWebView.loadHTMLString("<html><html>", baseURL: nil)
                             self.play(webView: self.primaryWebView)
-                            secondaryWebView.loadHTMLString("<html><html>", baseURL: nil)
                         }
                     }
                 } else {
@@ -70,24 +70,24 @@ extension DMGPlayerSDK {
                         self.isPrimaryActive = false
                         if self.index < self.queue.count - 1 {
                             self.index += 1
-                            primaryWebView.loadHTMLString("<html><html>", baseURL: nil)
+//                            primaryWebView.loadHTMLString("<html><html>", baseURL: nil)
                             self.play(webView: self.secondaryWebView)
                         } else {
                             print("Index is at the end of the queue")
+//                            secondaryWebView.loadHTMLString("<html><html>", baseURL: nil)
                             self.play(webView: self.primaryWebView)
-                            secondaryWebView.loadHTMLString("<html><html>", baseURL: nil)
                         }
                        
                     } else if self.isPrimaryActive == false {
                         self.isPrimaryActive = true
                         if self.index < self.queue.count - 1 {
                             self.index += 1
+//                            secondaryWebView.loadHTMLString("<html><html>", baseURL: nil)
                             self.play(webView: self.primaryWebView)
-                            secondaryWebView.loadHTMLString("<html><html>", baseURL: nil)
                         } else {
                             print("Index is at the end of the queue")
+//                            secondaryWebView.loadHTMLString("<html><html>", baseURL: nil)
                             self.play(webView: self.secondaryWebView)
-                            secondaryWebView.loadHTMLString("<html><html>", baseURL: nil)
                         }
                         
                     }
