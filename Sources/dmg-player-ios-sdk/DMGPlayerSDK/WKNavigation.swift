@@ -8,6 +8,10 @@ extension DMGPlayerSDK: WKNavigationDelegate {
     public func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
         let jsCodeCommon = buildCommonJavaScript()
         
+        if webView == backgroundWebView {
+            print("loaded bk")
+        }
+        
         if self.isPrimaryActive && webView == primaryWebView {
             webView.evaluateJavaScript(buildCommonJavaScript() + buildActiveJavaScript(), completionHandler: nil)
         } else if self.isPrimaryActive && webView == secondaryWebView {

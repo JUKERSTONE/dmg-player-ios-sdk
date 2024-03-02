@@ -117,6 +117,7 @@ extension DMGPlayerSDK {
             })
         } else {
             // App is in the background
+            print("BACKGROUND:")
             loadVideoInBackgroundWebView(isrc: "USWB11401859")
         }
     }

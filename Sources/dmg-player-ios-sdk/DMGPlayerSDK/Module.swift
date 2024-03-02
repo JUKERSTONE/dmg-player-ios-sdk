@@ -35,8 +35,10 @@ public class DMGPlayerSDK: NSObject, ObservableObject, WKScriptMessageHandler {
         
         self.primaryWebView = WKWebView(frame: .zero, configuration: config)
         self.secondaryWebView = WKWebView(frame: .zero, configuration: config)
+        self.backgroundWebView = WKWebView(frame: CGRect.zero, configuration: config)
         self.primaryWebView.navigationDelegate = self
         self.secondaryWebView.navigationDelegate = self
+        self.backgroundWebView.navigationDelegate = self
     }
     
     private func configureAudioSession() {
