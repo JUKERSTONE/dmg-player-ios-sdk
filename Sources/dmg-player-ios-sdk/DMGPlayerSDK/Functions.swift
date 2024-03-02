@@ -101,10 +101,6 @@ extension DMGPlayerSDK {
         }
     }
     
-//    func play(webView: WKWebView) {
-//        webView.evaluateJavaScript(buildActiveJavaScript(), completionHandler: nil)
-//    }
-    
     func play(webView: WKWebView) {
         // Check the application's state
         if UIApplication.shared.applicationState == .active {
@@ -118,8 +114,9 @@ extension DMGPlayerSDK {
             })
         } else {
             // App is in the background
-            print("BACKGROUND:")
-            loadVideoInBackgroundWebView(isrc: "USWB11401859")
+             print("BACKGROUND:")
+            // Playing random isrc
+             loadVideoInBackgroundWebView(isrc: "USWB11401859")
         }
     }
 
