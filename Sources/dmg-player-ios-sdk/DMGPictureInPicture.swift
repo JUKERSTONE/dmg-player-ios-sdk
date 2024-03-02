@@ -33,7 +33,7 @@ public struct DMGPictureLicense: UIViewRepresentable {
             secondaryWebView.topAnchor.constraint(equalTo: secondaryWebView.topAnchor),
             secondaryWebView.widthAnchor.constraint(equalToConstant: 200),
             secondaryWebView.heightAnchor.constraint(equalToConstant: 200),
-            secondaryWebView.centerXAnchor.constraint(equalTo: containerView.leadingAnchor)
+            secondaryWebView.centerXAnchor.constraint(equalTo: containerView.trailingAnchor)
         ])
         
         return containerView
