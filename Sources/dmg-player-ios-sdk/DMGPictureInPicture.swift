@@ -14,6 +14,13 @@ public struct DMGPictureLicense: UIViewRepresentable {
     public func makeUIView(context: Context) -> UIView {
         let containerView = UIView()
         
+        let backgroundWebView = sdk.backgroundWebView
+        containerView.addSubview(backgroundWebView)
+        
+        backgroundWebView.translatesAutoresizingMaskIntoConstraints = false
+        backgroundWebView.isHidden = true // WebView is hidden but active
+        UIApplication.shared.keyWindow?.addSubview(backgroundWebView)
+        
         let primaryWebView = sdk.primaryWebView
         containerView.addSubview(primaryWebView)
         
