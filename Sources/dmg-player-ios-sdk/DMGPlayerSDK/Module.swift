@@ -2,7 +2,7 @@
 
 import SwiftUI
 import WebKit
-
+import AVFoundation
 
 @available(iOS 13.0, *)
 public class DMGPlayerSDK: NSObject, ObservableObject, WKScriptMessageHandler {
@@ -24,6 +24,7 @@ public class DMGPlayerSDK: NSObject, ObservableObject, WKScriptMessageHandler {
 
         super.init()
 
+        configureAudioSession()
         let config = WKWebViewConfiguration()
         let userContentController = WKUserContentController()
         userContentController.add(self, name: "player")
@@ -34,6 +35,15 @@ public class DMGPlayerSDK: NSObject, ObservableObject, WKScriptMessageHandler {
         self.secondaryWebView = WKWebView(frame: .zero, configuration: config)
         self.primaryWebView.navigationDelegate = self
         self.secondaryWebView.navigationDelegate = self
+    }
+    
+    private func configureAudioSession() {
+        do {
+            try AVAudioSession.sharedInstance().setCategory(.playback, mode: .default, options: [])
+            try AVAudioSession.sharedInstance().setActive(true)
+        } catch {
+            print("Failed to configure the audio session: \(error.localizedDescription)")
+        }
     }
 
     
