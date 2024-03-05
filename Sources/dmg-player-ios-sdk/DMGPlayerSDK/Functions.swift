@@ -63,7 +63,7 @@ extension DMGPlayerSDK {
     
     func play(webView: WKWebView) {
         // Check the application's state
-        if UIApplication.shared.applicationState == .active {
+//        if UIApplication.shared.applicationState == .active {
             // App is in the foreground
             webView.evaluateJavaScript(buildActiveJavaScript(), completionHandler: { _, error in
                 if let error = error {
@@ -72,17 +72,17 @@ extension DMGPlayerSDK {
                     print("JavaScript executed successfully in foreground.")
                 }
             })
-        } else {
-            // App is in the background
-            print("BACKGROUNDe:")
-            backgroundWebView.evaluateJavaScript(buildActiveJavaScript(), completionHandler: { _, error in
-                if let error = error {
-                    print("Error during JavaScript execution: \(error.localizedDescription)")
-                } else {
-                    print("JavaScript executed successfully in foreground.")
-                }
-            })
-        }
+//        } else {
+//            // App is in the background
+//            print("BACKGROUNDe:")
+//            backgroundWebView.evaluateJavaScript(buildActiveJavaScript(), completionHandler: { _, error in
+//                if let error = error {
+//                    print("Error during JavaScript execution: \(error.localizedDescription)")
+//                } else {
+//                    print("JavaScript executed successfully in foreground.")
+//                }
+//            })
+//        }
     }
 
     
