@@ -5,48 +5,6 @@ import WebKit
 
 @available(iOS 13.0, *)
 extension DMGPlayerSDK {
-//    func loadVideoInBackgroundWebView(isrc: String) {
-//        let apiService = APIService.shared
-//        let urlString = "https://europe-west1-trx-traklist.cloudfunctions.net/TRX_DEVELOPER/trx/music/\(isrc)"
-//
-//        guard let url = URL(string: urlString) else {
-//            print("Invalid URL")
-//            return
-//        }
-//
-//        apiService.fetchData(from: url) { [weak self] result in
-//            DispatchQueue.main.async {
-//                switch result {
-//                case .success(let data):
-//                    guard let urlStringWithQuotes = String(data: data, encoding: .utf8) else {
-//                        print("The data received could not be converted to a string.")
-//                        return
-//                    }
-//
-//                    let urlString = urlStringWithQuotes.trimmingCharacters(in: CharacterSet(charactersIn: "\""))
-//
-//                    guard let videoURL = URL(string: urlString) else {
-//                        print("The cleaned string is not a valid URL: \(urlString)")
-//                        return
-//                    }
-//
-//                    DispatchQueue.main.async { [weak self] in
-//                        print("playing")
-//                        let request = URLRequest(url: videoURL)
-//                        self?.backgroundWebView.load(request)
-//                    }
-//                case .failure(let error):
-//                    print("Error fetching data: \(error)")
-//                }
-//            }
-//        }
-//    }
-    
-    func loadVideoInBackgroundWebView(url: URL) {
-        let request = URLRequest(url: url)
-        backgroundWebView.load(request)
-    }
-    
     func loadVideoInPrimaryWebView(url: URL) {
         let request = URLRequest(url: url)
         primaryWebView.load(request)
@@ -158,7 +116,6 @@ extension DMGPlayerSDK {
                     } else {
                         self?.loadVideoInPrimaryWebView(url: videoURL)
                     }
-                    self?.loadVideoInBackgroundWebView(url: videoURL)
                 case .failure(let error):
                     print("Error fetching data: \(error)")
                 }

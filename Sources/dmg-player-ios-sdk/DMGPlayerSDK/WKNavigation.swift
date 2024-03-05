@@ -7,26 +7,7 @@ import WebKit
 extension DMGPlayerSDK: WKNavigationDelegate {
     public func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
         let jsCodeCommon = buildCommonJavaScript()
-        
-//        if webView == backgroundWebView {
-//            print("loaded bk")
-//            
-//            if UIApplication.shared.applicationState == .active {
-//                // App is in the foreground
-//                webView.evaluateJavaScript(buildCommonJavaScript() + buildInactiveJavaScript(), completionHandler: { (result, error) in
-//                    if let error = error {
-//                        print("Error during JavaScript execution: \(error.localizedDescription)")
-//                    } else {
-//                        print("JavaScript executed successfully in the foreground.")
-//                    }
-//                })
-//            }
-//        }
-
-        if webView == backgroundWebView {
-            webView.evaluateJavaScript(buildCommonJavaScript() + buildInactiveJavaScript(), completionHandler: nil)
-        }
-        
+    
         if self.isPrimaryActive && webView == primaryWebView {
             webView.evaluateJavaScript(buildCommonJavaScript() + buildActiveJavaScript(), completionHandler: nil)
         } else if self.isPrimaryActive && webView == secondaryWebView {
