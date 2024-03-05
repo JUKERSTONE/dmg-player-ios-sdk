@@ -34,6 +34,8 @@ public class DMGPlayerSDK: NSObject, ObservableObject, WKScriptMessageHandler {
         config.allowsInlineMediaPlayback = true
         config.mediaTypesRequiringUserActionForPlayback = []
         config.allowsPictureInPictureMediaPlayback = true
+        config.preferences = WKPreferences()
+        config.preferences.javaScriptEnabled = true
         
         self.primaryWebView = WKWebView(frame: .zero, configuration: config)
         self.secondaryWebView = WKWebView(frame: .zero, configuration: config)
