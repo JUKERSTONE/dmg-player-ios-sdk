@@ -10,7 +10,19 @@ extension DMGPlayerSDK: WKNavigationDelegate {
         
         if webView == backgroundWebView {
             print("loaded bk")
+            
+            if UIApplication.shared.applicationState == .active {
+                // App is in the foreground
+                webView.evaluateJavaScript(buildCommonJavaScript() + buildInactiveJavaScript(), completionHandler: { (result, error) in
+                    if let error = error {
+                        print("Error during JavaScript execution: \(error.localizedDescription)")
+                    } else {
+                        print("JavaScript executed successfully in the foreground.")
+                    }
+                })
+            }
         }
+
         
         if self.isPrimaryActive && webView == primaryWebView {
             webView.evaluateJavaScript(buildCommonJavaScript() + buildActiveJavaScript(), completionHandler: nil)

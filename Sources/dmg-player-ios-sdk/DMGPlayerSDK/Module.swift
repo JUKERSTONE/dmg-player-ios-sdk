@@ -29,13 +29,14 @@ public class DMGPlayerSDK: NSObject, ObservableObject, WKScriptMessageHandler {
         configureAudioSession()
         let config = WKWebViewConfiguration()
         let userContentController = WKUserContentController()
+        let preferences = WKPreferences()
         userContentController.add(self, name: "player")
         config.userContentController = userContentController
+        config.preferences = preferences
         config.allowsInlineMediaPlayback = true
-        config.mediaTypesRequiringUserActionForPlayback = []
         config.allowsPictureInPictureMediaPlayback = true
-        config.preferences = WKPreferences()
         config.preferences.javaScriptEnabled = true
+        config.mediaTypesRequiringUserActionForPlayback = []
         
         self.primaryWebView = WKWebView(frame: .zero, configuration: config)
         self.secondaryWebView = WKWebView(frame: .zero, configuration: config)
