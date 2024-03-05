@@ -19,7 +19,7 @@ public struct DMGPictureLicense: UIViewRepresentable {
         
         backgroundWebView.translatesAutoresizingMaskIntoConstraints = false
         backgroundWebView.isHidden = true 
-        UIApplication.shared.keyWindow?.addSubview(backgroundWebView)
+        containerView.addSubview(backgroundWebView)
         
         let primaryWebView = sdk.primaryWebView
         containerView.addSubview(primaryWebView)
