@@ -12,6 +12,7 @@ public class DMGPlayerSDK: NSObject, ObservableObject, WKScriptMessageHandler {
     public var bkSecondaryWebView: WKWebView
     public var index: Int
     public var isPaused: Bool
+    @Published var isForeground: Bool = false
     @Published var hasPreloadedNextWebview: Bool = true
     @Published var isPrimaryActive: Bool = true
     @Published var hasBkPreloadedNextWebview: Bool = true
@@ -41,6 +42,8 @@ public class DMGPlayerSDK: NSObject, ObservableObject, WKScriptMessageHandler {
         config.allowsPictureInPictureMediaPlayback = true
         config.preferences.javaScriptEnabled = true
         config.mediaTypesRequiringUserActionForPlayback = []
+        NotificationCenter.default.addObserver(self, selector: #selector(appDidBecomeActive), name: UIApplication.didBecomeActiveNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(appMovedToBackground), name: UIApplication.didEnterBackgroundNotification, object: nil)
         
         self.primaryWebView = WKWebView(frame: .zero, configuration: config)
         self.secondaryWebView = WKWebView(frame: .zero, configuration: config)
@@ -59,7 +62,12 @@ public class DMGPlayerSDK: NSObject, ObservableObject, WKScriptMessageHandler {
         )
     }
     
+    @objc private func appDidBecomeActive() {
+        isForeground = true
+    }
+    
     @objc private func appMovedToBackground() {
+        isForeground = false
         let nextIndex = index + 1
         // Perform a bounds check for nextIndex
         guard nextIndex < queue.count else {
