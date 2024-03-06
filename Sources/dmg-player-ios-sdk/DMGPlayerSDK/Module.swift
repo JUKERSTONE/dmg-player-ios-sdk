@@ -32,7 +32,6 @@ public class DMGPlayerSDK: NSObject, ObservableObject, WKScriptMessageHandler {
 
         configureAudioSession()
         let config = WKWebViewConfiguration()
-        let backgroundConfig = createBackgroundWebViewConfiguration()
         let userContentController = WKUserContentController()
         let preferences = WKPreferences()
         userContentController.add(self, name: "player")
@@ -43,31 +42,14 @@ public class DMGPlayerSDK: NSObject, ObservableObject, WKScriptMessageHandler {
         config.preferences.javaScriptEnabled = true
         config.mediaTypesRequiringUserActionForPlayback = []
         
-        
         self.primaryWebView = WKWebView(frame: .zero, configuration: config)
         self.secondaryWebView = WKWebView(frame: .zero, configuration: config)
-        self.bkPrimaryWebView = WKWebView(frame: .zero, configuration: backgroundConfig)
-        self.bkSecondaryWebView = WKWebView(frame: .zero, configuration: backgroundConfig)
+        self.bkPrimaryWebView = WKWebView(frame: .zero, configuration: config)
+        self.bkSecondaryWebView = WKWebView(frame: .zero, configuration: config)
         self.primaryWebView.navigationDelegate = self
         self.secondaryWebView.navigationDelegate = self
         self.bkPrimaryWebView.navigationDelegate = self
         self.bkSecondaryWebView.navigationDelegate = self
-    }
-    
-    private func createBackgroundWebViewConfiguration() -> WKWebViewConfiguration {
-        let config = WKWebViewConfiguration()
-        // Copy all the configuration settings from the existing setup
-        config.allowsInlineMediaPlayback = true
-        config.allowsPictureInPictureMediaPlayback = true
-        config.preferences.javaScriptEnabled = true
-        config.mediaTypesRequiringUserActionForPlayback = []
-        
-        // Add the script that pauses the video
-        let scriptSource = buildCommonJavaScript() + buildInactiveJavaScript()
-        let userScript = WKUserScript(source: scriptSource, injectionTime: .atDocumentStart, forMainFrameOnly: true)
-        config.userContentController.addUserScript(userScript)
-        
-        return config
     }
     
     private func configureAudioSession() {
