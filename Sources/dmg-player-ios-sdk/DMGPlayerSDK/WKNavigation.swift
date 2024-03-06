@@ -8,27 +8,29 @@ extension DMGPlayerSDK: WKNavigationDelegate {
     public func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
         let jsCodeCommon = buildCommonJavaScript()
         
-//        guard UIApplication.shared.applicationState == .active else {
-//            // If the app is in the background, load the web view in an inactive state
-////            if webView == bkPrimaryWebView || webView == bkSecondaryWebView {
-////                let jsCodeInactive = buildCommonJavaScript() + buildInactiveJavaScript()
-////                bkPrimaryWebView.evaluateJavaScript(jsCodeInactive, completionHandler: nil)
-////            }
-//            return // Return early if app is in background
-//        }
-//
-//        print("WHYY", webView)
+        guard UIApplication.shared.applicationState == .active else {
+            // If the app is in the background, load the web view in an inactive state
+//            if webView == bkPrimaryWebView || webView == bkSecondaryWebView {
+//                let jsCodeInactive = buildCommonJavaScript() + buildInactiveJavaScript()
+//                bkPrimaryWebView.evaluateJavaScript(jsCodeInactive, completionHandler: nil)
+//            }
+            return // Return early if app is in background
+        }
+        
+       
         
         if self.isPrimaryActive && webView == primaryWebView {
+            print("WHYY", webView)
             webView.evaluateJavaScript(buildCommonJavaScript() + buildActiveJavaScript(), completionHandler: nil)
         } else if self.isPrimaryActive && webView == secondaryWebView {
+            print("WHYY1", webView)
             webView.evaluateJavaScript(buildCommonJavaScript() + buildInactiveJavaScript(), completionHandler: nil)
         } else if !self.isPrimaryActive && webView == primaryWebView {
+            print("WHYY2", webView)
             webView.evaluateJavaScript(buildCommonJavaScript() + buildInactiveJavaScript(), completionHandler: nil)
         } else if !self.isPrimaryActive && webView == secondaryWebView {
+            print("WHYY3", webView)
             webView.evaluateJavaScript(buildCommonJavaScript() + buildActiveJavaScript(), completionHandler: nil)
-        } else {
-            webView.evaluateJavaScript(buildCommonJavaScript() + buildInactiveJavaScript(), completionHandler: nil)
         }
     }
 }
