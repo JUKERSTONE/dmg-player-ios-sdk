@@ -17,6 +17,8 @@ extension DMGPlayerSDK: WKNavigationDelegate {
             return // Return early if app is in background
         }
         
+        print("WHYY")
+        
         if self.isPrimaryActive && webView == primaryWebView {
             webView.evaluateJavaScript(buildCommonJavaScript() + buildActiveJavaScript(), completionHandler: nil)
         } else if self.isPrimaryActive && webView == secondaryWebView {
