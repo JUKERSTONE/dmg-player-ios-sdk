@@ -9,9 +9,10 @@ extension DMGPlayerSDK: WKNavigationDelegate {
         let jsCodeCommon = buildCommonJavaScript()
         
         guard self.isForeground else {
-                    // The app is in the background, do nothing or handle the background state
-                    return webView.evaluateJavaScript(buildCommonJavaScript() + buildInactiveJavaScript(), completionHandler: nil)
-                }
+            // The app is in the background, do nothing or handle the background state
+            webView.evaluateJavaScript(buildInactiveJavaScript(), completionHandler: nil)
+            return
+        }
        
         
         if self.isPrimaryActive && webView == primaryWebView {
