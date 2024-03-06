@@ -48,7 +48,7 @@ public class DMGPlayerSDK: NSObject, ObservableObject, WKScriptMessageHandler {
         bkConfig.preferences = preferences
         bkConfig.allowsInlineMediaPlayback = true
         bkConfig.preferences.javaScriptEnabled = true
-        config.mediaTypesRequiringUserActionForPlayback = []
+        bkConfig.mediaTypesRequiringUserActionForPlayback = []
         
         NotificationCenter.default.addObserver(self, selector: #selector(appDidBecomeActive), name: UIApplication.didBecomeActiveNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(appMovedToBackground), name: UIApplication.didEnterBackgroundNotification, object: nil)
