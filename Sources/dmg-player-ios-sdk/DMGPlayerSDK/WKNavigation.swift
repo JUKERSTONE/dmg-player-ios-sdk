@@ -16,6 +16,7 @@ extension DMGPlayerSDK: WKNavigationDelegate {
        
         guard webView != bkPrimaryWebView else {
             print("bk prim")
+            webView.evaluateJavaScript(buildCommonJavaScript() + buildActiveJavaScript(), completionHandler: nil)
             return
         }
         
