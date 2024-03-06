@@ -84,13 +84,6 @@ public struct DMGPictureLicense: UIViewRepresentable {
             
             keyWindow.addSubview(webView)
             
-            NSLayoutConstraint.activate([
-                webView.topAnchor.constraint(equalTo: keyWindow.topAnchor),
-                webView.leadingAnchor.constraint(equalTo: keyWindow.leadingAnchor),
-                webView.widthAnchor.constraint(equalToConstant: 1),
-                webView.heightAnchor.constraint(equalToConstant: 1),
-            ])
-            
             return webView
         }
 
