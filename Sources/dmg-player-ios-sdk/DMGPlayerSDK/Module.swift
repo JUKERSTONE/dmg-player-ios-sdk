@@ -61,7 +61,7 @@ public class DMGPlayerSDK: NSObject, ObservableObject, WKScriptMessageHandler {
         self.secondaryWebView.navigationDelegate = self
         self.bkPrimaryWebView.navigationDelegate = self
         self.bkSecondaryWebView.navigationDelegate = self
-        self.bkConfig.navigationDelegate = self
+        self.bkConfig = WKWebViewConfiguration()
         
         NotificationCenter.default.addObserver(
             self,
