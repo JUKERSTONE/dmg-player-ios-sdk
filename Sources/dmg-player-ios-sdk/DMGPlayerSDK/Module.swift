@@ -67,11 +67,6 @@ public class DMGPlayerSDK: NSObject, ObservableObject, WKScriptMessageHandler {
             return
         }
         
-//        DispatchQueue.main.async {
-//            let request = URLRequest(url: nextURL)
-//            self.bkPrimaryWebView.load(request)
-//        }
-        
         let isrc = queue[index + 1]
         
         let apiService = APIService.shared
