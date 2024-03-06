@@ -40,13 +40,13 @@ public class DMGPlayerSDK: NSObject, ObservableObject, WKScriptMessageHandler {
         userContentController.add(self, name: "player")
         config.userContentController = userContentController
         config.preferences = preferences
-        config.allowsInlineMediaPlayback = true
+//        config.allowsInlineMediaPlayback = true
         config.allowsPictureInPictureMediaPlayback = true
 //        config.mediaTypesRequiringUserActionForPlayback = []
         
         bkConfig.userContentController = userContentController
         bkConfig.preferences = preferences
-//        bkConfig.allowsInlineMediaPlayback = true
+        bkConfig.allowsInlineMediaPlayback = true
         bkConfig.preferences.javaScriptEnabled = true
 //        bkConfig.mediaTypesRequiringUserActionForPlayback = []
         
