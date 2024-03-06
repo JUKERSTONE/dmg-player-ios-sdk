@@ -131,9 +131,9 @@ extension DMGPlayerSDK {
                     }
                     
                     if self?.isBkPrimaryActive == true {
-                        self?.loadBkVideoInSecondaryWebView(url: videoURL)
-                    } else {
                         self?.loadBkVideoInPrimaryWebView(url: videoURL)
+                    } else {
+                        self?.loadVideoInSecondaryWebView(url: videoURL)
                     }
 
                     if self?.isPrimaryActive == true {
