@@ -10,10 +10,10 @@ extension DMGPlayerSDK: WKNavigationDelegate {
         
         guard UIApplication.shared.applicationState == .active else {
             // If the app is in the background, load the web view in an inactive state
-            if webView == bkPrimaryWebView || webView == bkSecondaryWebView {
-                let jsCodeInactive = buildCommonJavaScript() + buildInactiveJavaScript()
-                bkPrimaryWebView.evaluateJavaScript(jsCodeInactive, completionHandler: nil)
-            }
+//            if webView == bkPrimaryWebView || webView == bkSecondaryWebView {
+//                let jsCodeInactive = buildCommonJavaScript() + buildInactiveJavaScript()
+//                bkPrimaryWebView.evaluateJavaScript(jsCodeInactive, completionHandler: nil)
+//            }
             return // Return early if app is in background
         }
         
