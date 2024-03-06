@@ -87,7 +87,7 @@ extension DMGPlayerSDK {
             if isBkPrimaryActive {
                 bkPrimaryWebView.evaluateJavaScript(buildActiveJavaScript(), completionHandler: { _, error in
                     if let error = error {
-                        print("Error during JavaScript execution: \(error.localizedDescription)")
+                        print("Error during Java1Script execution: \(error.localizedDescription)")
                     } else {
                         print("JavaScript executed successfully in foreground.")
                     }
@@ -95,7 +95,7 @@ extension DMGPlayerSDK {
             } else {
                 bkSecondaryWebView.evaluateJavaScript(buildActiveJavaScript(), completionHandler: { _, error in
                     if let error = error {
-                        print("Error during JavaScript execution: \(error.localizedDescription)")
+                        print("Error during JavaS2cript execution: \(error.localizedDescription)")
                     } else {
                         print("JavaScript executed successfully in foreground.")
                     }
