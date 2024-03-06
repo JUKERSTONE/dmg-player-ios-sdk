@@ -12,7 +12,6 @@ public class DMGPlayerSDK: NSObject, ObservableObject, WKScriptMessageHandler {
     public var bkSecondaryWebView: WKWebView
     public var index: Int
     public var isPaused: Bool
-    public var bkConfig: WKWebViewConfiguration
     @Published var isForeground: Bool = false
     @Published var hasPreloadedNextWebview: Bool = true
     @Published var isPrimaryActive: Bool = true
@@ -29,7 +28,6 @@ public class DMGPlayerSDK: NSObject, ObservableObject, WKScriptMessageHandler {
         self.isPrimaryActive = true
         self.index = 0
         self.isPaused = false
-        self.bkConfig = WKWebViewConfiguration()
 
         super.init()
 
@@ -40,24 +38,16 @@ public class DMGPlayerSDK: NSObject, ObservableObject, WKScriptMessageHandler {
         userContentController.add(self, name: "player")
         config.userContentController = userContentController
         config.preferences = preferences
-//        config.allowsInlineMediaPlayback = true
-//        config.allowsPictureInPictureMediaPlayback = true
-//        config.mediaTypesRequiringUserActionForPlayback = []
-        config.preferences.javaScriptEnabled = true
-        
-        bkConfig.userContentController = userContentController
-        bkConfig.preferences = preferences
-        bkConfig.allowsInlineMediaPlayback = true
-//        bkConfig.preferences.javaScriptEnabled = true
-//        bkConfig.mediaTypesRequiringUserActionForPlayback = []
+        config.allowsInlineMediaPlayback = true
+        config.allowsPictureInPictureMediaPlayback = true
         
         NotificationCenter.default.addObserver(self, selector: #selector(appDidBecomeActive), name: UIApplication.didBecomeActiveNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(appMovedToBackground), name: UIApplication.didEnterBackgroundNotification, object: nil)
         
         self.primaryWebView = WKWebView(frame: .zero, configuration: config)
         self.secondaryWebView = WKWebView(frame: .zero, configuration: config)
-        self.bkPrimaryWebView = WKWebView(frame: .zero, configuration: bkConfig)
-        self.bkSecondaryWebView = WKWebView(frame: .zero, configuration: bkConfig)
+        self.bkPrimaryWebView = WKWebView(frame: .zero, configuration: config)
+        self.bkSecondaryWebView = WKWebView(frame: .zero, configuration: config)
         self.primaryWebView.navigationDelegate = self
         self.secondaryWebView.navigationDelegate = self
         self.bkPrimaryWebView.navigationDelegate = self

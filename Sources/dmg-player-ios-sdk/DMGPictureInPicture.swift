@@ -74,11 +74,18 @@ public struct DMGPictureLicense: UIViewRepresentable {
             guard let keyWindow = UIApplication.shared.windows.first(where: { $0.isKeyWindow }) else {
                 fatalError("No key window")
             }
+        
             
-            let webViewConfig = WKWebViewConfiguration()
-            // Configure your WKWebView as needed
+            let config = WKWebViewConfiguration()
+            let userContentController = WKUserContentController()
+//          let preferences = WKPreferences()
+        
+            config.userContentController = userContentController
+//            config.preferences = preferences
+//            config.allowsInlineMediaPlayback = true
+            config.preferences.javaScriptEnabled = true
             
-            let webView = WKWebView(frame: CGRect.zero, configuration: webViewConfig)
+            let webView = WKWebView(frame: CGRect.zero, configuration: config)
             webView.translatesAutoresizingMaskIntoConstraints = false
             webView.isHidden = true  // Keep the web view hidden
             
