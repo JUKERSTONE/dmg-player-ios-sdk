@@ -129,13 +129,6 @@ extension DMGPlayerSDK {
                         print("The cleaned string is not a valid URL: \(urlString)")
                         return
                     }
-                    
-                    if self?.isBkPrimaryActive == true {
-                        self?.loadBkVideoInPrimaryWebView(url: videoURL)
-                    } else {
-                        self?.loadVideoInSecondaryWebView(url: videoURL)
-                    }
-                    
 
                     if self?.isPrimaryActive == true {
                         self?.loadVideoInSecondaryWebView(url: videoURL)

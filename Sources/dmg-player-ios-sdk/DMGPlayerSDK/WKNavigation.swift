@@ -7,19 +7,15 @@ import WebKit
 extension DMGPlayerSDK: WKNavigationDelegate {
     public func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
         let jsCodeCommon = buildCommonJavaScript()
-
-        if webView == bkPrimaryWebView || webView == bkSecondaryWebView {
-            print("bk")
-        } else {
-            if self.isPrimaryActive && webView == primaryWebView {
-                webView.evaluateJavaScript(buildCommonJavaScript() + buildActiveJavaScript(), completionHandler: nil)
-            } else if self.isPrimaryActive && webView == secondaryWebView {
-                webView.evaluateJavaScript(buildCommonJavaScript() + buildInactiveJavaScript(), completionHandler: nil)
-            } else if !self.isPrimaryActive && webView == primaryWebView {
-                webView.evaluateJavaScript(buildCommonJavaScript() + buildInactiveJavaScript(), completionHandler: nil)
-            } else if !self.isPrimaryActive && webView == secondaryWebView {
-                webView.evaluateJavaScript(buildCommonJavaScript() + buildActiveJavaScript(), completionHandler: nil)
-            }
+        
+        if self.isPrimaryActive && webView == primaryWebView {
+            webView.evaluateJavaScript(buildCommonJavaScript() + buildActiveJavaScript(), completionHandler: nil)
+        } else if self.isPrimaryActive && webView == secondaryWebView {
+            webView.evaluateJavaScript(buildCommonJavaScript() + buildInactiveJavaScript(), completionHandler: nil)
+        } else if !self.isPrimaryActive && webView == primaryWebView {
+            webView.evaluateJavaScript(buildCommonJavaScript() + buildInactiveJavaScript(), completionHandler: nil)
+        } else if !self.isPrimaryActive && webView == secondaryWebView {
+            webView.evaluateJavaScript(buildCommonJavaScript() + buildActiveJavaScript(), completionHandler: nil)
         }
     }
 }
