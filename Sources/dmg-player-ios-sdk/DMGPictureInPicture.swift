@@ -14,17 +14,23 @@ public struct DMGPictureLicense: UIViewRepresentable {
     public func makeUIView(context: Context) -> UIView {
         let containerView = UIView()
         
-        let bkPrimaryWebView = sdk.bkPrimaryWebView
-        containerView.addSubview(bkPrimaryWebView)
-        bkPrimaryWebView.translatesAutoresizingMaskIntoConstraints = false
-        bkPrimaryWebView.isHidden = true
-        containerView.addSubview(bkPrimaryWebView)
         
-        let bkSecondaryWebView = sdk.bkSecondaryWebView
+//        if let keyWindow = UIApplication.shared.windows.filter({$0.isKeyWindow}).first {
+//            let webViewConfig = WKWebViewConfiguration()
+//            // Configure your WKWebView as needed
+//            let webView = WKWebView(frame: CGRect.zero, configuration: webViewConfig)
+//            keyWindow.addSubview(webView)
+//            // Now you can load a request or perform other operations on the webView
+//        }
+        
+        let bkPrimaryWebView = createBackgroundWebView()
+        containerView.addSubview(bkPrimaryWebView)
+        sdk.bkPrimaryWebView = bkPrimaryWebView
+                
+                // Adding bkSecondaryWebView to the key window
+        let bkSecondaryWebView = createBackgroundWebView()
         containerView.addSubview(bkSecondaryWebView)
-        bkSecondaryWebView.translatesAutoresizingMaskIntoConstraints = false
-        bkSecondaryWebView.isHidden = true
-        containerView.addSubview(bkSecondaryWebView)
+        sdk.bkSecondaryWebView = bkSecondaryWebView
         
         let primaryWebView = sdk.primaryWebView
         containerView.addSubview(primaryWebView)
@@ -64,6 +70,29 @@ public struct DMGPictureLicense: UIViewRepresentable {
         }
     }
 
+    private func createBackgroundWebView() -> WKWebView {
+            guard let keyWindow = UIApplication.shared.windows.first(where: { $0.isKeyWindow }) else {
+                fatalError("No key window")
+            }
+            
+            let webViewConfig = WKWebViewConfiguration()
+            // Configure your WKWebView as needed
+            
+            let webView = WKWebView(frame: CGRect.zero, configuration: webViewConfig)
+            webView.translatesAutoresizingMaskIntoConstraints = false
+            webView.isHidden = true  // Keep the web view hidden
+            
+            keyWindow.addSubview(webView)
+            
+            NSLayoutConstraint.activate([
+                webView.topAnchor.constraint(equalTo: keyWindow.topAnchor),
+                webView.leadingAnchor.constraint(equalTo: keyWindow.leadingAnchor),
+                webView.widthAnchor.constraint(equalToConstant: 1),
+                webView.heightAnchor.constraint(equalToConstant: 1),
+            ])
+            
+            return webView
+        }
 
 }
 
