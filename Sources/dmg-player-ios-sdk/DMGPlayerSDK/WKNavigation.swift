@@ -7,21 +7,19 @@ import WebKit
 extension DMGPlayerSDK: WKNavigationDelegate {
     public func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
         let jsCodeCommon = buildCommonJavaScript()
-        let appIsInForeground = UIApplication.shared.applicationState == .active
     
-        if appIsInForeground && webView == bkPrimaryWebView || webView == bkSecondaryWebView {
-            webView.evaluateJavaScript(jsCodeCommon + buildInactiveJavaScript(), completionHandler: nil)
-        } else {
-            if self.isPrimaryActive && webView == primaryWebView {
-                primaryWebView.evaluateJavaScript(buildCommonJavaScript() + buildActiveJavaScript(), completionHandler: nil)
-            } else if self.isPrimaryActive && webView == secondaryWebView {
-                secondaryWebView.evaluateJavaScript(buildCommonJavaScript() + buildInactiveJavaScript(), completionHandler: nil)
-            } else if !self.isPrimaryActive && webView == primaryWebView {
-                primaryWebView.evaluateJavaScript(buildCommonJavaScript() + buildInactiveJavaScript(), completionHandler: nil)
-            } else if !self.isPrimaryActive && webView == secondaryWebView {
-                secondaryWebView.evaluateJavaScript(buildCommonJavaScript() + buildActiveJavaScript(), completionHandler: nil)
-            }
+
+
+        if self.isPrimaryActive && webView == primaryWebView {
+            webView.evaluateJavaScript(buildCommonJavaScript() + buildActiveJavaScript(), completionHandler: nil)
+        } else if self.isPrimaryActive && webView == secondaryWebView {
+            webView.evaluateJavaScript(buildCommonJavaScript() + buildInactiveJavaScript(), completionHandler: nil)
+        } else if !self.isPrimaryActive && webView == primaryWebView {
+            webView.evaluateJavaScript(buildCommonJavaScript() + buildInactiveJavaScript(), completionHandler: nil)
+        } else if !self.isPrimaryActive && webView == secondaryWebView {
+            webView.evaluateJavaScript(buildCommonJavaScript() + buildActiveJavaScript(), completionHandler: nil)
         }
+        
     }
     
     
