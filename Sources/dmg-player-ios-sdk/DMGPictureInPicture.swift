@@ -14,9 +14,20 @@ public struct DMGPictureLicense: UIViewRepresentable {
     public func makeUIView(context: Context) -> UIView {
         let containerView = UIView()
         
+        let bkPrimaryWebView = sdk.bkPrimaryWebView
+        containerView.addSubview(bkPrimaryWebView)
+        bkPrimaryWebView.translatesAutoresizingMaskIntoConstraints = false
+        bkPrimaryWebView.isHidden = true
+        containerView.addSubview(bkPrimaryWebView)
+        
+        let bkSecondaryWebView = sdk.bkSecondaryWebView
+        containerView.addSubview(bkSecondaryWebView)
+        bkSecondaryWebView.translatesAutoresizingMaskIntoConstraints = false
+        bkSecondaryWebView.isHidden = true
+        containerView.addSubview(bkSecondaryWebView)
+        
         let primaryWebView = sdk.primaryWebView
         containerView.addSubview(primaryWebView)
-        
         primaryWebView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             primaryWebView.topAnchor.constraint(equalTo: containerView.topAnchor),
@@ -27,7 +38,6 @@ public struct DMGPictureLicense: UIViewRepresentable {
 
         let secondaryWebView = sdk.secondaryWebView
         containerView.addSubview(secondaryWebView)
-
         secondaryWebView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             secondaryWebView.topAnchor.constraint(equalTo: secondaryWebView.topAnchor),

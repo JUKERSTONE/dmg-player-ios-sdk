@@ -5,6 +5,16 @@ import WebKit
 
 @available(iOS 13.0, *)
 extension DMGPlayerSDK {
+    func loadBkVideoInPrimaryWebView(url: URL) {
+        let request = URLRequest(url: url)
+        bkPrimaryWebView.load(request)
+    }
+    
+    func loadBkVideoInSecondaryWebView(url: URL) {
+        let request = URLRequest(url: url)
+        bkSecondaryWebView.load(request)
+    }
+    
     func loadVideoInPrimaryWebView(url: URL) {
         let request = URLRequest(url: url)
         primaryWebView.load(request)
@@ -63,7 +73,7 @@ extension DMGPlayerSDK {
     
     func play(webView: WKWebView) {
         // Check the application's state
-//        if UIApplication.shared.applicationState == .active {
+        if UIApplication.shared.applicationState == .active {
             // App is in the foreground
             webView.evaluateJavaScript(buildActiveJavaScript(), completionHandler: { _, error in
                 if let error = error {
@@ -72,17 +82,26 @@ extension DMGPlayerSDK {
                     print("JavaScript executed successfully in foreground.")
                 }
             })
-//        } else {
-//            // App is in the background
-//            print("BACKGROUNDe:")
-//            backgroundWebView.evaluateJavaScript(buildActiveJavaScript(), completionHandler: { _, error in
-//                if let error = error {
-//                    print("Error during JavaScript execution: \(error.localizedDescription)")
-//                } else {
-//                    print("JavaScript executed successfully in foreground.")
-//                }
-//            })
-//        }
+        } else {
+            // App is in the background
+            if isBkPrimaryActive {
+                bkPrimaryWebView.evaluateJavaScript(buildActiveJavaScript(), completionHandler: { _, error in
+                    if let error = error {
+                        print("Error during JavaScript execution: \(error.localizedDescription)")
+                    } else {
+                        print("JavaScript executed successfully in foreground.")
+                    }
+                })
+            } else {
+                bkSecondaryWebView.evaluateJavaScript(buildActiveJavaScript(), completionHandler: { _, error in
+                    if let error = error {
+                        print("Error during JavaScript execution: \(error.localizedDescription)")
+                    } else {
+                        print("JavaScript executed successfully in foreground.")
+                    }
+                })
+            }
+        }
     }
 
     
@@ -109,6 +128,12 @@ extension DMGPlayerSDK {
                     guard let videoURL = URL(string: urlString) else {
                         print("The cleaned string is not a valid URL: \(urlString)")
                         return
+                    }
+                    
+                    if self?.isBkPrimaryActive == true {
+                        self?.loadBkVideoInSecondaryWebView(url: videoURL)
+                    } else {
+                        self?.loadBkVideoInPrimaryWebView(url: videoURL)
                     }
 
                     if self?.isPrimaryActive == true {

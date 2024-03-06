@@ -8,16 +8,22 @@ import AVFoundation
 public class DMGPlayerSDK: NSObject, ObservableObject, WKScriptMessageHandler {
     public var primaryWebView: WKWebView
     public var secondaryWebView: WKWebView
+    public var bkPrimaryWebView: WKWebView
+    public var bkSecondaryWebView: WKWebView
     public var index: Int
     public var isPaused: Bool
     @Published var hasPreloadedNextWebview: Bool = true
     @Published var isPrimaryActive: Bool = true
+    @Published var hasBkPreloadedNextWebview: Bool = true
+    @Published var isBkPrimaryActive: Bool = true
     @Published var queue: [String] = []
     
     public override init() {
         self.queue = []
         self.primaryWebView = WKWebView()
         self.secondaryWebView = WKWebView()
+        self.bkPrimaryWebView = WKWebView()
+        self.bkSecondaryWebView = WKWebView()
         self.isPrimaryActive = true
         self.index = 0
         self.isPaused = false
@@ -38,8 +44,12 @@ public class DMGPlayerSDK: NSObject, ObservableObject, WKScriptMessageHandler {
         
         self.primaryWebView = WKWebView(frame: .zero, configuration: config)
         self.secondaryWebView = WKWebView(frame: .zero, configuration: config)
+        self.bkPrimaryWebView = WKWebView(frame: .zero, configuration: config)
+        self.bkSecondaryWebView = WKWebView(frame: .zero, configuration: config)
         self.primaryWebView.navigationDelegate = self
         self.secondaryWebView.navigationDelegate = self
+        self.bkPrimaryWebView.navigationDelegate = self
+        self.bkSecondaryWebView.navigationDelegate = self
     }
     
     private func configureAudioSession() {
