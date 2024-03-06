@@ -76,7 +76,6 @@ public class DMGPlayerSDK: NSObject, ObservableObject, WKScriptMessageHandler {
     }
     
     @objc private func appMovedToBackground() {
-        isForeground = false
         let nextIndex = index + 1
         // Perform a bounds check for nextIndex
         guard nextIndex < queue.count else {
@@ -124,6 +123,8 @@ public class DMGPlayerSDK: NSObject, ObservableObject, WKScriptMessageHandler {
                 }
             }
         }
+        
+        isForeground = false
     }
     
     private func configureAudioSession() {
