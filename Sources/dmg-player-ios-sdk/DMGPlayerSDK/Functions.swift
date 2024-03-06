@@ -129,7 +129,7 @@ extension DMGPlayerSDK {
                         print("The cleaned string is not a valid URL: \(urlString)")
                         return
                     }
-                    
+                    print(self?.isBkPrimaryActive, "isBK")
                     if self?.isBkPrimaryActive == true {
                         self?.loadBkVideoInPrimaryWebView(url: videoURL)
                     } else {

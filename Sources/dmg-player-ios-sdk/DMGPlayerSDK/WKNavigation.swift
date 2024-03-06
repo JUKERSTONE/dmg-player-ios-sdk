@@ -14,6 +14,10 @@ extension DMGPlayerSDK: WKNavigationDelegate {
             return
         }
        
+        guard webView != bkPrimaryWebView else {
+            print("bk prim")
+            return
+        }
         
         if self.isPrimaryActive && webView == primaryWebView {
             print("WHYY", webView)
