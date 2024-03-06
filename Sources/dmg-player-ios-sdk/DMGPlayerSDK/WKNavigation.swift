@@ -15,7 +15,7 @@ extension DMGPlayerSDK: WKNavigationDelegate {
 //        }
        
         guard webView != bkPrimaryWebView else {
-            print("bk prim")
+            print("STEP 2: background video has loaded. Ensure it doesn't play")
             webView.evaluateJavaScript(buildCommonJavaScript() + buildInactiveJavaScript(), completionHandler: nil)
             return
         }

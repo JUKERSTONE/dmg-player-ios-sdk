@@ -85,6 +85,7 @@ extension DMGPlayerSDK {
         } else {
             // App is in the background
             if isBkPrimaryActive {
+                print("STEP 3: EXECUTE TRACK IN WEBVIEW")
                 bkPrimaryWebView.evaluateJavaScript(buildActiveJavaScript(), completionHandler: { _, error in
                     if let error = error {
                         print("Error during Java1Script execution: \(error.localizedDescription)")
@@ -131,7 +132,7 @@ extension DMGPlayerSDK {
                     }
                     
                     if self?.isBkPrimaryActive == true {
-                        print(self?.isBkPrimaryActive, "isBK")
+                        print(self?.isBkPrimaryActive, "STEP 1: load background video in foreground")
                         self?.bkConfig.mediaTypesRequiringUserActionForPlayback = []
                         self?.loadBkVideoInPrimaryWebView(url: videoURL)
                     } else {
