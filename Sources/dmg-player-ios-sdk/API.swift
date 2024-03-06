@@ -2,7 +2,7 @@
 
 import Foundation
 
-class APIService {
+public class APIService {
     
     static let shared = APIService()
     
