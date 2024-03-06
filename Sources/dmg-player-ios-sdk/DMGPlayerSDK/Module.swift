@@ -12,6 +12,7 @@ public class DMGPlayerSDK: NSObject, ObservableObject, WKScriptMessageHandler {
     public var bkSecondaryWebView: WKWebView
     public var index: Int
     public var isPaused: Bool
+    public var bkConfig: WKWebViewConfiguration
     @Published var isForeground: Bool = false
     @Published var hasPreloadedNextWebview: Bool = true
     @Published var isPrimaryActive: Bool = true
@@ -33,7 +34,6 @@ public class DMGPlayerSDK: NSObject, ObservableObject, WKScriptMessageHandler {
 
         configureAudioSession()
         let config = WKWebViewConfiguration()
-        let bkConfig = WKWebViewConfiguration()
         let userContentController = WKUserContentController()
         let preferences = WKPreferences()
         userContentController.add(self, name: "player")
@@ -49,7 +49,6 @@ public class DMGPlayerSDK: NSObject, ObservableObject, WKScriptMessageHandler {
         bkConfig.allowsInlineMediaPlayback = true
         bkConfig.allowsPictureInPictureMediaPlayback = true
         bkConfig.preferences.javaScriptEnabled = true
-//        bkConfig.mediaTypesRequiringUserActionForPlayback = []
         
         NotificationCenter.default.addObserver(self, selector: #selector(appDidBecomeActive), name: UIApplication.didBecomeActiveNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(appMovedToBackground), name: UIApplication.didEnterBackgroundNotification, object: nil)
@@ -62,6 +61,7 @@ public class DMGPlayerSDK: NSObject, ObservableObject, WKScriptMessageHandler {
         self.secondaryWebView.navigationDelegate = self
         self.bkPrimaryWebView.navigationDelegate = self
         self.bkSecondaryWebView.navigationDelegate = self
+        self.bkConfig.navigationDelegate = self
         
         NotificationCenter.default.addObserver(
             self,

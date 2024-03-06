@@ -131,6 +131,7 @@ extension DMGPlayerSDK {
                     }
                     print(self?.isBkPrimaryActive, "isBK")
                     if self?.isBkPrimaryActive == true {
+                        self?.bkConfig.mediaTypesRequiringUserActionForPlayback = []
                         self?.loadBkVideoInPrimaryWebView(url: videoURL)
                     } else {
                         self?.loadBkVideoInSecondaryWebView(url: videoURL)
