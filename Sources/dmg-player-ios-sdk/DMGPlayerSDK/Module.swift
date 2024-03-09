@@ -65,11 +65,12 @@ public class DMGPlayerSDK: NSObject, ObservableObject, WKScriptMessageHandler {
     
     @objc private func appDidBecomeActive() {
         isForeground = true
+        print("is Foreground")
     }
     
     @objc private func appMovedToBackground() {
         isForeground = false
-        
+        print("is Background")
 //        let nextIndex = index + 1
 //        // Perform a bounds check for nextIndex
 //        guard nextIndex < queue.count else {
