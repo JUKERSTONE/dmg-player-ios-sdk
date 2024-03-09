@@ -131,12 +131,12 @@ extension DMGPlayerSDK {
                         return
                     }
                     
-//                    if self?.isBkPrimaryActive == true {
-//                        print(self?.isBkPrimaryActive, "STEP 1: load background video in foreground")
-//                        self?.loadBkVideoInPrimaryWebView(url: videoURL)
-//                    } else {
-//                        self?.loadBkVideoInSecondaryWebView(url: videoURL)
-//                    }
+                    if self?.isBkPrimaryActive == true {
+                        print(self?.isBkPrimaryActive, "STEP 1: load background video in foreground")
+                        self?.loadBkVideoInPrimaryWebView(url: videoURL)
+                    } else {
+                        self?.loadBkVideoInSecondaryWebView(url: videoURL)
+                    }
 
                     if self?.isPrimaryActive == true {
                         self?.loadVideoInSecondaryWebView(url: videoURL)
