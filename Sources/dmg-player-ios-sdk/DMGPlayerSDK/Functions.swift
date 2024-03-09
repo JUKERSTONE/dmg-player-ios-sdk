@@ -7,6 +7,7 @@ import WebKit
 extension DMGPlayerSDK {
     func loadBkVideoInPrimaryWebView(url: URL) {
         let request = URLRequest(url: url)
+        print("bk load")
         bkPrimaryWebView.load(request)
     }
     
