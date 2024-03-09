@@ -43,8 +43,8 @@ public class DMGPlayerSDK: NSObject, ObservableObject, WKScriptMessageHandler {
         config.allowsInlineMediaPlayback = true
         config.allowsPictureInPictureMediaPlayback = true
         
-//        NotificationCenter.default.addObserver(self, selector: #selector(appDidBecomeActive), name: UIApplication.didBecomeActiveNotification, object: nil)
-//        NotificationCenter.default.addObserver(self, selector: #selector(appMovedToBackground), name: UIApplication.didEnterBackgroundNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(appDidBecomeActive), name: UIApplication.didBecomeActiveNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(appMovedToBackground), name: UIApplication.didEnterBackgroundNotification, object: nil)
         
         self.primaryWebView = WKWebView(frame: .zero, configuration: config)
         self.secondaryWebView = WKWebView(frame: .zero, configuration: config)
@@ -55,69 +55,69 @@ public class DMGPlayerSDK: NSObject, ObservableObject, WKScriptMessageHandler {
         self.bkPrimaryWebView.navigationDelegate = self
         self.bkSecondaryWebView.navigationDelegate = self
         
-//        NotificationCenter.default.addObserver(
-//            self,
-//            selector: #selector(appMovedToBackground),
-//            name: UIApplication.didEnterBackgroundNotification,
-//            object: nil
-//        )
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(appMovedToBackground),
+            name: UIApplication.didEnterBackgroundNotification,
+            object: nil
+        )
     }
     
-//    @objc private func appDidBecomeActive() {
-//        isForeground = true
-//    }
+    @objc private func appDidBecomeActive() {
+        isForeground = true
+    }
     
-//    @objc private func appMovedToBackground() {
-//        let nextIndex = index + 1
-//        // Perform a bounds check for nextIndex
-//        guard nextIndex < queue.count else {
-//            print("Index out of bounds.")
-//            return
-//        }
-//
-//        let isrc = queue[index + 1]
-//
-//        let apiService = APIService.shared
-//        let urlString = "https://europe-west1-trx-traklist.cloudfunctions.net/TRX_DEVELOPER/trx/music/\(isrc)"
-//
-//        guard let url = URL(string: urlString) else {
-//            print("Invalid URL")
-//            return
-//        }
-//
-//        apiService.fetchData(from: url) { [weak self] result in
-//            DispatchQueue.main.async {
-//                switch result {
-//                case .success(let data):
-//                    guard let urlStringWithQuotes = String(data: data, encoding: .utf8) else {
-//                        print("The data received could not be converted to a string.")
-//                        return
-//                    }
-//
-//                    let urlString = urlStringWithQuotes.trimmingCharacters(in: CharacterSet(charactersIn: "\""))
-//
-//                    guard let videoURL = URL(string: urlString) else {
-//                        print("The cleaned string is not a valid URL: \(urlString)")
-//                        return
-//                    }
-//
-//                    DispatchQueue.main.async { [weak self] in
-////                        if self?.isPrimaryActive == true {
-////                            self?.loadVideoInPrimaryWebView(url: videoURL)
-////                        } else {
-////                            self?.loadVideoInSecondaryWebView(url: videoURL)
-////                        }
-//                        self?.loadBkVideoInPrimaryWebView(url: videoURL)
-//
-//                    }
-//                case .failure(let error):
-//                    print("Error fetching data: \(error)")
-//                }
-//            }
-//        }
-//
-//        isForeground = false
-//    }
+    @objc private func appMovedToBackground() {
+        isForeground = false
+        
+        let nextIndex = index + 1
+        // Perform a bounds check for nextIndex
+        guard nextIndex < queue.count else {
+            print("Index out of bounds.")
+            return
+        }
+
+        let isrc = queue[index + 1]
+
+        let apiService = APIService.shared
+        let urlString = "https://europe-west1-trx-traklist.cloudfunctions.net/TRX_DEVELOPER/trx/music/\(isrc)"
+
+        guard let url = URL(string: urlString) else {
+            print("Invalid URL")
+            return
+        }
+
+        apiService.fetchData(from: url) { [weak self] result in
+            DispatchQueue.main.async {
+                switch result {
+                case .success(let data):
+                    guard let urlStringWithQuotes = String(data: data, encoding: .utf8) else {
+                        print("The data received could not be converted to a string.")
+                        return
+                    }
+
+                    let urlString = urlStringWithQuotes.trimmingCharacters(in: CharacterSet(charactersIn: "\""))
+
+                    guard let videoURL = URL(string: urlString) else {
+                        print("The cleaned string is not a valid URL: \(urlString)")
+                        return
+                    }
+
+                    DispatchQueue.main.async { [weak self] in
+//                        if self?.isPrimaryActive == true {
+//                            self?.loadVideoInPrimaryWebView(url: videoURL)
+//                        } else {
+//                            self?.loadVideoInSecondaryWebView(url: videoURL)
+//                        }
+                        self?.loadBkVideoInPrimaryWebView(url: videoURL)
+
+                    }
+                case .failure(let error):
+                    print("Error fetching data: \(error)")
+                }
+            }
+        }
+    }
     
     private func configureAudioSession() {
         do {
