@@ -133,7 +133,6 @@ extension DMGPlayerSDK {
                     
                     if self?.isBkPrimaryActive == true {
                         print(self?.isBkPrimaryActive, "STEP 1: load background video in foreground")
-                        self?.bkConfig.mediaTypesRequiringUserActionForPlayback = []
                         self?.loadBkVideoInPrimaryWebView(url: videoURL)
                     } else {
                         self?.loadBkVideoInSecondaryWebView(url: videoURL)
