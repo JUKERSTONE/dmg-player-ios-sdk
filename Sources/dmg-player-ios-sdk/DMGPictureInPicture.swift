@@ -71,26 +71,28 @@ public struct DMGPictureLicense: UIViewRepresentable {
     }
 
     private func createBackgroundWebView() -> WKWebView {
-        guard let keyWindow = UIApplication.shared.windows.first(where: { $0.isKeyWindow }) else {
-            fatalError("No key window")
-        }
-    
         let config = WKWebViewConfiguration()
-        // Configure the WKWebViewConfiguration as needed
         config.preferences.javaScriptEnabled = true
-        
-        let webView = WKWebView(frame: CGRect.zero, configuration: config)
-        webView.translatesAutoresizingMaskIntoConstraints = false
-        webView.isHidden = true  // Keep the web view hidden
+        let webView = WKWebView(frame: .zero, configuration: config)
 
-        keyWindow.addSubview(webView)
-        
-        // Set the constraints to move the webView offscreen
-        NSLayoutConstraint.activate([
-            webView.widthAnchor.constraint(equalToConstant: 1),
-            webView.heightAnchor.constraint(equalToConstant: 1),
-            webView.leadingAnchor.constraint(equalTo: keyWindow.trailingAnchor, constant: 1)
-        ])
+        // This makes sure the webView isn't visible, even if it is technically part of the view hierarchy.
+        webView.isHidden = true
+
+        // By setting these constraints, the webView will be sized to be practically invisible
+        // and positioned off the bounds of the screen.
+        webView.translatesAutoresizingMaskIntoConstraints = false
+        if let keyWindow = UIApplication.shared.keyWindow {
+            keyWindow.addSubview(webView)
+            
+            NSLayoutConstraint.activate([
+                webView.widthAnchor.constraint(equalToConstant: 0),
+                webView.heightAnchor.constraint(equalToConstant: 0),
+                webView.leadingAnchor.constraint(equalTo: keyWindow.trailingAnchor)
+            ])
+        } else {
+            // Handle the error case where the key window is not available
+            print("Failed to access the key window.")
+        }
         
         return webView
     }
