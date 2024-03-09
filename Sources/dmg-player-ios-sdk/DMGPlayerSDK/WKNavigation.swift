@@ -6,35 +6,41 @@ import WebKit
 @available(iOS 13.0, *)
 extension DMGPlayerSDK: WKNavigationDelegate {
     public func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
-        let jsCodeCommon = buildCommonJavaScript()
-        
-//        guard self.isForeground else {
-//            // The app is in the background, do nothing or handle the background state
-////            webView.evaluateJavaScript(buildInactiveJavaScript(), completionHandler: nil)
-//            return
-//        }
-       
-//        guard webView != bkPrimaryWebView else {
-//            print("STEP 2: background video has loaded. Ensure it doesn't play")
-//            webView.evaluateJavaScript(buildCommonJavaScript() + buildInactiveJavaScript(), completionHandler: nil)
-//            return
-//        }
-        
-        if webView == bkPrimaryWebView {
-            print("STEP 2: background video has loaded. Ensure it doesn't play")
-            webView.evaluateJavaScript(buildCommonJavaScript() + buildInactiveJavaScript(), completionHandler: nil)
-        } else if self.isPrimaryActive && webView == primaryWebView {
-            print("WHYY", webView)
-            webView.evaluateJavaScript(buildCommonJavaScript() + buildActiveJavaScript(), completionHandler: nil)
-        } else if self.isPrimaryActive && webView == secondaryWebView {
-            print("WHYY1", webView)
-            webView.evaluateJavaScript(buildCommonJavaScript() + buildInactiveJavaScript(), completionHandler: nil)
-        } else if !self.isPrimaryActive && webView == primaryWebView {
-            print("WHYY2", webView)
-            webView.evaluateJavaScript(buildCommonJavaScript() + buildInactiveJavaScript(), completionHandler: nil)
-        } else if !self.isPrimaryActive && webView == secondaryWebView {
-            print("WHYY3", webView)
-            webView.evaluateJavaScript(buildCommonJavaScript() + buildActiveJavaScript(), completionHandler: nil)
+        if self.isForeground {
+            // Foreground behavior
+            if self.isPrimaryActive && webView == primaryWebView {
+                print("WHYY", webView)
+                webView.evaluateJavaScript(buildCommonJavaScript() + buildActiveJavaScript(), completionHandler: nil)
+            } else if self.isPrimaryActive && webView == secondaryWebView {
+                print("WHYY1", webView)
+                webView.evaluateJavaScript(buildCommonJavaScript() + buildInactiveJavaScript(), completionHandler: nil)
+            } else if !self.isPrimaryActive && webView == primaryWebView {
+                print("WHYY2", webView)
+                webView.evaluateJavaScript(buildCommonJavaScript() + buildInactiveJavaScript(), completionHandler: nil)
+            } else if !self.isPrimaryActive && webView == secondaryWebView {
+                print("WHYY3", webView)
+                webView.evaluateJavaScript(buildCommonJavaScript() + buildActiveJavaScript(), completionHandler: nil)
+            }
+        } else {
+            // Background behavior
+            if webView == bkPrimaryWebView {
+                print("Background bkPrimaryWebView loaded")
+                webView.evaluateJavaScript(buildCommonJavaScript() + buildInactiveJavaScript(), completionHandler: nil)
+            }
+            // You can add more background-related conditions here if needed.
         }
     }
+    
+    public func webView(_ webView: WKWebView, didFail navigation: WKNavigation!, withError error: Error) {
+        // Handle navigation failure
+        print("Navigation error on webView: \(webView) with error: \(error)")
+        // You can add more specific error handling here
+    }
+
+    public func webView(_ webView: WKWebView, didFailProvisionalNavigation navigation: WKNavigation!, withError error: Error) {
+        // Handle failure of a provisional navigation
+        print("Provisional navigation error on webView: \(webView) with error: \(error)")
+        // You can add more specific error handling here
+    }
 }
+
