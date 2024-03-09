@@ -14,13 +14,16 @@ extension DMGPlayerSDK: WKNavigationDelegate {
 //            return
 //        }
        
-        guard webView != bkPrimaryWebView else {
+//        guard webView != bkPrimaryWebView else {
+//            print("STEP 2: background video has loaded. Ensure it doesn't play")
+//            webView.evaluateJavaScript(buildCommonJavaScript() + buildInactiveJavaScript(), completionHandler: nil)
+//            return
+//        }
+        
+        if webView == bkPrimaryWebView {
             print("STEP 2: background video has loaded. Ensure it doesn't play")
             webView.evaluateJavaScript(buildCommonJavaScript() + buildInactiveJavaScript(), completionHandler: nil)
-            return
-        }
-        
-        if self.isPrimaryActive && webView == primaryWebView {
+        } else if self.isPrimaryActive && webView == primaryWebView {
             print("WHYY", webView)
             webView.evaluateJavaScript(buildCommonJavaScript() + buildActiveJavaScript(), completionHandler: nil)
         } else if self.isPrimaryActive && webView == secondaryWebView {
