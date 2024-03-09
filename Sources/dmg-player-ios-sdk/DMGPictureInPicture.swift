@@ -14,9 +14,19 @@ public struct DMGPictureLicense: UIViewRepresentable {
     public func makeUIView(context: Context) -> UIView {
         let containerView = UIView()
         
-        let bkPrimaryWebView = createBackgroundWebView()
+//        let bkPrimaryWebView = createBackgroundWebView()
+//        containerView.addSubview(bkPrimaryWebView)
+//        sdk.bkPrimaryWebView = bkPrimaryWebView
+        
+        let bkPrimaryWebView = sdk.bkPrimaryWebView
         containerView.addSubview(bkPrimaryWebView)
-        sdk.bkPrimaryWebView = bkPrimaryWebView
+        bkPrimaryWebView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            bkPrimaryWebView.topAnchor.constraint(equalTo: containerView.topAnchor),
+            bkPrimaryWebView.widthAnchor.constraint(equalToConstant: 1),
+            bkPrimaryWebView.heightAnchor.constraint(equalToConstant: 1),
+            bkPrimaryWebView.centerXAnchor.constraint(equalTo: containerView.leadingAnchor)
+        ])
                 
                 // Adding bkSecondaryWebView to the key window
         let bkSecondaryWebView = createBackgroundWebView()
@@ -74,7 +84,7 @@ public struct DMGPictureLicense: UIViewRepresentable {
         webView.translatesAutoresizingMaskIntoConstraints = false
         if let keyWindow = UIApplication.shared.keyWindow {
             keyWindow.addSubview(webView)
-            
+
             NSLayoutConstraint.activate([
                 webView.centerXAnchor.constraint(equalTo: webView.leadingAnchor)
             ])
@@ -82,7 +92,7 @@ public struct DMGPictureLicense: UIViewRepresentable {
             // Handle the error case where the key window is not available
             print("Failed to access the key window.")
         }
-        
+
         return webView
     }
 }
