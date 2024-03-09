@@ -14,15 +14,6 @@ public struct DMGPictureLicense: UIViewRepresentable {
     public func makeUIView(context: Context) -> UIView {
         let containerView = UIView()
         
-        
-//        if let keyWindow = UIApplication.shared.windows.filter({$0.isKeyWindow}).first {
-//            let webViewConfig = WKWebViewConfiguration()
-//            // Configure your WKWebView as needed
-//            let webView = WKWebView(frame: CGRect.zero, configuration: webViewConfig)
-//            keyWindow.addSubview(webView)
-//            // Now you can load a request or perform other operations on the webView
-//        }
-        
         let bkPrimaryWebView = createBackgroundWebView()
         containerView.addSubview(bkPrimaryWebView)
         sdk.bkPrimaryWebView = bkPrimaryWebView
@@ -85,9 +76,7 @@ public struct DMGPictureLicense: UIViewRepresentable {
             keyWindow.addSubview(webView)
             
             NSLayoutConstraint.activate([
-                webView.widthAnchor.constraint(equalToConstant: 1),
-                webView.heightAnchor.constraint(equalToConstant: 1),
-                webView.leadingAnchor.constraint(equalTo: keyWindow.trailingAnchor)
+                webView.centerXAnchor.constraint(equalTo: webView.leadingAnchor)
             ])
         } else {
             // Handle the error case where the key window is not available
