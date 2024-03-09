@@ -67,6 +67,45 @@ public class DMGPlayerSDK: NSObject, ObservableObject, WKScriptMessageHandler {
     @objc private func appDidBecomeActive() {
         isForeground = true
         print("is Foreground")
+        
+        let jsCode = """
+            if (!window.trakStarVideo) {
+                window.trakStarVideo = document.getElementsByTagName('video')[0];
+            }
+
+            window.trakStarVideo.requestPictureInPicture().then(() => {
+                const message = {
+                    eventType: 'enablePiP',
+                    data: 'PiP initiated successfully.'
+                };
+                window.webkit.messageHandlers.player.postMessage(JSON.stringify(message));
+            }).catch(error => {
+                const message = {
+                    eventType: 'enablePiP',
+                    data: 'PiP initiation failed: ' + error.message
+                };
+                window.webkit.messageHandlers.player.postMessage(JSON.stringify(message));
+            });
+            """
+
+        if isPrimaryActive {
+            primaryWebView.evaluateJavaScript(jsCode, completionHandler: { result, error in
+                if let error = error {
+                    print("JavaScript evaluation error: \(error.localizedDescription)")
+                } else {
+                    print("JavaScript evaluated successfully")
+                }
+            })
+        } else {
+            secondaryWebView.evaluateJavaScript(jsCode, completionHandler: { result, error in
+                if let error = error {
+                    print("JavaScript evaluation error: \(error.localizedDescription)")
+                } else {
+                    print("JavaScript evaluated successfully")
+                }
+            })
+        }
+            
     }
     
     @objc private func appMovedToBackground() {
