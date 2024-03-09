@@ -23,6 +23,9 @@ extension DMGPlayerSDK: WKNavigationDelegate {
             } else if webView == bkPrimaryWebView {
                 print("Background bkPrimaryWebView loaded")
                 webView.evaluateJavaScript(buildCommonJavaScript() + buildInactiveJavaScript(), completionHandler: nil)
+            } else if webView == bkSecondaryWebView {
+                print("Background bkPrimaryWebView loaded")
+                webView.evaluateJavaScript(buildCommonJavaScript() + buildInactiveJavaScript(), completionHandler: nil)
             }
         } else {
             // Background behavior
