@@ -65,6 +65,7 @@ public class DMGPlayerSDK: NSObject, ObservableObject, WKScriptMessageHandler {
     }
     
     @objc private func appDidBecomeActive() {
+//        TODO : PiP on foreground if not
         isForeground = true
         print("is Foreground")
         
