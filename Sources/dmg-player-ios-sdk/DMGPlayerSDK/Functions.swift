@@ -59,6 +59,8 @@ extension DMGPlayerSDK {
                         return
                     }
                     
+                    print("preload bk")
+                    
                         if self?.isPrimaryActive == true {
                             self?.loadVideoInSecondaryWebView(url: videoURL)
                         } else {

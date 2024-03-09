@@ -39,116 +39,60 @@ extension DMGPlayerSDK {
                     print("The 'data' for 'videoProgress' is not a Double or not present in the message body.")
                 }
             case "videoEnded":
-                if self.isForeground {
-                    if self.hasPreloadedNextWebview {
-                        if self.isPrimaryActive == true {
-                            self.isPrimaryActive = false
-                            self.hasPreloadedNextWebview = false
-                            if self.index < self.queue.count - 1 {
-                                self.index += 1
-                                //                            primaryWebView.loadHTMLString("<html><html>", baseURL: nil)
-                                self.play(webView: self.secondaryWebView)
-                            } else {
-                                print("Index is at the end of the queue")
-                                //                            secondaryWebView.loadHTMLString("<html><html>", baseURL: nil)
-                                self.play(webView: self.primaryWebView)
-                            }
-                        } else if self.isPrimaryActive == false {
-                            self.isPrimaryActive = true
-                            self.hasPreloadedNextWebview = false
-                            if self.index < self.queue.count - 1 {
-                                self.index += 1
-                                //                            primaryWebView.loadHTMLString("<html><html>", baseURL: nil)
-                                self.play(webView: self.secondaryWebView)
-                            } else {
-                                print("Index is at the end of the queue")
-                                //                            secondaryWebView.loadHTMLString("<html><html>", baseURL: nil)
-                                self.play(webView: self.primaryWebView)
-                            }
+                if self.hasPreloadedNextWebview {
+                    if self.isPrimaryActive == true {
+                        self.isPrimaryActive = false
+                        self.hasPreloadedNextWebview = false
+                        if self.index < self.queue.count - 1 {
+                            self.index += 1
+//                            primaryWebView.loadHTMLString("<html><html>", baseURL: nil)
+                            self.play(webView: self.secondaryWebView)
+                        } else {
+                            print("Index is at the end of the queue")
+//                            secondaryWebView.loadHTMLString("<html><html>", baseURL: nil)
+                            self.play(webView: self.primaryWebView)
                         }
-                    } else {
-                        if self.isPrimaryActive == true {
-                            self.isPrimaryActive = false
-                            if self.index < self.queue.count - 1 {
-                                self.index += 1
-                                //                            primaryWebView.loadHTMLString("<html><html>", baseURL: nil)
-                                self.play(webView: self.secondaryWebView)
-                            } else {
-                                print("Index is at the end of the queue")
-                                //                            secondaryWebView.loadHTMLString("<html><html>", baseURL: nil)
-                                self.play(webView: self.primaryWebView)
-                            }
-                            
-                        } else if self.isPrimaryActive == false {
-                            self.isPrimaryActive = true
-                            if self.index < self.queue.count - 1 {
-                                self.index += 1
-                                //                            secondaryWebView.loadHTMLString("<html><html>", baseURL: nil)
-                                self.play(webView: self.primaryWebView)
-                            } else {
-                                print("Index is at the end of the queue")
-                                //                            secondaryWebView.loadHTMLString("<html><html>", baseURL: nil)
-                                self.play(webView: self.secondaryWebView)
-                            }
-                            
+                    } else if self.isPrimaryActive == false {
+                        self.isPrimaryActive = true
+                        self.hasPreloadedNextWebview = false
+                        if self.index < self.queue.count - 1 {
+                            self.index += 1
+//                            primaryWebView.loadHTMLString("<html><html>", baseURL: nil)
+                            self.play(webView: self.secondaryWebView)
+                        } else {
+                            print("Index is at the end of the queue")
+//                            secondaryWebView.loadHTMLString("<html><html>", baseURL: nil)
+                            self.play(webView: self.primaryWebView)
                         }
                     }
                 } else {
-                    print("bk next")
-//                    if self.hasPreloadedNextWebview {
-//                        if self.isPrimaryActive == true {
-//                            self.isPrimaryActive = false
-//                            self.hasPreloadedNextWebview = false
-//                            if self.index < self.queue.count - 1 {
-//                                self.index += 1
-//                                //                            primaryWebView.loadHTMLString("<html><html>", baseURL: nil)
-//                                self.play(webView: self.secondaryWebView)
-//                            } else {
-//                                print("Index is at the end of the queue")
-//                                //                            secondaryWebView.loadHTMLString("<html><html>", baseURL: nil)
-//                                self.play(webView: self.primaryWebView)
-//                            }
-//                        } else if self.isPrimaryActive == false {
-//                            self.isPrimaryActive = true
-//                            self.hasPreloadedNextWebview = false
-//                            if self.index < self.queue.count - 1 {
-//                                self.index += 1
-//                                //                            primaryWebView.loadHTMLString("<html><html>", baseURL: nil)
-//                                self.play(webView: self.secondaryWebView)
-//                            } else {
-//                                print("Index is at the end of the queue")
-//                                //                            secondaryWebView.loadHTMLString("<html><html>", baseURL: nil)
-//                                self.play(webView: self.primaryWebView)
-//                            }
-//                        }
-//                    } else {
-//                        if self.isPrimaryActive == true {
-//                            self.isPrimaryActive = false
-//                            if self.index < self.queue.count - 1 {
-//                                self.index += 1
-//                                //                            primaryWebView.loadHTMLString("<html><html>", baseURL: nil)
-//                                self.play(webView: self.secondaryWebView)
-//                            } else {
-//                                print("Index is at the end of the queue")
-//                                //                            secondaryWebView.loadHTMLString("<html><html>", baseURL: nil)
-//                                self.play(webView: self.primaryWebView)
-//                            }
-//
-//                        } else if self.isPrimaryActive == false {
-//                            self.isPrimaryActive = true
-//                            if self.index < self.queue.count - 1 {
-//                                self.index += 1
-//                                //                            secondaryWebView.loadHTMLString("<html><html>", baseURL: nil)
-//                                self.play(webView: self.primaryWebView)
-//                            } else {
-//                                print("Index is at the end of the queue")
-//                                //                            secondaryWebView.loadHTMLString("<html><html>", baseURL: nil)
-//                                self.play(webView: self.secondaryWebView)
-//                            }
-//
-//                        }
-//                    }
+                    if self.isPrimaryActive == true {
+                        self.isPrimaryActive = false
+                        if self.index < self.queue.count - 1 {
+                            self.index += 1
+//                            primaryWebView.loadHTMLString("<html><html>", baseURL: nil)
+                            self.play(webView: self.secondaryWebView)
+                        } else {
+                            print("Index is at the end of the queue")
+//                            secondaryWebView.loadHTMLString("<html><html>", baseURL: nil)
+                            self.play(webView: self.primaryWebView)
+                        }
+                       
+                    } else if self.isPrimaryActive == false {
+                        self.isPrimaryActive = true
+                        if self.index < self.queue.count - 1 {
+                            self.index += 1
+//                            secondaryWebView.loadHTMLString("<html><html>", baseURL: nil)
+                            self.play(webView: self.primaryWebView)
+                        } else {
+                            print("Index is at the end of the queue")
+//                            secondaryWebView.loadHTMLString("<html><html>", baseURL: nil)
+                            self.play(webView: self.secondaryWebView)
+                        }
+                        
+                    }
                 }
+                
             default:
                 print("Unknown event type received: \(eventType)")
             }
