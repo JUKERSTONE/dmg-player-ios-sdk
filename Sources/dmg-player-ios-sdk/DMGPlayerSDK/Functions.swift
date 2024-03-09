@@ -96,6 +96,7 @@ extension DMGPlayerSDK {
                         print("JavaScript executed successfully in foreground.")
                     }
                 })
+                isBkPrimaryActive = false
             } else {
                 bkSecondaryWebView.evaluateJavaScript(buildActiveJavaScript(), completionHandler: { _, error in
                     if let error = error {
@@ -104,6 +105,7 @@ extension DMGPlayerSDK {
                         print("JavaScript executed successfully in foreground.")
                     }
                 })
+                isBkPrimaryActive = true
             }
         }
     }

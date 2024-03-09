@@ -25,6 +25,7 @@ public class DMGPlayerSDK: NSObject, ObservableObject, WKScriptMessageHandler {
         self.secondaryWebView = WKWebView()
         self.bkPrimaryWebView = WKWebView()
         self.bkSecondaryWebView = WKWebView()
+        self.isBkPrimaryActive = true
         self.isPrimaryActive = true
         self.index = 0
         self.isPaused = false
