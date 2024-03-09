@@ -38,6 +38,8 @@ public class DMGPlayerSDK: NSObject, ObservableObject, WKScriptMessageHandler {
         userContentController.add(self, name: "player")
         config.userContentController = userContentController
         config.preferences = preferences
+        config.preferences.javaScriptEnabled = true
+        config.preferences.javaScriptCanOpenWindowsAutomatically = true
         config.allowsInlineMediaPlayback = true
         config.allowsPictureInPictureMediaPlayback = true
         
