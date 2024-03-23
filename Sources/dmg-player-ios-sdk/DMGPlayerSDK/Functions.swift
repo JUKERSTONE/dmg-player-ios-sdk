@@ -83,20 +83,22 @@ extension DMGPlayerSDK {
                     print("Error during JavaScript execution: \(error.localizedDescription)")
                 } else {
                     print("JavaScript executed successfully in foreground.")
+                    self.isBkActive = false
                 }
             })
         } else {
             // App is in the background
 //            if isBkPrimaryActive {
                 print("STEP 3: EXECUTE TRACK IN WEBVIEW")
-                bkPrimaryWebView.evaluateJavaScript(buildActiveJavaScript(), completionHandler: { _, error in
+                bkWebView.evaluateJavaScript(buildActiveJavaScript(), completionHandler: { _, error in
                     if let error = error {
                         print("Error during Java1Script execution: \(error.localizedDescription)")
                     } else {
                         print("JavaScript executed successfully in foreground.")
+                        self.isBkActive = true
                     }
                 })
-                isBkPrimaryActive = false
+//                isBkPrimaryActive = false
 //            } else {
 //                bkSecondaryWebView.evaluateJavaScript(buildActiveJavaScript(), completionHandler: { _, error in
 //                    if let error = error {
@@ -136,12 +138,7 @@ extension DMGPlayerSDK {
                         return
                     }
                     
-                    if self?.isBkPrimaryActive == true {
-                        print(self?.isBkPrimaryActive, "STEP 1: load background video in foreground")
-                        self?.loadBkVideoInPrimaryWebView(url: videoURL)
-                    } else {
-                        self?.loadBkVideoInSecondaryWebView(url: videoURL)
-                    }
+                    self?.loadBkVideoInPrimaryWebView(url: videoURL)
 
                     if self?.isPrimaryActive == true {
                         self?.loadVideoInSecondaryWebView(url: videoURL)

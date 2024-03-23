@@ -14,24 +14,14 @@ public struct DMGPictureLicense: UIViewRepresentable {
     public func makeUIView(context: Context) -> UIView {
         let containerView = UIView()
         
-        let bkPrimaryWebView = sdk.bkPrimaryWebView
-        containerView.addSubview(bkPrimaryWebView)
-        bkPrimaryWebView.translatesAutoresizingMaskIntoConstraints = false
+        let bkWebView = sdk.bkWebView
+        containerView.addSubview(bkWebView)
+        bkWebView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            bkPrimaryWebView.topAnchor.constraint(equalTo: containerView.topAnchor),
-            bkPrimaryWebView.widthAnchor.constraint(equalToConstant: 1),
-            bkPrimaryWebView.heightAnchor.constraint(equalToConstant: 1),
-            bkPrimaryWebView.centerXAnchor.constraint(equalTo: containerView.leadingAnchor)
-        ])
-        
-        let bkSecondaryWebView = sdk.bkSecondaryWebView
-        containerView.addSubview(bkSecondaryWebView)
-        bkSecondaryWebView.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            bkSecondaryWebView.topAnchor.constraint(equalTo: containerView.topAnchor),
-            bkSecondaryWebView.widthAnchor.constraint(equalToConstant: 1),
-            bkSecondaryWebView.heightAnchor.constraint(equalToConstant: 1),
-            bkSecondaryWebView.centerXAnchor.constraint(equalTo: containerView.leadingAnchor)
+            bkWebView.topAnchor.constraint(equalTo: containerView.topAnchor),
+            bkWebView.widthAnchor.constraint(equalToConstant: 1),
+            bkWebView.heightAnchor.constraint(equalToConstant: 1),
+            bkWebView.centerXAnchor.constraint(equalTo: containerView.leadingAnchor)
         ])
         
         let primaryWebView = sdk.primaryWebView
