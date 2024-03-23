@@ -86,6 +86,9 @@ extension DMGPlayerSDK {
             
             self.isBkActive = false
         } else {
+            if self.isFreeloading == true {
+                print("freeloading yes")
+            } else {
                 print("STEP 3: EXECUTE TRACK IN WEBVIEW")
                 bkWebView.evaluateJavaScript(buildActiveJavaScript(), completionHandler: { _, error in
                     if let error = error {
@@ -93,7 +96,9 @@ extension DMGPlayerSDK {
                     } else {
                         print("JavaScript executed successfully in foreground.")
                     }
+                    self.isFreeloading = true
                 })
+            }
             
             self.isBkActive = true
         }
