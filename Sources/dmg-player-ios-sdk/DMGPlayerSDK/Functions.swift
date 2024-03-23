@@ -94,14 +94,14 @@ extension DMGPlayerSDK {
                            print("Error injecting the 'load' event listener: \(error.localizedDescription)")
                        } else {
                            print("JavaScript executed successfully in foregroundr.")
-                           
-                           self.bkWebView.evaluateJavaScript(buildCommonJavaScript() + buildActiveJavaScript()) { result, error in
-                                  if let error = error {
-                                      print("Error injecting the 'load' event listener: \(error.localizedDescription)")
-                                  } else {
-                                      print("JavaScript executed successfully in foregroundr.")
-                                  }
-                              }
+                       }
+                   }
+                
+                bkWebView.evaluateJavaScript(buildCommonJavaScript() + buildPlayJavaScript()) { result, error in
+                       if let error = error {
+                           print("Error injecting the 'leoad' event listener: \(error.localizedDescription)")
+                       } else {
+                           print("JavaScript executed successfully in foregroundr.")
                        }
                    }
             } else {
