@@ -78,7 +78,7 @@ extension DMGPlayerSDK {
                     print("Error during JavaScript execution: \(error.localizedDescription)")
                 } else {
                     print("JavaScript executed successfully in foreground.")
-                    self.isBkActive = false
+//                    self.isBkActive = false
                 }
             })
         } else {
