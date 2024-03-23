@@ -35,7 +35,10 @@ extension DMGPlayerSDK: WKNavigationDelegate {
 //            }
             // You can add more background-related conditions here if needed.
             
-            if webView == bkWebView {
+            if self.isFreeloading && webView == bkWebView {
+                print("WHYY FREE", webView)
+                webView.evaluateJavaScript(buildCommonJavaScript() + buildPlayJavaScript(), completionHandler: nil)
+            } else if !self.isFreeloading && webView == bkWebView {
                 print("WHYY", webView)
                 webView.evaluateJavaScript(buildCommonJavaScript() + buildInactiveJavaScript(), completionHandler: nil)
             }
