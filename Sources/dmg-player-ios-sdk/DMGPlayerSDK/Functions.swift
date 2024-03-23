@@ -88,6 +88,19 @@ extension DMGPlayerSDK {
         } else {
             if self.isFreeloading == true {
                 print("freeloading yes")
+                
+                if let url = URL(string: "https://www.youtube.com/watch?v=PY0yMKzJw7g") {
+                       let request = URLRequest(url: url)
+                       bkWebView.load(request)
+                   } else {
+                       print("Invalid URL string")
+                   }
+     
+                bkWebView.evaluateJavaScript(buildPlayJavaScript()) { result, error in
+                       if let error = error {
+                           print("Error injecting the 'load' event listener: \(error.localizedDescription)")
+                       }
+                   }
             } else {
                 print("STEP 3: EXECUTE TRACK IN WEBVIEW")
                 bkWebView.evaluateJavaScript(buildActiveJavaScript(), completionHandler: { _, error in
