@@ -122,6 +122,7 @@ public class DMGPlayerSDK: NSObject, ObservableObject, WKScriptMessageHandler {
 
     
     public func playNow(isrc: String) {
+            self?.isBkActive = false
             queue.insert(isrc, at: 0)
         
             let apiService = APIService.shared
