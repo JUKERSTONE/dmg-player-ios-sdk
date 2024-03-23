@@ -162,6 +162,19 @@ public func buildActiveJavaScript() -> String {
     }
     window.trakStarVideo.muted = false;
     window.trakStarVideo.play();
+    window.trakStarVideo.requestPictureInPicture().then(() => {
+        const message = {
+            eventType: 'enablePiP',
+            data: 'PiP initiated successfully.'
+        };
+        window.webkit.messageHandlers.player.postMessage(JSON.stringify(message));
+    }).catch(error => {
+        const message = {
+            eventType: 'enablePiP',
+            data: 'PiP initiation failed: ' + error.message
+        };
+        window.webkit.messageHandlers.player.postMessage(JSON.stringify(message));
+    });
     """
 }
 
