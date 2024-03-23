@@ -19,8 +19,8 @@ public struct DMGPictureLicense: UIViewRepresentable {
         bkWebView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             bkWebView.topAnchor.constraint(equalTo: containerView.topAnchor),
-            bkWebView.widthAnchor.constraint(equalToConstant: 1),
-            bkWebView.heightAnchor.constraint(equalToConstant: 1),
+            bkWebView.widthAnchor.constraint(equalToConstant: 300),
+            bkWebView.heightAnchor.constraint(equalToConstant: 80),
             bkWebView.centerXAnchor.constraint(equalTo: containerView.leadingAnchor)
         ])
         
