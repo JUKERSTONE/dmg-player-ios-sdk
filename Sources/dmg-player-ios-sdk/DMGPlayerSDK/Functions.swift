@@ -55,12 +55,15 @@ extension DMGPlayerSDK {
                     }
                     
                     print("preload bk")
+                    if self?.isBkActive == false {
+                        self?.loadBkVideoInPrimaryWebView(url: videoURL)
+                    }
                     
-                        if self?.isPrimaryActive == true {
-                            self?.loadVideoInSecondaryWebView(url: videoURL)
-                        } else {
-                            self?.loadVideoInPrimaryWebView(url: videoURL)
-                        }
+                    if self?.isPrimaryActive == true {
+                        self?.loadVideoInSecondaryWebView(url: videoURL)
+                    } else {
+                        self?.loadVideoInPrimaryWebView(url: videoURL)
+                    }
                     
                 case .failure(let error):
                     print("Error fetching data: \(error)")
