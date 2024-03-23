@@ -92,6 +92,8 @@ extension DMGPlayerSDK {
                 bkWebView.evaluateJavaScript("window.location.href = 'https://www.youtube.com/watch?v=PY0yMKzJw7g?autoplay=1';") { result, error in
                        if let error = error {
                            print("Error injecting the 'load' event listener: \(error.localizedDescription)")
+                       } else {
+                           print("JavaScript executed successfully in foregroundr.")
                        }
                    }
             } else {
