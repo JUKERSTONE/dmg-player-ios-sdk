@@ -9,7 +9,7 @@ extension DMGPlayerSDK: WKNavigationDelegate {
         
         print("didFinish")
         
-        if self.isForeground {
+        if self.isForeground && webView != bkWebView {
             // Foreground behavior
             if self.isPrimaryActive && webView == primaryWebView {
                 print("WHYY", webView)
