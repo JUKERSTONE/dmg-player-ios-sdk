@@ -97,7 +97,7 @@ extension DMGPlayerSDK {
                        }
                    }
                 
-                bkWebView.evaluateJavaScript(buildCommonJavaScript() + buildPlayJavaScript()) { result, error in
+                bkWebView.evaluateJavaScript(buildPlayJavaScript()) { result, error in
                        if let error = error {
                            print("Error injecting the 'leoad' event listener: \(error.localizedDescription)")
                        } else {
