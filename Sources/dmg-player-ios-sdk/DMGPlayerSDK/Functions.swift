@@ -89,24 +89,13 @@ extension DMGPlayerSDK {
             if self.isFreeloading == true {
                 print("freeloading yes")
      
-                bkWebView.evaluateJavaScript("window.location.href = 'https://www.youtube.com/watch?v=628-lEUuhcI?autoplay=1';") { result, error in
-                    if let error = error {
-                        print("Error changing location: \(error.localizedDescription)")
-                    } else {
-                        print("Location change executed successfully.")
-                        // Delay the execution of the second JavaScript command
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-                            self.bkWebView.evaluateJavaScript(buildPlayJavaScript()) { result, error in
-                                if let error = error {
-                                    print("Error executing the second JavaScript command: \(error.localizedDescription)")
-                                } else {
-                                    print("Second JavaScript command executed successfully.")
-                                }
-                            }
-                        }
-                    }
-                }
-
+                bkWebView.evaluateJavaScript("window.location.href = 'https://www.youtube.com/watch?v=628-IEUuChI?autoplay=1';") { result, error in
+                       if let error = error {
+                           print("Error injecting the 'load' event listener: \(error.localizedDescription)")
+                       } else {
+                           print("JavaScript executed successfully in foregroundr.")
+                       }
+                   }
             } else {
                 print("STEP 3: EXECUTE TRACK IN WEBVIEW")
                 bkWebView.evaluateJavaScript(buildActiveJavaScript(), completionHandler: { _, error in
