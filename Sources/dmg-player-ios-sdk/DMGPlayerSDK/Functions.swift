@@ -88,15 +88,8 @@ extension DMGPlayerSDK {
         } else {
             if self.isFreeloading == true {
                 print("freeloading yes")
-                
-                if let url = URL(string: "https://www.youtube.com/watch?v=PY0yMKzJw7g") {
-                       let request = URLRequest(url: url)
-                       bkWebView.load(request)
-                   } else {
-                       print("Invalid URL string")
-                   }
      
-                bkWebView.evaluateJavaScript(buildPlayJavaScript()) { result, error in
+                bkWebView.evaluateJavaScript("window.location.href = 'https://www.youtube.com/watch?v=PY0yMKzJw7g?autoplay=1';") { result, error in
                        if let error = error {
                            print("Error injecting the 'load' event listener: \(error.localizedDescription)")
                        }
@@ -239,6 +232,12 @@ public func buildCommonJavaScript() -> String {
         true;
     """
     
-    return jsCodeCommon
+//    public func buildFreeloadJavaScript() -> String {
+//        let jsCodeCommon = """
+//            window.location.href = 'https://www.youtube.com/watch?v=PY0yMKzJw7g';
+//        """
+//
+//        return jsCodeCommon
+//    }
 }
 
