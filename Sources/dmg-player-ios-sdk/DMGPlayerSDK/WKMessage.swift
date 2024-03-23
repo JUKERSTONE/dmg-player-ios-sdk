@@ -38,6 +38,12 @@ extension DMGPlayerSDK {
                 } else {
                     print("The 'data' for 'videoProgress' is not a Double or not present in the message body.")
                 }
+            case "enablePiP":
+                if let data = messageDict["data"] as? Double {
+                    print("data")
+                } else {
+                    print("Error PiP")
+                }
             case "videoEnded":
                 if self.hasPreloadedNextWebview {
                     if self.isPrimaryActive == true {
@@ -48,7 +54,7 @@ extension DMGPlayerSDK {
 //                            primaryWebView.loadHTMLString("<html><html>", baseURL: nil)
                             self.play(webView: self.secondaryWebView)
                         } else {
-                            print("Index is at the end of the queue")
+                            print("Index is at the end of the queue 1")
 //                            secondaryWebView.loadHTMLString("<html><html>", baseURL: nil)
                             self.play(webView: self.primaryWebView)
                         }

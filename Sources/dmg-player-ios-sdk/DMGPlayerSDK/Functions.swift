@@ -87,7 +87,7 @@ extension DMGPlayerSDK {
             })
         } else {
             // App is in the background
-            if isBkPrimaryActive {
+//            if isBkPrimaryActive {
                 print("STEP 3: EXECUTE TRACK IN WEBVIEW")
                 bkPrimaryWebView.evaluateJavaScript(buildActiveJavaScript(), completionHandler: { _, error in
                     if let error = error {
@@ -97,16 +97,16 @@ extension DMGPlayerSDK {
                     }
                 })
                 isBkPrimaryActive = false
-            } else {
-                bkSecondaryWebView.evaluateJavaScript(buildActiveJavaScript(), completionHandler: { _, error in
-                    if let error = error {
-                        print("Error during JavaS2cript execution: \(error.localizedDescription)")
-                    } else {
-                        print("JavaScript executed successfully in foreground.")
-                    }
-                })
-                isBkPrimaryActive = true
-            }
+//            } else {
+//                bkSecondaryWebView.evaluateJavaScript(buildActiveJavaScript(), completionHandler: { _, error in
+//                    if let error = error {
+//                        print("Error during JavaS2cript execution: \(error.localizedDescription)")
+//                    } else {
+//                        print("JavaScript executed successfully in foreground.")
+//                    }
+//                })
+//                isBkPrimaryActive = true
+//            }
         }
     }
 

@@ -89,7 +89,7 @@ public class DMGPlayerSDK: NSObject, ObservableObject, WKScriptMessageHandler {
             });
             """
 
-        if isBkPrimaryActive {
+//        if isBkPrimaryActive {
             bkPrimaryWebView.evaluateJavaScript(jsCode, completionHandler: { result, error in
                 if let error = error {
                     print("JavaScript evaluation error: \(error.localizedDescription)")
@@ -97,15 +97,15 @@ public class DMGPlayerSDK: NSObject, ObservableObject, WKScriptMessageHandler {
                     print("JavaScript evaluated successfully")
                 }
             })
-        } else {
-            bkSecondaryWebView.evaluateJavaScript(jsCode, completionHandler: { result, error in
-                if let error = error {
-                    print("JavaScript evaluation error: \(error.localizedDescription)")
-                } else {
-                    print("JavaScript evaluated successfully")
-                }
-            })
-        }
+//        } else {
+//            bkSecondaryWebView.evaluateJavaScript(jsCode, completionHandler: { result, error in
+//                if let error = error {
+//                    print("JavaScript evaluation error: \(error.localizedDescription)")
+//                } else {
+//                    print("JavaScript evaluated successfully")
+//                }
+//            })
+//        }
             
     }
     
