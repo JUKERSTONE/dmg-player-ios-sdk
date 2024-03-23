@@ -78,9 +78,10 @@ extension DMGPlayerSDK {
                     print("Error during JavaScript execution: \(error.localizedDescription)")
                 } else {
                     print("JavaScript executed successfully in foreground.")
-                    self.isBkActive = false
                 }
             })
+            
+            self.isBkActive = false
         } else {
             // App is in the background
 //            if isBkPrimaryActive {
@@ -90,9 +91,10 @@ extension DMGPlayerSDK {
                         print("Error during Java1Script execution: \(error.localizedDescription)")
                     } else {
                         print("JavaScript executed successfully in foreground.")
-                        self.isBkActive = true
                     }
                 })
+            
+            self.isBkActive = true
 //                isBkPrimaryActive = false
 //            } else {
 //                bkSecondaryWebView.evaluateJavaScript(buildActiveJavaScript(), completionHandler: { _, error in
