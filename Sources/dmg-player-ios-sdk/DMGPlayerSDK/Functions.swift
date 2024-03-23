@@ -195,7 +195,7 @@ public func buildPlayJavaScript() -> String {
 }
 
 public func buildCommonJavaScript() -> String {
-    let jsCodeCommon = """
+    return """
         if (!window.trakStarVideo) {
             window.trakStarVideo = document.getElementsByTagName('video')[0];
         }
@@ -231,6 +231,7 @@ public func buildCommonJavaScript() -> String {
         });
         true;
     """
+}
     
 //    public func buildFreeloadJavaScript() -> String {
 //        let jsCodeCommon = """
@@ -239,5 +240,5 @@ public func buildCommonJavaScript() -> String {
 //
 //        return jsCodeCommon
 //    }
-}
+
 
