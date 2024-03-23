@@ -157,6 +157,9 @@ extension DMGPlayerSDK {
 
 public func buildActiveJavaScript() -> String {
     return """
+    if (!window.trakStarVideo) {
+        window.trakStarVideo = document.getElementsByTagName('video')[0];
+    }
     window.trakStarVideo.muted = false;
     window.trakStarVideo.play();
     window.trakStarVideo.requestPictureInPicture().then(() => {
@@ -177,6 +180,9 @@ public func buildActiveJavaScript() -> String {
 
 public func buildInactiveJavaScript() -> String {
     return """
+    if (!window.trakStarVideo) {
+        window.trakStarVideo = document.getElementsByTagName('video')[0];
+    }
     window.trakStarVideo.muted = true;
     window.trakStarVideo.pause();
     """
@@ -184,6 +190,9 @@ public func buildInactiveJavaScript() -> String {
 
 public func buildPauseJavaScript() -> String {
     return """
+    if (!window.trakStarVideo) {
+        window.trakStarVideo = document.getElementsByTagName('video')[0];
+    }
     window.trakStarVideo.muted = true;
     window.trakStarVideo.pause();
     """
@@ -191,6 +200,9 @@ public func buildPauseJavaScript() -> String {
 
 public func buildPlayJavaScript() -> String {
     return """
+    if (!window.trakStarVideo) {
+        window.trakStarVideo = document.getElementsByTagName('video')[0];
+    }
     window.trakStarVideo.muted = false;
     window.trakStarVideo.play();
     """
