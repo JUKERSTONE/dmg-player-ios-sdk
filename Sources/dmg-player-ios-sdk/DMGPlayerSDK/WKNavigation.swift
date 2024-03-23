@@ -20,10 +20,7 @@ extension DMGPlayerSDK: WKNavigationDelegate {
             } else if !self.isPrimaryActive && webView == secondaryWebView {
                 print("WHYY3", webView)
                 webView.evaluateJavaScript(buildCommonJavaScript() + buildActiveJavaScript(), completionHandler: nil)
-            } else if webView == bkPrimaryWebView {
-                print("Background bkPrimaryWebView loaded")
-                webView.evaluateJavaScript(buildCommonJavaScript() + buildInactiveJavaScript(), completionHandler: nil)
-            } else if webView == bkSecondaryWebView {
+            } else if webView == bkWebView {
                 print("Background bkPrimaryWebView loaded")
                 webView.evaluateJavaScript(buildCommonJavaScript() + buildInactiveJavaScript(), completionHandler: nil)
             }
@@ -35,13 +32,14 @@ extension DMGPlayerSDK: WKNavigationDelegate {
 //            }
             // You can add more background-related conditions here if needed.
             
-            if webView == bkPrimaryWebView {
+            if webView == bkWebView {
                 print("WHYY", webView)
                 webView.evaluateJavaScript(buildCommonJavaScript() + buildInactiveJavaScript(), completionHandler: nil)
-            } else if webView == bkSecondaryWebView {
-                print("WHYY1", webView)
-                webView.evaluateJavaScript(buildCommonJavaScript() + buildActiveJavaScript(), completionHandler: nil)
             }
+//            else if webView == bkSecondaryWebView {
+//                print("WHYY1", webView)
+//                webView.evaluateJavaScript(buildCommonJavaScript() + buildActiveJavaScript(), completionHandler: nil)
+//            }
 //            else if !self.isBkPrimaryActive && webView == bkPrimaryWebView {
 //                print("WHYY2", webView)
 //                webView.evaluateJavaScript(buildCommonJavaScript() + buildActiveJavaScript(), completionHandler: nil)

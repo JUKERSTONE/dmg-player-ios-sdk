@@ -8,12 +8,7 @@ extension DMGPlayerSDK {
     func loadBkVideoInPrimaryWebView(url: URL) {
         let request = URLRequest(url: url)
         print("bk load")
-        bkPrimaryWebView.load(request)
-    }
-    
-    func loadBkVideoInSecondaryWebView(url: URL) {
-        let request = URLRequest(url: url)
-        bkSecondaryWebView.load(request)
+        bkWebView.load(request)
     }
     
     func loadVideoInPrimaryWebView(url: URL) {
