@@ -181,7 +181,13 @@ public class DMGPlayerSDK: NSObject, ObservableObject, WKScriptMessageHandler {
     
     public func pause() {
         if isBkActive {
-            bkWebView.evaluateJavaScript(buildPauseJavaScript(), completionHandler: nil)
+            bkWebView.evaluateJavaScript(buildPauseJavaScript(), completionHandler: { result, error in
+                if let error = error {
+                    print("JavaScript evaluation error: \(error.localizedDescription)")
+                } else {
+                    print("JavaScript evaluated successfully")
+                }
+            })
         } else if isPrimaryActive {
             primaryWebView.evaluateJavaScript(buildPauseJavaScript(), completionHandler: nil)
         } else {
