@@ -119,31 +119,33 @@ extension DMGPlayerSDK {
 
         // Serialize the dictionary to JSON data
         do {
+            // Serializing the array to JSON Data directly.
             let jsonData = try JSONSerialization.data(withJSONObject: buffer, options: [])
-            print(jsonData, "json")
+
+            // The jsonData can now be used as the body of your POST request.
             apiService.postData(to: url, body: jsonData) { (result: Result<Data, Error>) in
                 DispatchQueue.main.async {
                     switch result {
                     case .success(let data):
-                        // Handle the successful response
-                        print("Success with data:", data)
-                        // If you need to decode JSON response into an array of strings
+                        // Handle the successful response.
+                        // If the response is also an array of strings as JSON,
+                        // you can deserialize it like this:
                         do {
                             if let responseArray = try JSONSerialization.jsonObject(with: data, options: []) as? [String] {
-                                // Use `responseArray` as needed
-                                print("Received array of URLs:", responseArray)
+                                // Use 'responseArray' as needed.
+                                print("Received array of strings:", responseArray)
                             }
                         } catch {
                             print("JSON deserialization error:", error)
                         }
                     case .failure(let error):
-                        // Handle the error
-                        print("Error2:", error)
+                        // Handle the error.
+                        print("Error fetching data:", error)
                     }
                 }
             }
         } catch {
-            print("JSON serialization error:", error)
+            print("Error serializing array to JSON:", error)
         }
     }
 }
