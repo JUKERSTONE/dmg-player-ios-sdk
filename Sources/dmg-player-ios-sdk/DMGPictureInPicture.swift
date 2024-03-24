@@ -29,9 +29,9 @@ public struct DMGPictureLicense: UIViewRepresentable {
             webView.translatesAutoresizingMaskIntoConstraints = false
             NSLayoutConstraint.activate([
                 webView.topAnchor.constraint(equalTo: containerView.topAnchor),
-                webView.widthAnchor.constraint(equalToConstant: 1), // Assuming you want them to be invisible
-                webView.heightAnchor.constraint(equalToConstant: 1),
-                webView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: -1000) // Offscreen
+                webView.widthAnchor.constraint(equalToConstant: 300), // Assuming you want them to be invisible
+                webView.heightAnchor.constraint(equalToConstant: 80),
+                primaryWebView.centerXAnchor.constraint(equalTo: containerView.leadingAnchor) // Offscreen
             ])
         }
         
