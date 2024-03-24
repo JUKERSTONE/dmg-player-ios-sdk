@@ -27,10 +27,12 @@ extension DMGPlayerSDK: WKNavigationDelegate {
                 webView.evaluateJavaScript(buildCommonJavaScript() + buildInactiveJavaScript(), completionHandler: nil)
             }
         } else {
-            if webView == self.bkWebViews[index] {
+            if index > 0 && webView == self.bkWebViews[index] {
+                // If 'index' is greater than 0 and 'webView' matches the current 'bkWebViews' element at 'index'
                 webView.evaluateJavaScript(buildCommonJavaScript() + buildPlayJavaScript(), completionHandler: nil)
             } else {
-                self.bkWebViews[index].evaluateJavaScript(buildCommonJavaScript() + buildInactiveJavaScript(), completionHandler: nil)
+                // In all other cases, use the 'bkWebViews' element at 'index' to evaluate a different set of JavaScript
+                webView.evaluateJavaScript(buildCommonJavaScript() + buildInactiveJavaScript(), completionHandler: nil)
             }
         }
     }
