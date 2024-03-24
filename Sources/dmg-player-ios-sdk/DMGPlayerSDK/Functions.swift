@@ -120,7 +120,7 @@ extension DMGPlayerSDK {
         // Serialize the dictionary to JSON data
         do {
             let jsonData = try JSONSerialization.data(withJSONObject: buffer, options: [])
-            
+            print(jsonData, "json")
             apiService.postData(to: url, body: jsonData) { (result: Result<Data, Error>) in
                 DispatchQueue.main.async {
                     switch result {
