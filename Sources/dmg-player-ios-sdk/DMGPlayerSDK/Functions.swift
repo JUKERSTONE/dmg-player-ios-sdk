@@ -12,9 +12,17 @@ extension DMGPlayerSDK {
 //    }
     
     func loadBkWebViewBuffer(urls: [URL]) {
-//        let request = URLRequest(url: url)
-//        print("bk load")
-//        bkWebView.load(request)
+        // Ensure you have the same number or more webviews than URLs to load
+        guard self.bkWebViews.count >= urls.count else {
+            print("Not enough webviews to load the buffer")
+            return
+        }
+        
+        // Iterate over the URLs and load them into the corresponding web view
+        for (index, url) in urls.enumerated() {
+            let request = URLRequest(url: url)
+            self.bkWebViews[index].load(request)
+        }
     }
     
     func loadVideoInPrimaryWebView(url: URL) {
@@ -140,16 +148,29 @@ extension DMGPlayerSDK {
                             return URL(string: urlString.trimmingCharacters(in: CharacterSet(charactersIn: "\"")))
                         }
                         
-                        if self.isBkActive == false {
-                            self.loadBkWebViewBuffer(urls: urls)
-                        }
+                        if index + 1 < urls.count {
+                            let nextUp = urls[index + 1] // This is the "next up" video URL.
+                            
+                            // Check if there's more than one item left after "next up" to create a buffer
+                            if index + 2 < urls.count {
+                                let buffer = Array(urls[(index + 2)...]) // This creates the buffer starting from 1th index (as 0-based) after "next up" to the end of the array.
                         
-                        let videoURL = urls[index + 1]
-
-                        if self.isPrimaryActive == true {
-                            self.loadVideoInSecondaryWebView(url: videoURL) // next up
+                                if self.isBkActive == false {
+                                    self.loadBkWebViewBuffer(urls: buffer) // Assuming this method exists and loads the buffer.
+                                }
+                            } else {
+                                // No items left for buffer, handle accordingly...
+                            }
+                            
+                           
+                            
+                            if self.isPrimaryActive {
+                                self.loadVideoInSecondaryWebView(url: nextUp) // Load "next up" URL in secondary web view
+                            } else {
+                                self.loadVideoInPrimaryWebView(url: nextUp) // Load "next up" URL in primary web view
+                            }
                         } else {
-                            self.loadVideoInPrimaryWebView(url: videoURL) // next up
+                            // No next item, handle accordingly...
                         }
                     }
                 } else {
