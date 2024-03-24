@@ -107,7 +107,7 @@ extension DMGPlayerSDK {
     }
 
     
-    func updatedPreload(buffer : [String], index : Int) {
+    func updatedPreload(buffer: [String], index: Int) {
         let apiService = APIService.shared
         let urlString = "https://europe-west1-trx-traklist.cloudfunctions.net/TRX_DEVELOPER/trx/music/buffer"
 
@@ -115,26 +115,27 @@ extension DMGPlayerSDK {
             print("Invalid URL")
             return
         }
-        print("check", buffer)
 
-        // Serialize the dictionary to JSON data
+        // Convert your buffer array into JSON data
         guard let jsonData = try? JSONSerialization.data(withJSONObject: buffer, options: []) else {
-            print("Error: Cannot create JSON from buffer")
+            print("Failed to serialize buffer to JSON")
             return
         }
 
-        // Then, use your postData function to make the request
-        APIService.shared.postData(to: url, body: jsonData) { result in
-            switch result {
-            case .success(let data):
-                // Handle the successful response here
-                // You can parse the data if it's in JSON format
-                if let stringResponse = String(data: data, encoding: .utf8) {
-                    print("Received response: \(stringResponse)")
+        // Print JSON string for debugging
+        if let jsonString = apiService.json(from: buffer) {
+            print("JSON String to be sent: \(jsonString)")
+        }
+
+        // Perform the POST request
+        apiService.postData(to: url, body: jsonData) { result in
+            DispatchQueue.main.async {
+                switch result {
+                case .success(let data):
+                    print("Successfully updated preload with data:", data)
+                case .failure(let error):
+                    print("Failed to update preload:", error)
                 }
-            case .failure(let error):
-                // Handle the error here
-                print("Error occurred: \(error.localizedDescription)")
             }
         }
     }
