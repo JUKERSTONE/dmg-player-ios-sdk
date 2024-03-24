@@ -27,34 +27,11 @@ extension DMGPlayerSDK: WKNavigationDelegate {
                 webView.evaluateJavaScript(buildCommonJavaScript() + buildInactiveJavaScript(), completionHandler: nil)
             }
         } else {
-            // Background behavior
-//            if webView == bkPrimaryWebView {
-//                print("Background bkPrimaryWebView loaded")
-//                webView.evaluateJavaScript(buildCommonJavaScript() + buildInactiveJavaScript(), completionHandler: nil)
-//            }
-            // You can add more background-related conditions here if needed.
-            print("isFree: ", self.isFreeloading)
             if webView == self.bkWebViews[index] {
-                print("WHYY FREE", webView)
-                self.bkWebViews[index].evaluateJavaScript(buildPlayJavaScript(), completionHandler: nil)
-            } else {
-                print("WHYY", webView)
                 webView.evaluateJavaScript(buildCommonJavaScript() + buildInactiveJavaScript(), completionHandler: nil)
             }
-//            else if webView == bkSecondaryWebView {
-//                print("WHYY1", webView)
-//                webView.evaluateJavaScript(buildCommonJavaScript() + buildActiveJavaScript(), completionHandler: nil)
-//            }
-//            else if !self.isBkPrimaryActive && webView == bkPrimaryWebView {
-//                print("WHYY2", webView)
-//                webView.evaluateJavaScript(buildCommonJavaScript() + buildActiveJavaScript(), completionHandler: nil)
-//            } else if !self.isBkPrimaryActive && webView == bkSecondaryWebView {
-//                print("WHYY3", webView)
-//                webView.evaluateJavaScript(buildCommonJavaScript() + buildInactiveJavaScript(), completionHandler: nil)
-//            }
-//            else if webView == bkPrimaryWebView {
-//                print("Background bkPrimaryWebView loaded")
-//                webView.evaluateJavaScript(buildCommonJavaScript() + buildInactiveJavaScript(), completionHandler: nil)
+//            else {
+//                self.bkWebViews[index].evaluateJavaScript(buildPlayJavaScript(), completionHandler: nil)
 //            }
         }
     }
