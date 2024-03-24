@@ -45,22 +45,31 @@ extension DMGPlayerSDK {
                     print("Error PiP")
                 }
             case "videoEnded":
+                print("start")
                 if self.hasPreloadedNextWebview {
                     if self.isPrimaryActive == true {
+                        print("why11o")
                         self.isPrimaryActive = false
                         self.hasPreloadedNextWebview = false
+                        print("why1o")
                         self.play(webView: self.secondaryWebView)
                     } else if self.isPrimaryActive == false {
+                        print("why22o")
                         self.isPrimaryActive = true
                         self.hasPreloadedNextWebview = false
+                        print("why2o")
                         self.play(webView: self.secondaryWebView)
                     }
                 } else {
                     if self.isPrimaryActive == true {
+                        print("why33o")
                         self.isPrimaryActive = false
+                        print("why3o")
                         self.play(webView: self.secondaryWebView)
                     } else if self.isPrimaryActive == false {
+                        print("why44o")
                         self.isPrimaryActive = true
+                        print("why4o")
                         self.play(webView: self.secondaryWebView)
                     }
                 }
