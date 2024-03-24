@@ -118,34 +118,24 @@ extension DMGPlayerSDK {
         print("check", buffer)
 
         // Serialize the dictionary to JSON data
-        do {
-            // Serializing the array to JSON Data directly.
-            let jsonData = try JSONSerialization.data(withJSONObject: buffer, options: [])
+        guard let jsonData = try? JSONSerialization.data(withJSONObject: buffer, options: []) else {
+            print("Error: Cannot create JSON from buffer")
+            return
+        }
 
-            // The jsonData can now be used as the body of your POST request.
-            apiService.postData(to: url, body: jsonData) { (result: Result<Data, Error>) in
-                DispatchQueue.main.async {
-                    switch result {
-                    case .success(let data):
-                        // Handle the successful response.
-                        // If the response is also an array of strings as JSON,
-                        // you can deserialize it like this:
-                        do {
-                            if let responseArray = try JSONSerialization.jsonObject(with: data, options: []) as? [String] {
-                                // Use 'responseArray' as needed.
-                                print("Received array of strings:", responseArray)
-                            }
-                        } catch {
-                            print("JSON deserialization error:", error)
-                        }
-                    case .failure(let error):
-                        // Handle the error.
-                        print("Error fetching data:", error)
-                    }
+        // Then, use your postData function to make the request
+        APIService.shared.postData(to: url, body: jsonData) { result in
+            switch result {
+            case .success(let data):
+                // Handle the successful response here
+                // You can parse the data if it's in JSON format
+                if let stringResponse = String(data: data, encoding: .utf8) {
+                    print("Received response: \(stringResponse)")
                 }
+            case .failure(let error):
+                // Handle the error here
+                print("Error occurred: \(error.localizedDescription)")
             }
-        } catch {
-            print("Error serializing array to JSON:", error)
         }
     }
 }
