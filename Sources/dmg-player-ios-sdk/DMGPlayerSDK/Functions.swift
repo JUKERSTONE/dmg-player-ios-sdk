@@ -97,11 +97,17 @@ extension DMGPlayerSDK {
                     print("JavaScript executed successfully in foreground.")
                 }
             })
+            
+            if self.index < self.queue.count - 1 {
+                self.index += 1
+            } else {
+                print("Index is at the end of the queue")
+            }
 
             self.isBkActive = false
         } else {
             print("index::::!", index)
-            self.bkWebViews[index - 1].evaluateJavaScript(buildActiveJavaScript(), completionHandler: { _, error in
+            self.bkWebViews[index].evaluateJavaScript(buildActiveJavaScript(), completionHandler: { _, error in
                 if let error = error {
                     print("Error during Java1Script execution: \(error.localizedDescription)")
                 } else {
@@ -109,6 +115,12 @@ extension DMGPlayerSDK {
                 }
             })
 
+            if self.index < self.queue.count - 1 {
+                self.index += 1
+            } else {
+                print("Index is at the end of the queue")
+            }
+            
             self.isBkActive = true
         }
     }
