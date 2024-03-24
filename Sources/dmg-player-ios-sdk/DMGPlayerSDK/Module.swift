@@ -23,7 +23,7 @@ public class DMGPlayerSDK: NSObject, ObservableObject, WKScriptMessageHandler {
         self.queue = []
         self.primaryWebView = WKWebView()
         self.secondaryWebView = WKWebView()
-        self.bkWebViews = []
+        self.bkWebViews = [WKWebView(), WKWebView(), WKWebView(), WKWebView(), WKWebView(), WKWebView(), WKWebView(), WKWebView(), WKWebView(), WKWebView()]
         self.isPrimaryActive = true
         self.isBkActive = false
         self.isFreeloading = false
