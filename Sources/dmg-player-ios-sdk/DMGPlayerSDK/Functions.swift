@@ -100,7 +100,7 @@ extension DMGPlayerSDK {
 
             self.isBkActive = false
         } else {
-            print("STEP 3: EXECUTE TRACK IN WEBVIEW")
+            print("index::::!", index)
             self.bkWebViews[index].evaluateJavaScript(buildActiveJavaScript(), completionHandler: { _, error in
                 if let error = error {
                     print("Error during Java1Script execution: \(error.localizedDescription)")
