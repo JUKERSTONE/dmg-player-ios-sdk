@@ -142,8 +142,6 @@ extension DMGPlayerSDK {
                         }
                         
                         if self.isBkActive == false {
-                            self?.loadBkVideoInPrimaryWebView(url: videoURL)
-                            // update bkWebviews according to queue
                             self.loadBkWebViewBuffer(urls: urls)
                         }
                         
