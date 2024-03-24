@@ -14,15 +14,26 @@ public struct DMGPictureLicense: UIViewRepresentable {
     public func makeUIView(context: Context) -> UIView {
         let containerView = UIView()
         
-        let bkWebView = sdk.bkWebView
-        containerView.addSubview(bkWebView)
-        bkWebView.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            bkWebView.topAnchor.constraint(equalTo: containerView.topAnchor),
-            bkWebView.widthAnchor.constraint(equalToConstant: 300),
-            bkWebView.heightAnchor.constraint(equalToConstant: 80),
-            bkWebView.centerXAnchor.constraint(equalTo: containerView.leadingAnchor)
-        ])
+//        let bkWebView = sdk.bkWebView
+//        containerView.addSubview(bkWebView)
+//        bkWebView.translatesAutoresizingMaskIntoConstraints = false
+//        NSLayoutConstraint.activate([
+//            bkWebView.topAnchor.constraint(equalTo: containerView.topAnchor),
+//            bkWebView.widthAnchor.constraint(equalToConstant: 300),
+//            bkWebView.heightAnchor.constraint(equalToConstant: 80),
+//            bkWebView.centerXAnchor.constraint(equalTo: containerView.leadingAnchor)
+//        ])
+        
+        sdk.bkWebViews.forEach { webView in
+            containerView.addSubview(webView)
+            webView.translatesAutoresizingMaskIntoConstraints = false
+            NSLayoutConstraint.activate([
+                webView.topAnchor.constraint(equalTo: containerView.topAnchor),
+                webView.widthAnchor.constraint(equalToConstant: 1), // Assuming you want them to be invisible
+                webView.heightAnchor.constraint(equalToConstant: 1),
+                webView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: -1000) // Offscreen
+            ])
+        }
         
         let primaryWebView = sdk.primaryWebView
         containerView.addSubview(primaryWebView)
@@ -54,8 +65,7 @@ public struct DMGPictureLicense: UIViewRepresentable {
             guard let sdk = sdk else { return }
             
             if sdk.index + 1 < updatedQueue.count {
-                let nextUp = updatedQueue[sdk.index + 1]
-                sdk.updatedPreload(isrc: nextUp)
+                sdk.updatedPreload(buffer: updatedQueue, index : sdk.index)
             } else {
                 print("No next item to preload")
             }

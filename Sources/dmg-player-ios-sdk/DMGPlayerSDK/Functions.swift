@@ -5,10 +5,16 @@ import WebKit
 
 @available(iOS 13.0, *)
 extension DMGPlayerSDK {
-    func loadBkVideoInPrimaryWebView(url: URL) {
-        let request = URLRequest(url: url)
-        print("bk load")
-        bkWebView.load(request)
+//    func loadBkVideoInPrimaryWebView(url: URL) {
+//        let request = URLRequest(url: url)
+//        print("bk load")
+//        bkWebView.load(request)
+//    }
+    
+    func loadBkWebViewBuffer(urls: [URL]) {
+//        let request = URLRequest(url: url)
+//        print("bk load")
+//        bkWebView.load(request)
     }
     
     func loadVideoInPrimaryWebView(url: URL) {
@@ -31,12 +37,12 @@ extension DMGPlayerSDK {
 
         let apiService = APIService.shared
         let urlString = "https://europe-west1-trx-traklist.cloudfunctions.net/TRX_DEVELOPER/trx/music/\(nextIsrc)"
-        
+
         guard let url = URL(string: urlString) else {
             print("Invalid URL")
             return
         }
-        
+
         apiService.fetchData(from: url) { [weak self] result in
             DispatchQueue.main.async {
                 switch result {
@@ -45,26 +51,26 @@ extension DMGPlayerSDK {
                         print("The data received could not be converted to a string.")
                         return
                     }
-                    
+
                     print(urlStringWithQuotes)
                     let urlString = urlStringWithQuotes.trimmingCharacters(in: CharacterSet(charactersIn: "\""))
-                 
+
                     guard let videoURL = URL(string: urlString) else {
                         print("The cleaned string is not a valid URL: \(urlString)")
                         return
                     }
-                    
+
                     print("preload bk")
-                    if self?.isBkActive == false {
-                        self?.loadBkVideoInPrimaryWebView(url: videoURL)
-                    }
-                    
+//                    if self?.isBkActive == false {
+//                        self?.loadBkVideoInPrimaryWebView(url: videoURL)
+//                    }
+
                     if self?.isPrimaryActive == true {
                         self?.loadVideoInSecondaryWebView(url: videoURL)
                     } else {
                         self?.loadVideoInPrimaryWebView(url: videoURL)
                     }
-                    
+
                 case .failure(let error):
                     print("Error fetching data: \(error)")
                 }
@@ -83,74 +89,61 @@ extension DMGPlayerSDK {
                     print("JavaScript executed successfully in foreground.")
                 }
             })
-            
+
             self.isBkActive = false
         } else {
-            if self.isFreeloading == true {
-                print("freeloading yes")
-     
-                bkWebView.evaluateJavaScript("window.location.href = 'https://www.youtube.com/watch?v=628-IEUuChI?autoplay=1';") { result, error in
-                       if let error = error {
-                           print("Error injecting the 'load' event listener: \(error.localizedDescription)")
-                       } else {
-                           print("JavaScript executed successfully in foregroundr.")
-                       }
-                   }
-            } else {
-                print("STEP 3: EXECUTE TRACK IN WEBVIEW")
-                bkWebView.evaluateJavaScript(buildActiveJavaScript(), completionHandler: { _, error in
-                    if let error = error {
-                        print("Error during Java1Script execution: \(error.localizedDescription)")
-                    } else {
-                        print("JavaScript executed successfully in foreground.")
-                    }
-                    self.isFreeloading = true
-                })
-            }
-            
+            print("STEP 3: EXECUTE TRACK IN WEBVIEW")
+            self.bkWebViews[index].evaluateJavaScript(buildActiveJavaScript(), completionHandler: { _, error in
+                if let error = error {
+                    print("Error during Java1Script execution: \(error.localizedDescription)")
+                } else {
+                    print("JavaScript executed successfully in foreground.")
+                }
+                self.isFreeloading = true
+            })
+
             self.isBkActive = true
         }
     }
 
     
-    func updatedPreload(isrc: String) {
+    func updatedPreload(buffer : [String], index : Int) {
         let apiService = APIService.shared
-        let urlString = "https://europe-west1-trx-traklist.cloudfunctions.net/TRX_DEVELOPER/trx/music/\(isrc)"
+        let urlString = "https://europe-west1-trx-traklist.cloudfunctions.net/TRX_DEVELOPER/trx/music/buffer"
 
         guard let url = URL(string: urlString) else {
             print("Invalid URL")
             return
         }
+        print("check", buffer)
 
-        apiService.fetchData(from: url) { [weak self] result in
-            DispatchQueue.main.async {
-                switch result {
-                case .success(let data):
-                    guard let urlStringWithQuotes = String(data: data, encoding: .utf8) else {
-                        print("The data received could not be converted to a string.")
-                        return
+        // Serialize the dictionary to JSON data
+        do {
+            let jsonData = try JSONSerialization.data(withJSONObject: buffer, options: [])
+            
+            apiService.postData(to: url, body: jsonData) { (result: Result<Data, Error>) in
+                DispatchQueue.main.async {
+                    switch result {
+                    case .success(let data):
+                        // Handle the successful response
+                        print("Success with data:", data)
+                        // If you need to decode JSON response into an array of strings
+                        do {
+                            if let responseArray = try JSONSerialization.jsonObject(with: data, options: []) as? [String] {
+                                // Use `responseArray` as needed
+                                print("Received array of URLs:", responseArray)
+                            }
+                        } catch {
+                            print("JSON deserialization error:", error)
+                        }
+                    case .failure(let error):
+                        // Handle the error
+                        print("Error2:", error)
                     }
-
-                    let urlString = urlStringWithQuotes.trimmingCharacters(in: CharacterSet(charactersIn: "\""))
-
-                    guard let videoURL = URL(string: urlString) else {
-                        print("The cleaned string is not a valid URL: \(urlString)")
-                        return
-                    }
-                    
-                    if self?.isBkActive == false {
-                        self?.loadBkVideoInPrimaryWebView(url: videoURL)
-                    }
-
-                    if self?.isPrimaryActive == true {
-                        self?.loadVideoInSecondaryWebView(url: videoURL)
-                    } else {
-                        self?.loadVideoInPrimaryWebView(url: videoURL)
-                    }
-                case .failure(let error):
-                    print("Error fetching data: \(error)")
                 }
             }
+        } catch {
+            print("JSON serialization error:", error)
         }
     }
 }

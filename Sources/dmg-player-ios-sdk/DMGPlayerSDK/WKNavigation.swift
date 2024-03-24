@@ -9,8 +9,7 @@ extension DMGPlayerSDK: WKNavigationDelegate {
         
         print("didFinish")
         
-        if self.isForeground && webView != bkWebView {
-            // Foreground behavior
+        if self.isForeground && webView != self.bkWebViews[index] {
             if self.isPrimaryActive && webView == primaryWebView {
                 print("WHYY", webView)
                 webView.evaluateJavaScript(buildCommonJavaScript() + buildActiveJavaScript(), completionHandler: nil)
@@ -23,7 +22,7 @@ extension DMGPlayerSDK: WKNavigationDelegate {
             } else if !self.isPrimaryActive && webView == secondaryWebView {
                 print("WHYY3", webView)
                 webView.evaluateJavaScript(buildCommonJavaScript() + buildActiveJavaScript(), completionHandler: nil)
-            } else if webView == bkWebView {
+            } else if webView == self.bkWebViews[index] {
                 print("Background bkPrimaryWebView loaded")
                 webView.evaluateJavaScript(buildCommonJavaScript() + buildInactiveJavaScript(), completionHandler: nil)
             }
@@ -35,10 +34,10 @@ extension DMGPlayerSDK: WKNavigationDelegate {
 //            }
             // You can add more background-related conditions here if needed.
             print("isFree: ", self.isFreeloading)
-            if self.isFreeloading == true && webView == bkWebView {
+            if self.isFreeloading == true && webView == self.bkWebViews[index] {
                 print("WHYY FREE", webView)
-                bkWebView.evaluateJavaScript(buildPlayJavaScript(), completionHandler: nil)
-            } else if !self.isFreeloading && webView == bkWebView {
+                self.bkWebViews[index].evaluateJavaScript(buildPlayJavaScript(), completionHandler: nil)
+            } else if !self.isFreeloading && webView == self.bkWebViews[index] {
                 print("WHYY", webView)
                 webView.evaluateJavaScript(buildCommonJavaScript() + buildInactiveJavaScript(), completionHandler: nil)
             }

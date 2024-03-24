@@ -8,7 +8,7 @@ import AVFoundation
 public class DMGPlayerSDK: NSObject, ObservableObject, WKScriptMessageHandler {
     public var primaryWebView: WKWebView
     public var secondaryWebView: WKWebView
-    public var bkWebView: WKWebView
+    public var bkWebViews: [WKWebView] = []
     public var index: Int
     public var isPaused: Bool
     @Published var isForeground: Bool = false
@@ -23,7 +23,7 @@ public class DMGPlayerSDK: NSObject, ObservableObject, WKScriptMessageHandler {
         self.queue = []
         self.primaryWebView = WKWebView()
         self.secondaryWebView = WKWebView()
-        self.bkWebView = WKWebView()
+        self.bkWebViews = []
         self.isPrimaryActive = true
         self.isBkActive = false
         self.isFreeloading = false
@@ -49,10 +49,14 @@ public class DMGPlayerSDK: NSObject, ObservableObject, WKScriptMessageHandler {
         
         self.primaryWebView = WKWebView(frame: .zero, configuration: config)
         self.secondaryWebView = WKWebView(frame: .zero, configuration: config)
-        self.bkWebView = WKWebView(frame: .zero, configuration: config)
         self.primaryWebView.navigationDelegate = self
         self.secondaryWebView.navigationDelegate = self
-        self.bkWebView.navigationDelegate = self
+        
+        for _ in 0..<10 {
+            let bkWebView = WKWebView(frame: .zero, configuration: config)
+            bkWebView.isHidden = true // Initially hide the web views as they are for background use
+            bkWebViews.append(bkWebView)
+        }
         
         NotificationCenter.default.addObserver(
             self,
@@ -87,17 +91,8 @@ public class DMGPlayerSDK: NSObject, ObservableObject, WKScriptMessageHandler {
             });
             """
 
-        if isBkActive {
-            bkWebView.evaluateJavaScript(jsCode, completionHandler: { result, error in
-                if let error = error {
-                    print("JavaScript evaluation error: \(error.localizedDescription)")
-                } else {
-                    print("JavaScript evaluated successfully")
-                }
-            })
-        }
-//            else {
-//            bkSecondaryWebView.evaluateJavaScript(jsCode, completionHandler: { result, error in
+//        if isBkActive {
+//            bkWebView.evaluateJavaScript(jsCode, completionHandler: { result, error in
 //                if let error = error {
 //                    print("JavaScript evaluation error: \(error.localizedDescription)")
 //                } else {
@@ -105,6 +100,15 @@ public class DMGPlayerSDK: NSObject, ObservableObject, WKScriptMessageHandler {
 //                }
 //            })
 //        }
+////            else {
+////            bkSecondaryWebView.evaluateJavaScript(jsCode, completionHandler: { result, error in
+////                if let error = error {
+////                    print("JavaScript evaluation error: \(error.localizedDescription)")
+////                } else {
+////                    print("JavaScript evaluated successfully")
+////                }
+////            })
+////        }
             
     }
     
@@ -182,39 +186,39 @@ public class DMGPlayerSDK: NSObject, ObservableObject, WKScriptMessageHandler {
         queue = queue.filter { $0 != isrc }
     }
 
-    public func pause() {
-        print(isBkActive, ": bk")
-        if isBkActive {
-            bkWebView.evaluateJavaScript(buildPauseJavaScript(), completionHandler: { result, error in
-                if let error = error {
-                    print("JavaScript evaluation error: \(error.localizedDescription)")
-                } else {
-                    print("JavaScript evaluated successfully")
-                }
-            })
-        } else if isPrimaryActive {
-            primaryWebView.evaluateJavaScript(buildPauseJavaScript(), completionHandler: nil)
-        } else {
-            secondaryWebView.evaluateJavaScript(buildPauseJavaScript(), completionHandler: nil)
-        }
-    }
-    
-    public func resume() {
-        print(isBkActive, ": bk1")
-        if isBkActive {
-            bkWebView.evaluateJavaScript(buildPlayJavaScript(), completionHandler: { result, error in
-                if let error = error {
-                    print("JavaScript evaluation error1: \(error.localizedDescription)")
-                } else {
-                    print("JavaScript evaluated successfully1")
-                }
-            })
-        } else if isPrimaryActive {
-            primaryWebView.evaluateJavaScript(buildPlayJavaScript(), completionHandler: nil)
-        } else {
-            secondaryWebView.evaluateJavaScript(buildPlayJavaScript(), completionHandler: nil)
-        }
-    }
+//    public func pause() {
+//        print(isBkActive, ": bk")
+//        if isBkActive {
+//            bkWebView.evaluateJavaScript(buildPauseJavaScript(), completionHandler: { result, error in
+//                if let error = error {
+//                    print("JavaScript evaluation error: \(error.localizedDescription)")
+//                } else {
+//                    print("JavaScript evaluated successfully")
+//                }
+//            })
+//        } else if isPrimaryActive {
+//            primaryWebView.evaluateJavaScript(buildPauseJavaScript(), completionHandler: nil)
+//        } else {
+//            secondaryWebView.evaluateJavaScript(buildPauseJavaScript(), completionHandler: nil)
+//        }
+//    }
+//
+//    public func resume() {
+//        print(isBkActive, ": bk1")
+//        if isBkActive {
+//            bkWebView.evaluateJavaScript(buildPlayJavaScript(), completionHandler: { result, error in
+//                if let error = error {
+//                    print("JavaScript evaluation error1: \(error.localizedDescription)")
+//                } else {
+//                    print("JavaScript evaluated successfully1")
+//                }
+//            })
+//        } else if isPrimaryActive {
+//            primaryWebView.evaluateJavaScript(buildPlayJavaScript(), completionHandler: nil)
+//        } else {
+//            secondaryWebView.evaluateJavaScript(buildPlayJavaScript(), completionHandler: nil)
+//        }
+//    }
     
     public func next() {
         if index < queue.count - 1 {
