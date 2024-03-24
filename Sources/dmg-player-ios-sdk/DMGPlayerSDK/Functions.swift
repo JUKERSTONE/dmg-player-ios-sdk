@@ -129,15 +129,45 @@ extension DMGPlayerSDK {
 
         // Perform the POST request
         apiService.postData(to: url, body: jsonData) { result in
-            DispatchQueue.main.async {
-                switch result {
-                case .success(let data):
-                    print("Successfully updated preload with data:", data)
-                case .failure(let error):
+            switch result {
+            case .success(let data):
+                // Attempt to convert the data to a JSON array
+                // You must use 'try?' here because you are inside a closure that does not allow throwing functions.
+                if let urlStringArray = try? JSONSerialization.jsonObject(with: data, options: []) as? [String] {
+                    // Now on the main queue, you can update your UI or perform other operations
+                    DispatchQueue.main.async {
+                        // Map the array of string URLs to actual URL objects
+                        let urls = urlStringArray.compactMap { urlString -> URL? in
+                            return URL(string: urlString.trimmingCharacters(in: CharacterSet(charactersIn: "\"")))
+                        }
+                        
+                        if self.isBkActive == false {
+                            self?.loadBkVideoInPrimaryWebView(url: videoURL)
+                            // update bkWebviews according to queue
+                            self.loadBkWebViewBuffer(urls: urls)
+                        }
+                        
+                        let videoURL = urls[index + 1]
+
+                        if self.isPrimaryActive == true {
+                            self.loadVideoInSecondaryWebView(url: videoURL) // next up
+                        } else {
+                            self.loadVideoInPrimaryWebView(url: videoURL) // next up
+                        }
+                    }
+                } else {
+                    DispatchQueue.main.async {
+                        print("The received data is not an array of strings.")
+                    }
+                }
+                
+            case .failure(let error):
+                DispatchQueue.main.async {
                     print("Failed to update preload:", error)
                 }
             }
         }
+
     }
 }
 
