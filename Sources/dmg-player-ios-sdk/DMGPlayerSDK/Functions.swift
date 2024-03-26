@@ -155,7 +155,7 @@ extension DMGPlayerSDK {
             }
             
             if UIApplication.shared.applicationState != .active && !self.isFreeloading {
-                self.isBkPrimaryActive = !self.isBkPrimaryActive
+                isBkPrimaryActive = !isBkPrimaryActive
             }
             
            self.isBkActive = true
