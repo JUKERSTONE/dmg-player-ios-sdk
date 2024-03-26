@@ -147,7 +147,7 @@ extension DMGPlayerSDK {
                     })
                 }
                 
-//                self.isBkPrimaryActive = !self.isBkPrimaryActive
+                self.isBkPrimaryActive = !self.isBkPrimaryActive
             }
             
             if self.index < self.queue.count - 1 {

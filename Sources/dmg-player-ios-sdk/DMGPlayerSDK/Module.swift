@@ -14,10 +14,10 @@ public class DMGPlayerSDK: NSObject, ObservableObject, WKScriptMessageHandler {
     public var index: Int
     public var isPaused: Bool
     public var buffer: [URL] = []
+    public var isBkPrimaryActive: Bool = true
     @Published var isForeground: Bool = false
     @Published var hasPreloadedNextWebview: Bool = true
     @Published var isPrimaryActive: Bool = true
-    @Published var isBkPrimaryActive: Bool = true
     @Published var isFreeloading: Bool = false
     @Published var isBkActive: Bool = false
     @Published var hasBkPreloadedNextWebview: Bool = true
