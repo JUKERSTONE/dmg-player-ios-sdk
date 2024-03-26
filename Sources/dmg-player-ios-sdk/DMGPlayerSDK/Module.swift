@@ -52,9 +52,9 @@ public class DMGPlayerSDK: NSObject, ObservableObject, WKScriptMessageHandler {
         self.primaryWebView.navigationDelegate = self
         self.secondaryWebView.navigationDelegate = self
         
-        for bkWebView in bkWebViews {
+        for (index, bkWebView) in bkWebViews.enumerated() {
             // Apply your configurations here, for example:
-            let bkWebView = WKWebView(frame: .zero, configuration: config)
+            self.bkWebViews[index] = WKWebView(frame: .zero, configuration: config)
             bkWebView.navigationDelegate = self // Set the delegate if necessary
             // ... more configurations ...
         }
