@@ -165,7 +165,7 @@ extension DMGPlayerSDK {
 //                            self.buffer = urls
                             
                             if 2 < urls.count {
-                                let nextUp = urls[0] // This is the "next up" video URL.
+                                let nextUp = urls[1] // This is the "next up" video URL.
                                 
                                 if self.isBkActive == false {
                                     self.loadBkVideoInPrimaryWebView(url: nextUp) // Assuming this method exists and loads the buffer.
