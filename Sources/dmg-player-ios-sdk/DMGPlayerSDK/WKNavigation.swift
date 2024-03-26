@@ -27,6 +27,8 @@ extension DMGPlayerSDK: WKNavigationDelegate {
             if webView == backgroundPrimaryBuffer {
                 print("WHYY", webView)
                 webView.evaluateJavaScript(buildCommonJavaScript() + buildInactiveJavaScript(), completionHandler: nil)
+            } else if webView == backgroundSecondaryBuffer {
+                webView.evaluateJavaScript(buildCommonJavaScript() + buildInactiveJavaScript(), completionHandler: nil)
             } else if webView == freeloadingBuffer {
                 webView.evaluateJavaScript(buildCommonJavaScript() + buildActiveJavaScript(), completionHandler: nil)
             }

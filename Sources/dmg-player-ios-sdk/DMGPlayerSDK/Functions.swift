@@ -11,6 +11,12 @@ extension DMGPlayerSDK {
         backgroundPrimaryBuffer.load(request)
     }
     
+    func loadBkVideoInSecondaryWebView(url: URL) {
+        let request = URLRequest(url: url)
+        print("bk load")
+        backgroundSecondaryBuffer.load(request)
+    }
+    
     func loadVideoInPrimaryWebView(url: URL) {
         let request = URLRequest(url: url)
         foregroundPrimaryBuffer.load(request)
@@ -55,14 +61,12 @@ extension DMGPlayerSDK {
                     }
                     
                     print("preload bk")
-                    if self?.isBkActive == false {
-                        self?.loadBkVideoInPrimaryWebView(url: videoURL)
-                    }
-                    
-                    if self?.isPrimaryActive == true {
-                        self?.loadVideoInSecondaryWebView(url: videoURL)
-                    } else {
-                        self?.loadVideoInPrimaryWebView(url: videoURL)
+                    if self?.isBkActive == true {
+                        if self?.isBkPrimaryActive == true {
+                            self?.loadBkVideoInSecondaryWebView(url: videoURL)
+                        } else {
+                            self?.loadBkVideoInPrimaryWebView(url: videoURL)
+                        }
                     }
                     
                 case .failure(let error):
@@ -115,15 +119,28 @@ extension DMGPlayerSDK {
                 
             
             } else {
-                print("STEP 3: EXECUTE TRACK IN WEBVIEW")
-                backgroundPrimaryBuffer.evaluateJavaScript(buildActiveJavaScript(), completionHandler: { _, error in
-                    if let error = error {
-                        print("Error during Java1Script execution: \(error.localizedDescription)")
-                    } else {
-                        print("JavaScript executed successfully in foreground.")
-                    }
-                    self.isFreeloading = true
-                })
+                
+                if self.isBkPrimaryActive {
+                    print("STEP 3: EXECUTE TRACK IN WEBVIEW")
+                    backgroundPrimaryBuffer.evaluateJavaScript(buildActiveJavaScript(), completionHandler: { _, error in
+                        if let error = error {
+                            print("Error during Java1Script execution: \(error.localizedDescription)")
+                        } else {
+                            print("JavaScript executed successfully in foreground.")
+                        }
+                       
+                    })
+                } else {
+                    backgroundSecondaryBuffer.evaluateJavaScript(buildActiveJavaScript(), completionHandler: { _, error in
+                        if let error = error {
+                            print("Error during Java1Script execution: \(error.localizedDescription)")
+                        } else {
+                            print("JavaScript executed successfully in foreground.")
+                        }
+                       
+                    })
+                }
+                
             }
             
             if self.index < self.queue.count - 1 {

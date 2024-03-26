@@ -31,7 +31,7 @@ extension DMGPlayerSDK {
             switch eventType {
             case "videoProgress":
                 if let progressData = messageDict["data"] as? Double {
-                    if progressData > 80.0 && queue.count <= 1 && !self.hasPreloadedNextWebview {
+                    if progressData > 80.0 && !self.hasPreloadedNextWebview {
                         self.preloadNextWebView()
                         self.hasPreloadedNextWebview = true
                     }
