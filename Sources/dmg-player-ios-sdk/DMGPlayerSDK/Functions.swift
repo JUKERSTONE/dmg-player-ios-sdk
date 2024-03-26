@@ -12,9 +12,16 @@ extension DMGPlayerSDK {
     }
     
     func loadBkVideoInSecondaryWebView(url: URL) {
-        let request = URLRequest(url: url)
-        print("bk load")
-        backgroundSecondaryBuffer.load(request)
+        let javaScriptString = "window.location.href = '\(url)';"
+        print(javaScriptString, "js")
+
+        backgroundSecondaryBuffer.evaluateJavaScript(javaScriptString) { result, error in
+           if let error = error {
+               print("Error injecting the 'load' event listener: \(error.localizedDescription)")
+           } else {
+               print("JavaScript executed successfully in foregroundr.")
+           }
+        }
     }
     
     func loadVideoInPrimaryWebView(url: URL) {
