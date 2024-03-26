@@ -77,7 +77,6 @@ public class DMGPlayerSDK: NSObject, ObservableObject, WKScriptMessageHandler {
         if let url = URL(string: "https://google.com") {
             let request = URLRequest(url: url)
             self.freeloadingBuffer.load(request)
-            self.backgroundSecondaryBuffer.load(request)
         }
         
         NotificationCenter.default.addObserver(

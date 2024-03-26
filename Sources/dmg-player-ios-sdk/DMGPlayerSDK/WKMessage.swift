@@ -32,8 +32,8 @@ extension DMGPlayerSDK {
             case "videoProgress":
                 if let progressData = messageDict["data"] as? Double {
                     if progressData > 80.0 && !self.hasPreloadedNextWebview {
-                        self.preloadNextWebView()
-                        self.hasPreloadedNextWebview = true
+//                        self.preloadNextWebView()
+//                        self.hasPreloadedNextWebview = true
                     }
                 } else {
                     print("The 'data' for 'videoProgress' is not a Double or not present in the message body.")
