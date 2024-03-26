@@ -95,16 +95,24 @@ extension DMGPlayerSDK {
             if self.isFreeloading == true {
             print("freeloading yes")
      
-            let url = self.buffer[self.index + 1]
-            let javaScriptString = "window.location.href = \(url);"
-                print(javaScriptString, "js")
+                if self.index + 1 < self.buffer.count {
+                    let url = self.buffer[self.index + 1]
+                    let javaScriptString = "window.location.href = '\(url)';"
+                    print(javaScriptString, "js")
+
+                    freeloaderWebView.evaluateJavaScript(javaScriptString) { result, error in
+                       if let error = error {
+                           print("Error injecting the 'load' event listener: \(error.localizedDescription)")
+                       } else {
+                           print("JavaScript executed successfully in foregroundr.")
+                       }
+
+                } else {
+                    print("Index is out of range of the buffer array")
+                    // Handle the case when the index is out of range
+                }
                 
-            freeloaderWebView.evaluateJavaScript(javaScriptString) { result, error in
-               if let error = error {
-                   print("Error injecting the 'load' event listener: \(error.localizedDescription)")
-               } else {
-                   print("JavaScript executed successfully in foregroundr.")
-               }
+          
             }
             } else {
                 print("STEP 3: EXECUTE TRACK IN WEBVIEW")
