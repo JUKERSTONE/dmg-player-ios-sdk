@@ -8,6 +8,7 @@ import AVFoundation
 public class DMGPlayerSDK: NSObject, ObservableObject, WKScriptMessageHandler {
     public var primaryWebView: WKWebView
     public var secondaryWebView: WKWebView
+    public var freeloaderWebView: WKWebView
     public var bkWebView: WKWebView
     public var index: Int
     public var isPaused: Bool
@@ -23,6 +24,7 @@ public class DMGPlayerSDK: NSObject, ObservableObject, WKScriptMessageHandler {
         self.queue = []
         self.primaryWebView = WKWebView()
         self.secondaryWebView = WKWebView()
+        self.freeloaderWebView = WKWebView()
         self.bkWebView = WKWebView()
         self.isPrimaryActive = true
         self.isBkActive = false
@@ -34,6 +36,7 @@ public class DMGPlayerSDK: NSObject, ObservableObject, WKScriptMessageHandler {
 
         configureAudioSession()
         let config = WKWebViewConfiguration()
+        let bkConfig = WKWebViewConfiguration()
         let userContentController = WKUserContentController()
         let preferences = WKPreferences()
         userContentController.add(self, name: "player")
@@ -43,6 +46,13 @@ public class DMGPlayerSDK: NSObject, ObservableObject, WKScriptMessageHandler {
         config.preferences.javaScriptCanOpenWindowsAutomatically = true
         config.allowsInlineMediaPlayback = true
         config.allowsPictureInPictureMediaPlayback = true
+        bkConfig.userContentController = userContentController
+        bkConfig.preferences = preferences
+        bkConfig.preferences.javaScriptEnabled = true
+        bkConfig.preferences.javaScriptCanOpenWindowsAutomatically = true
+        bkConfig.allowsInlineMediaPlayback = true
+        bkConfig.allowsPictureInPictureMediaPlayback = true
+        bkConfig.mediaTypesRequiringUserActionForPlayback = []
         
         NotificationCenter.default.addObserver(self, selector: #selector(appDidBecomeActive), name: UIApplication.didBecomeActiveNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(appMovedToBackground), name: UIApplication.didEnterBackgroundNotification, object: nil)
@@ -50,9 +60,16 @@ public class DMGPlayerSDK: NSObject, ObservableObject, WKScriptMessageHandler {
         self.primaryWebView = WKWebView(frame: .zero, configuration: config)
         self.secondaryWebView = WKWebView(frame: .zero, configuration: config)
         self.bkWebView = WKWebView(frame: .zero, configuration: config)
+        self.freeloaderWebView = WKWebView(frame: .zero, configuration: bkConfig)
         self.primaryWebView.navigationDelegate = self
         self.secondaryWebView.navigationDelegate = self
         self.bkWebView.navigationDelegate = self
+        self.freeloaderWebView.navigationDelegate = self
+        
+        if let url = URL(string: "https://google.com") {
+            let request = URLRequest(url: url)
+            self.freeloaderWebView.load(request)
+        }
         
         NotificationCenter.default.addObserver(
             self,

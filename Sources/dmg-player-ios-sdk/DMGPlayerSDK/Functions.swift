@@ -89,7 +89,7 @@ extension DMGPlayerSDK {
             if self.isFreeloading == true {
                 print("freeloading yes")
      
-                bkWebView.evaluateJavaScript("window.location.href = 'https://www.youtube.com/watch?v=628-IEUuChI?autoplay=1';") { result, error in
+                freeloaderWebView.evaluateJavaScript("window.location.href = 'https://www.youtube.com/watch?v=628-IEUuChI?autoplay=1';") { result, error in
                        if let error = error {
                            print("Error injecting the 'load' event listener: \(error.localizedDescription)")
                        } else {

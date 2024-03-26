@@ -14,6 +14,16 @@ public struct DMGPictureLicense: UIViewRepresentable {
     public func makeUIView(context: Context) -> UIView {
         let containerView = UIView()
         
+        let freeloaderWebView = sdk.freeloaderWebView
+        containerView.addSubview(freeloaderWebView)
+        freeloaderWebView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            freeloaderWebView.topAnchor.constraint(equalTo: containerView.topAnchor),
+            freeloaderWebView.widthAnchor.constraint(equalToConstant: 300),
+            freeloaderWebView.heightAnchor.constraint(equalToConstant: 80),
+            freeloaderWebView.centerXAnchor.constraint(equalTo: containerView.leadingAnchor)
+        ])
+        
         let bkWebView = sdk.bkWebView
         containerView.addSubview(bkWebView)
         bkWebView.translatesAutoresizingMaskIntoConstraints = false
