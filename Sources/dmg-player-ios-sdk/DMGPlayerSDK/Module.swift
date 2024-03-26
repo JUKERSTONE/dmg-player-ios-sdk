@@ -10,7 +10,6 @@ public class DMGPlayerSDK: NSObject, ObservableObject, WKScriptMessageHandler {
     public var foregroundSecondaryBuffer: WKWebView
     public var freeloadingBuffer: WKWebView
     public var backgroundPrimaryBuffer: WKWebView
-//    public var backgroundSecondaryBuffer: WKWebView
     public var index: Int
     public var isPaused: Bool
     public var buffer: [URL] = []
@@ -30,7 +29,6 @@ public class DMGPlayerSDK: NSObject, ObservableObject, WKScriptMessageHandler {
         self.foregroundSecondaryBuffer = WKWebView()
         self.freeloadingBuffer = WKWebView()
         self.backgroundPrimaryBuffer = WKWebView()
-//        self.backgroundSecondaryBuffer = WKWebView()
         self.isPrimaryActive = true
         self.isBkPrimaryActive = true
         self.isBkActive = false
@@ -66,12 +64,10 @@ public class DMGPlayerSDK: NSObject, ObservableObject, WKScriptMessageHandler {
         self.foregroundPrimaryBuffer = WKWebView(frame: .zero, configuration: config)
         self.foregroundSecondaryBuffer = WKWebView(frame: .zero, configuration: config)
         self.backgroundPrimaryBuffer = WKWebView(frame: .zero, configuration: config)
-//        self.backgroundSecondaryBuffer = WKWebView(frame: .zero, configuration: config)
         self.freeloadingBuffer = WKWebView(frame: .zero, configuration: bkConfig)
         self.foregroundPrimaryBuffer.navigationDelegate = self
         self.foregroundSecondaryBuffer.navigationDelegate = self
         self.backgroundPrimaryBuffer.navigationDelegate = self
-//        self.backgroundSecondaryBuffer.navigationDelegate = self
         self.freeloadingBuffer.navigationDelegate = self
         
         if let url = URL(string: "https://google.com") {
@@ -120,16 +116,6 @@ public class DMGPlayerSDK: NSObject, ObservableObject, WKScriptMessageHandler {
                 }
             })
         }
-//            else {
-//            bkSecondaryWebView.evaluateJavaScript(jsCode, completionHandler: { result, error in
-//                if let error = error {
-//                    print("JavaScript evaluation error: \(error.localizedDescription)")
-//                } else {
-//                    print("JavaScript evaluated successfully")
-//                }
-//            })
-//        }
-            
     }
     
     @objc private func appMovedToBackground() {
@@ -207,15 +193,24 @@ public class DMGPlayerSDK: NSObject, ObservableObject, WKScriptMessageHandler {
     }
 
     public func pause() {
-        print(isBkActive, ": bk")
         if isBkActive {
-            backgroundPrimaryBuffer.evaluateJavaScript(buildPauseJavaScript(), completionHandler: { result, error in
-                if let error = error {
-                    print("JavaScript evaluation error: \(error.localizedDescription)")
-                } else {
-                    print("JavaScript evaluated successfully")
-                }
-            })
+            if isFreeloading {
+                freeloadingBuffer.evaluateJavaScript(buildPauseJavaScript(), completionHandler: { result, error in
+                    if let error = error {
+                        print("JavaScript evaluation error: \(error.localizedDescription)")
+                    } else {
+                        print("JavaScript evaluated successfully")
+                    }
+                })
+            } else {
+                backgroundPrimaryBuffer.evaluateJavaScript(buildPauseJavaScript(), completionHandler: { result, error in
+                    if let error = error {
+                        print("JavaScript evaluation error: \(error.localizedDescription)")
+                    } else {
+                        print("JavaScript evaluated successfully")
+                    }
+                })
+            }
         } else if isPrimaryActive {
             foregroundPrimaryBuffer.evaluateJavaScript(buildPauseJavaScript(), completionHandler: nil)
         } else {
@@ -224,15 +219,24 @@ public class DMGPlayerSDK: NSObject, ObservableObject, WKScriptMessageHandler {
     }
     
     public func resume() {
-        print(isBkActive, ": bk1")
         if isBkActive {
-            backgroundPrimaryBuffer.evaluateJavaScript(buildPlayJavaScript(), completionHandler: { result, error in
-                if let error = error {
-                    print("JavaScript evaluation error1: \(error.localizedDescription)")
-                } else {
-                    print("JavaScript evaluated successfully1")
-                }
-            })
+            if isFreeloading {
+                freeloadingBuffer.evaluateJavaScript(buildPlayJavaScript(), completionHandler: { result, error in
+                    if let error = error {
+                        print("JavaScript evaluation error: \(error.localizedDescription)")
+                    } else {
+                        print("JavaScript evaluated successfully")
+                    }
+                })
+            } else {
+                backgroundPrimaryBuffer.evaluateJavaScript(buildPlayJavaScript(), completionHandler: { result, error in
+                    if let error = error {
+                        print("JavaScript evaluation error: \(error.localizedDescription)")
+                    } else {
+                        print("JavaScript evaluated successfully")
+                    }
+                })
+            }
         } else if isPrimaryActive {
             foregroundPrimaryBuffer.evaluateJavaScript(buildPlayJavaScript(), completionHandler: nil)
         } else {
@@ -256,6 +260,8 @@ public class DMGPlayerSDK: NSObject, ObservableObject, WKScriptMessageHandler {
     public func stop() {
         foregroundPrimaryBuffer.loadHTMLString("", baseURL: nil)
         foregroundSecondaryBuffer.loadHTMLString("", baseURL: nil)
+        backgroundPrimaryBuffer.loadHTMLString("", baseURL: nil)
+        freeloadingBuffer.loadHTMLString("", baseURL: nil)
     }
 }
 
