@@ -52,11 +52,11 @@ public class DMGPlayerSDK: NSObject, ObservableObject, WKScriptMessageHandler {
         self.primaryWebView.navigationDelegate = self
         self.secondaryWebView.navigationDelegate = self
         
-        for _ in 0..<10 {
+        for bkWebView in bkWebViews {
+            // Apply your configurations here, for example:
             let bkWebView = WKWebView(frame: .zero, configuration: config)
-            bkWebView.isHidden = true // Initially hide the web views as they are for background use
-            bkWebViews.append(bkWebView)
-            bkWebView.navigationDelegate = self
+            bkWebView.navigationDelegate = self // Set the delegate if necessary
+            // ... more configurations ...
         }
         
         NotificationCenter.default.addObserver(
