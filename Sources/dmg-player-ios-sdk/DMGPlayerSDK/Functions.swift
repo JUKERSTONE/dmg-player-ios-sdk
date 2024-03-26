@@ -163,7 +163,7 @@ extension DMGPlayerSDK {
                         if 2 < urls.count {
                             let nextUp = urls[0] // This is the "next up" video URL.
                             
-                            let buffer = Array(urls) // This creates the buffer starting from 1th index (as 0-based) after "next up" to the end of the array.
+                            let buffer = Array(urls[1...])
                             
                             print(buffer, "bufferr")
                             if self.isBkActive == false {
