@@ -56,6 +56,7 @@ public class DMGPlayerSDK: NSObject, ObservableObject, WKScriptMessageHandler {
             let bkWebView = WKWebView(frame: .zero, configuration: config)
             bkWebView.isHidden = true // Initially hide the web views as they are for background use
             bkWebViews.append(bkWebView)
+            bkWebView.navigationDelegate = self
         }
         
         NotificationCenter.default.addObserver(
