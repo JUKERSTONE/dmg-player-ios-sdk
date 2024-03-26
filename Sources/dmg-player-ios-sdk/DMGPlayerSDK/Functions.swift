@@ -167,7 +167,7 @@ extension DMGPlayerSDK {
                             if index + 2 < urls.count {
                                 let buffer = Array(urls[(index + 2)...]) // This creates the buffer starting from 1th index (as 0-based) after "next up" to the end of the array.
                                 
-                                print(buffer)
+                                print(buffer, "bufferr")
                                 if self.isBkActive == false {
                                     self.loadBkWebViewBuffer(urls: buffer) // Assuming this method exists and loads the buffer.
                                 }
