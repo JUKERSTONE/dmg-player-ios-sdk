@@ -128,46 +128,70 @@ extension DMGPlayerSDK {
     }
 
     
-    func updatedPreload(isrc: String) {
-        let apiService = APIService.shared
-        let urlString = "https://europe-west1-trx-traklist.cloudfunctions.net/TRX_DEVELOPER/trx/music/\(isrc)"
+    func updatedPreload(buffer: [String], index: Int) {
+            let apiService = APIService.shared
+            let urlString = "https://europe-west1-trx-traklist.cloudfunctions.net/TRX_DEVELOPER/trx/music/buffer"
 
-        guard let url = URL(string: urlString) else {
-            print("Invalid URL")
-            return
-        }
+            guard let url = URL(string: urlString) else {
+                print("Invalid URL")
+                return
+            }
 
-        apiService.fetchData(from: url) { [weak self] result in
-            DispatchQueue.main.async {
+            // Convert your buffer array into JSON data
+            guard let jsonData = try? JSONSerialization.data(withJSONObject: buffer, options: []) else {
+                print("Failed to serialize buffer to JSON")
+                return
+            }
+
+            // Print JSON string for debugging
+            if let jsonString = apiService.json(from: buffer) {
+                print("JSON String to be sent: \(jsonString)")
+            }
+
+            // Perform the POST request
+            apiService.postData(to: url, body: jsonData) { result in
                 switch result {
                 case .success(let data):
-                    guard let urlStringWithQuotes = String(data: data, encoding: .utf8) else {
-                        print("The data received could not be converted to a string.")
-                        return
-                    }
-
-                    let urlString = urlStringWithQuotes.trimmingCharacters(in: CharacterSet(charactersIn: "\""))
-
-                    guard let videoURL = URL(string: urlString) else {
-                        print("The cleaned string is not a valid URL: \(urlString)")
-                        return
+                    // Attempt to convert the data to a JSON array
+                    // You must use 'try?' here because you are inside a closure that does not allow throwing functions.
+                    if let urlStringArray = try? JSONSerialization.jsonObject(with: data, options: []) as? [String] {
+                        // Now on the main queue, you can update your UI or perform other operations
+                        DispatchQueue.main.async {
+                            // Map the array of string URLs to actual URL objects
+                            let urls = urlStringArray.compactMap { urlString -> URL? in
+                                return URL(string: urlString.trimmingCharacters(in: CharacterSet(charactersIn: "\"")))
+                            }
+                            
+//                            self.buffer = urls
+                            
+                            if 2 < urls.count {
+                                let nextUp = urls[0] // This is the "next up" video URL.
+                                
+                                if self.isBkActive == false {
+                                    self.loadBkVideoInPrimaryWebView(url: nextUp) // Assuming this method exists and loads the buffer.
+                                }
+                                
+                                if self.isPrimaryActive {
+                                    self.loadVideoInSecondaryWebView(url: nextUp) // Load "next up" URL in secondary web view
+                                } else {
+                                    self.loadVideoInPrimaryWebView(url: nextUp) // Load "next up" URL in primary web view
+                                }
+                            }
+                        }
+                    } else {
+                        DispatchQueue.main.async {
+                            print("The received data is not an array of strings.")
+                        }
                     }
                     
-                    if self?.isBkActive == false {
-                        self?.loadBkVideoInPrimaryWebView(url: videoURL)
-                    }
-
-                    if self?.isPrimaryActive == true {
-                        self?.loadVideoInSecondaryWebView(url: videoURL)
-                    } else {
-                        self?.loadVideoInPrimaryWebView(url: videoURL)
-                    }
                 case .failure(let error):
-                    print("Error fetching data: \(error)")
+                    DispatchQueue.main.async {
+                        print("Failed to update preload:", error)
+                    }
                 }
             }
+
         }
-    }
 }
 
 public func buildActiveJavaScript() -> String {

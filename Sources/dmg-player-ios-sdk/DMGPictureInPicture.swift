@@ -64,8 +64,7 @@ public struct DMGPictureLicense: UIViewRepresentable {
             guard let sdk = sdk else { return }
             
             if sdk.index + 1 < updatedQueue.count {
-                let nextUp = updatedQueue[sdk.index + 1]
-                sdk.updatedPreload(isrc: nextUp)
+                sdk.updatedPreload(buffer: updatedQueue, index : sdk.index)
             } else {
                 print("No next item to preload")
             }
