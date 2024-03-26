@@ -146,8 +146,6 @@ extension DMGPlayerSDK {
                         }
                     })
                 }
-                
-                self.isBkPrimaryActive = !self.isBkPrimaryActive
             }
             
             if self.index < self.queue.count - 1 {
@@ -155,7 +153,11 @@ extension DMGPlayerSDK {
             } else {
                 print("Index is at the end of the queue")
             }
-
+            
+            if UIApplication.shared.applicationState != .active {
+                self.isBkPrimaryActive == !self.isBkPrimaryActive
+            }
+            
            self.isBkActive = true
         }
     }
