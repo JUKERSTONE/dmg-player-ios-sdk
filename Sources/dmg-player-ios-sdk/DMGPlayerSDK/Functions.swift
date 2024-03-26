@@ -137,7 +137,6 @@ extension DMGPlayerSDK {
                         }
                        
                     })
-                    self.isBkPrimaryActive = false
                 } else {
                     backgroundSecondaryBuffer.evaluateJavaScript(buildActiveJavaScript(), completionHandler: { _, error in
                         if let error = error {
@@ -146,8 +145,9 @@ extension DMGPlayerSDK {
                             print("JavaScript executed successfully in foreground.")
                         }
                     })
-                    self.isBkPrimaryActive = true
                 }
+                
+                self.isBkPrimaryActive = !self.isBkPrimaryActive
             }
             
             if self.index < self.queue.count - 1 {
