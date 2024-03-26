@@ -106,14 +106,14 @@ extension DMGPlayerSDK {
                        } else {
                            print("JavaScript executed successfully in foregroundr.")
                        }
+                    }
 
                 } else {
                     print("Index is out of range of the buffer array")
                     // Handle the case when the index is out of range
                 }
                 
-          
-            }
+            
             } else {
                 print("STEP 3: EXECUTE TRACK IN WEBVIEW")
                 bkWebView.evaluateJavaScript(buildActiveJavaScript(), completionHandler: { _, error in
