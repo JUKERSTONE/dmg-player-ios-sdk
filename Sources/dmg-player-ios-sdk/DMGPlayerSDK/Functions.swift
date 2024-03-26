@@ -107,7 +107,7 @@ extension DMGPlayerSDK {
             self.isBkActive = false
         } else {
             print("index::::!", index)
-            self.bkWebViews[self.index].evaluateJavaScript(buildActiveJavaScript(), completionHandler: { _, error in
+            self.bkWebViews[index].evaluateJavaScript(buildActiveJavaScript(), completionHandler: { _, error in
                 if let error = error {
                     print("Error during Java1Script execution: \(error.localizedDescription)")
                 } else {
@@ -166,7 +166,8 @@ extension DMGPlayerSDK {
                             // Check if there's more than one item left after "next up" to create a buffer
                             if index + 2 < urls.count {
                                 let buffer = Array(urls[(index + 2)...]) // This creates the buffer starting from 1th index (as 0-based) after "next up" to the end of the array.
-                        
+                                
+                                print(buffer)
                                 if self.isBkActive == false {
                                     self.loadBkWebViewBuffer(urls: buffer) // Assuming this method exists and loads the buffer.
                                 }
