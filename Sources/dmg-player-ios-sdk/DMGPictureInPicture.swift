@@ -14,44 +14,54 @@ public struct DMGPictureLicense: UIViewRepresentable {
     public func makeUIView(context: Context) -> UIView {
         let containerView = UIView()
         
-        let freeloaderWebView = sdk.freeloaderWebView
-        containerView.addSubview(freeloaderWebView)
-        freeloaderWebView.translatesAutoresizingMaskIntoConstraints = false
+        let freeloadingBuffer = sdk.freeloadingBuffer
+        containerView.addSubview(freeloadingBuffer)
+        freeloadingBuffer.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            freeloaderWebView.topAnchor.constraint(equalTo: containerView.topAnchor),
-            freeloaderWebView.widthAnchor.constraint(equalToConstant: 300),
-            freeloaderWebView.heightAnchor.constraint(equalToConstant: 80),
-            freeloaderWebView.centerXAnchor.constraint(equalTo: containerView.leadingAnchor)
+            freeloadingBuffer.topAnchor.constraint(equalTo: containerView.topAnchor),
+            freeloadingBuffer.widthAnchor.constraint(equalToConstant: 1),
+            freeloadingBuffer.heightAnchor.constraint(equalToConstant: 1),
+            freeloadingBuffer.centerXAnchor.constraint(equalTo: containerView.leadingAnchor)
         ])
         
-        let bkWebView = sdk.bkWebView
-        containerView.addSubview(bkWebView)
-        bkWebView.translatesAutoresizingMaskIntoConstraints = false
+        let backgroundPrimaryBuffer = sdk.backgroundPrimaryBuffer
+        containerView.addSubview(backgroundPrimaryBuffer)
+        backgroundPrimaryBuffer.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            bkWebView.topAnchor.constraint(equalTo: containerView.topAnchor),
-            bkWebView.widthAnchor.constraint(equalToConstant: 300),
-            bkWebView.heightAnchor.constraint(equalToConstant: 80),
-            bkWebView.centerXAnchor.constraint(equalTo: containerView.leadingAnchor)
+            backgroundPrimaryBuffer.topAnchor.constraint(equalTo: containerView.topAnchor),
+            backgroundPrimaryBuffer.widthAnchor.constraint(equalToConstant: 1),
+            backgroundPrimaryBuffer.heightAnchor.constraint(equalToConstant: 1),
+            backgroundPrimaryBuffer.centerXAnchor.constraint(equalTo: containerView.leadingAnchor)
         ])
         
-        let primaryWebView = sdk.primaryWebView
-        containerView.addSubview(primaryWebView)
-        primaryWebView.translatesAutoresizingMaskIntoConstraints = false
+        let backgroundSecondaryBuffer = sdk.backgroundSecondaryBuffer
+        containerView.addSubview(backgroundSecondaryBuffer)
+        backgroundSecondaryBuffer.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            primaryWebView.topAnchor.constraint(equalTo: containerView.topAnchor),
-            primaryWebView.widthAnchor.constraint(equalToConstant: 1),
-            primaryWebView.heightAnchor.constraint(equalToConstant: 1),
-            primaryWebView.centerXAnchor.constraint(equalTo: containerView.leadingAnchor)
+            backgroundSecondaryBuffer.topAnchor.constraint(equalTo: containerView.topAnchor),
+            backgroundSecondaryBuffer.widthAnchor.constraint(equalToConstant: 1),
+            backgroundSecondaryBuffer.heightAnchor.constraint(equalToConstant: 1),
+            backgroundSecondaryBuffer.centerXAnchor.constraint(equalTo: containerView.leadingAnchor)
+        ])
+        
+        let foregroundPrimaryBuffer = sdk.foregroundPrimaryBuffer
+        containerView.addSubview(foregroundPrimaryBuffer)
+        foregroundPrimaryBuffer.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            foregroundPrimaryBuffer.topAnchor.constraint(equalTo: containerView.topAnchor),
+            foregroundPrimaryBuffer.widthAnchor.constraint(equalToConstant: 1),
+            foregroundPrimaryBuffer.heightAnchor.constraint(equalToConstant: 1),
+            foregroundPrimaryBuffer.centerXAnchor.constraint(equalTo: containerView.leadingAnchor)
         ])
 
-        let secondaryWebView = sdk.secondaryWebView
-        containerView.addSubview(secondaryWebView)
-        secondaryWebView.translatesAutoresizingMaskIntoConstraints = false
+        let foregroundSecondaryBuffer = sdk.foregroundSecondaryBuffer
+        containerView.addSubview(foregroundSecondaryBuffer)
+        foregroundSecondaryBuffer.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            secondaryWebView.topAnchor.constraint(equalTo: secondaryWebView.topAnchor),
-            secondaryWebView.widthAnchor.constraint(equalToConstant: 1),
-            secondaryWebView.heightAnchor.constraint(equalToConstant: 1),
-            secondaryWebView.centerXAnchor.constraint(equalTo: containerView.leadingAnchor)
+            foregroundSecondaryBuffer.topAnchor.constraint(equalTo: foregroundSecondaryBuffer.topAnchor),
+            foregroundSecondaryBuffer.widthAnchor.constraint(equalToConstant: 1),
+            foregroundSecondaryBuffer.heightAnchor.constraint(equalToConstant: 1),
+            foregroundSecondaryBuffer.centerXAnchor.constraint(equalTo: containerView.leadingAnchor)
         ])
         
         return containerView
@@ -69,31 +79,6 @@ public struct DMGPictureLicense: UIViewRepresentable {
                 print("No next item to preload")
             }
         }
-    }
-
-    private func createBackgroundWebView() -> WKWebView {
-        let config = WKWebViewConfiguration()
-        config.preferences.javaScriptEnabled = true
-        let webView = WKWebView(frame: .zero, configuration: config)
-
-        // This makes sure the webView isn't visible, even if it is technically part of the view hierarchy.
-        webView.isHidden = true
-
-        // By setting these constraints, the webView will be sized to be practically invisible
-        // and positioned off the bounds of the screen.
-        webView.translatesAutoresizingMaskIntoConstraints = false
-        if let keyWindow = UIApplication.shared.keyWindow {
-            keyWindow.addSubview(webView)
-
-            NSLayoutConstraint.activate([
-                webView.centerXAnchor.constraint(equalTo: webView.leadingAnchor)
-            ])
-        } else {
-            // Handle the error case where the key window is not available
-            print("Failed to access the key window.")
-        }
-
-        return webView
     }
 }
 

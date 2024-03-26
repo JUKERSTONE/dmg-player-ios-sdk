@@ -6,10 +6,11 @@ import AVFoundation
 
 @available(iOS 13.0, *)
 public class DMGPlayerSDK: NSObject, ObservableObject, WKScriptMessageHandler {
-    public var primaryWebView: WKWebView
-    public var secondaryWebView: WKWebView
-    public var freeloaderWebView: WKWebView
-    public var bkWebView: WKWebView
+    public var foregroundPrimaryBuffer: WKWebView
+    public var foregroundSecondaryBuffer: WKWebView
+    public var freeloadingBuffer: WKWebView
+    public var backgroundPrimaryBuffer: WKWebView
+    public var backgroundSecondaryBuffer: WKWebView
     public var index: Int
     public var isPaused: Bool
     public var buffer: [URL] = []
@@ -24,10 +25,11 @@ public class DMGPlayerSDK: NSObject, ObservableObject, WKScriptMessageHandler {
     public override init() {
         self.queue = []
         self.buffer = []
-        self.primaryWebView = WKWebView()
-        self.secondaryWebView = WKWebView()
-        self.freeloaderWebView = WKWebView()
-        self.bkWebView = WKWebView()
+        self.foregroundPrimaryBuffer = WKWebView()
+        self.foregroundSecondaryBuffer = WKWebView()
+        self.freeloadingBuffer = WKWebView()
+        self.backgroundPrimaryBuffer = WKWebView()
+        self.backgroundSecondaryBuffer = WKWebView()
         self.isPrimaryActive = true
         self.isBkActive = false
         self.isFreeloading = false
@@ -59,18 +61,21 @@ public class DMGPlayerSDK: NSObject, ObservableObject, WKScriptMessageHandler {
         NotificationCenter.default.addObserver(self, selector: #selector(appDidBecomeActive), name: UIApplication.didBecomeActiveNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(appMovedToBackground), name: UIApplication.didEnterBackgroundNotification, object: nil)
         
-        self.primaryWebView = WKWebView(frame: .zero, configuration: config)
-        self.secondaryWebView = WKWebView(frame: .zero, configuration: config)
-        self.bkWebView = WKWebView(frame: .zero, configuration: config)
-        self.freeloaderWebView = WKWebView(frame: .zero, configuration: bkConfig)
-        self.primaryWebView.navigationDelegate = self
-        self.secondaryWebView.navigationDelegate = self
-        self.bkWebView.navigationDelegate = self
-        self.freeloaderWebView.navigationDelegate = self
+        self.foregroundPrimaryBuffer = WKWebView(frame: .zero, configuration: config)
+        self.foregroundSecondaryBuffer = WKWebView(frame: .zero, configuration: config)
+        self.backgroundPrimaryBuffer = WKWebView(frame: .zero, configuration: config)
+        self.backgroundSecondaryBuffer = WKWebView(frame: .zero, configuration: config)
+        self.freeloadingBuffer = WKWebView(frame: .zero, configuration: bkConfig)
+        self.foregroundPrimaryBuffer.navigationDelegate = self
+        self.foregroundSecondaryBuffer.navigationDelegate = self
+        self.backgroundPrimaryBuffer.navigationDelegate = self
+        self.backgroundSecondaryBuffer.navigationDelegate = self
+        self.freeloadingBuffer.navigationDelegate = self
         
         if let url = URL(string: "https://google.com") {
             let request = URLRequest(url: url)
-            self.freeloaderWebView.load(request)
+            self.freeloadingBuffer.load(request)
+            self.backgroundSecondaryBuffer.load(request)
         }
         
         NotificationCenter.default.addObserver(
@@ -82,7 +87,6 @@ public class DMGPlayerSDK: NSObject, ObservableObject, WKScriptMessageHandler {
     }
     
     @objc private func appDidBecomeActive() {
-//        TODO : PiP on foreground if not
         isForeground = true
         print("is Foreground")
         
@@ -107,7 +111,7 @@ public class DMGPlayerSDK: NSObject, ObservableObject, WKScriptMessageHandler {
             """
 
         if isBkActive {
-            bkWebView.evaluateJavaScript(jsCode, completionHandler: { result, error in
+            backgroundPrimaryBuffer.evaluateJavaScript(jsCode, completionHandler: { result, error in
                 if let error = error {
                     print("JavaScript evaluation error: \(error.localizedDescription)")
                 } else {
@@ -204,7 +208,7 @@ public class DMGPlayerSDK: NSObject, ObservableObject, WKScriptMessageHandler {
     public func pause() {
         print(isBkActive, ": bk")
         if isBkActive {
-            bkWebView.evaluateJavaScript(buildPauseJavaScript(), completionHandler: { result, error in
+            backgroundPrimaryBuffer.evaluateJavaScript(buildPauseJavaScript(), completionHandler: { result, error in
                 if let error = error {
                     print("JavaScript evaluation error: \(error.localizedDescription)")
                 } else {
@@ -212,16 +216,16 @@ public class DMGPlayerSDK: NSObject, ObservableObject, WKScriptMessageHandler {
                 }
             })
         } else if isPrimaryActive {
-            primaryWebView.evaluateJavaScript(buildPauseJavaScript(), completionHandler: nil)
+            foregroundPrimaryBuffer.evaluateJavaScript(buildPauseJavaScript(), completionHandler: nil)
         } else {
-            secondaryWebView.evaluateJavaScript(buildPauseJavaScript(), completionHandler: nil)
+            foregroundSecondaryBuffer.evaluateJavaScript(buildPauseJavaScript(), completionHandler: nil)
         }
     }
     
     public func resume() {
         print(isBkActive, ": bk1")
         if isBkActive {
-            bkWebView.evaluateJavaScript(buildPlayJavaScript(), completionHandler: { result, error in
+            backgroundPrimaryBuffer.evaluateJavaScript(buildPlayJavaScript(), completionHandler: { result, error in
                 if let error = error {
                     print("JavaScript evaluation error1: \(error.localizedDescription)")
                 } else {
@@ -229,9 +233,9 @@ public class DMGPlayerSDK: NSObject, ObservableObject, WKScriptMessageHandler {
                 }
             })
         } else if isPrimaryActive {
-            primaryWebView.evaluateJavaScript(buildPlayJavaScript(), completionHandler: nil)
+            foregroundPrimaryBuffer.evaluateJavaScript(buildPlayJavaScript(), completionHandler: nil)
         } else {
-            secondaryWebView.evaluateJavaScript(buildPlayJavaScript(), completionHandler: nil)
+            foregroundSecondaryBuffer.evaluateJavaScript(buildPlayJavaScript(), completionHandler: nil)
         }
     }
     
@@ -249,8 +253,8 @@ public class DMGPlayerSDK: NSObject, ObservableObject, WKScriptMessageHandler {
     }
        
     public func stop() {
-        primaryWebView.loadHTMLString("", baseURL: nil)
-        secondaryWebView.loadHTMLString("", baseURL: nil)
+        foregroundPrimaryBuffer.loadHTMLString("", baseURL: nil)
+        foregroundSecondaryBuffer.loadHTMLString("", baseURL: nil)
     }
 }
 

@@ -49,19 +49,19 @@ extension DMGPlayerSDK {
                     if self.isPrimaryActive == true {
                         self.isPrimaryActive = false
                         self.hasPreloadedNextWebview = false
-                        self.play(webView: self.secondaryWebView)
+                        self.play(webView: self.foregroundSecondaryBuffer)
                     } else if self.isPrimaryActive == false {
                         self.isPrimaryActive = true
                         self.hasPreloadedNextWebview = false
-                        self.play(webView: self.secondaryWebView)
+                        self.play(webView: self.foregroundPrimaryBuffer)
                     }
                 } else {
                     if self.isPrimaryActive == true {
                         self.isPrimaryActive = false
-                        self.play(webView: self.secondaryWebView)
+                        self.play(webView: self.foregroundSecondaryBuffer)
                     } else if self.isPrimaryActive == false {
                         self.isPrimaryActive = true
-                        self.play(webView: self.primaryWebView)
+                        self.play(webView: self.foregroundPrimaryBuffer)
                     }
                 }
                 

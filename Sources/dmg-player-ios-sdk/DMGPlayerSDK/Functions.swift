@@ -8,17 +8,17 @@ extension DMGPlayerSDK {
     func loadBkVideoInPrimaryWebView(url: URL) {
         let request = URLRequest(url: url)
         print("bk load")
-        bkWebView.load(request)
+        backgroundPrimaryBuffer.load(request)
     }
     
     func loadVideoInPrimaryWebView(url: URL) {
         let request = URLRequest(url: url)
-        primaryWebView.load(request)
+        foregroundPrimaryBuffer.load(request)
     }
     
     func loadVideoInSecondaryWebView(url: URL) {
         let request = URLRequest(url: url)
-        secondaryWebView.load(request)
+        foregroundSecondaryBuffer.load(request)
     }
 
     func preloadNextWebView() {
@@ -100,7 +100,7 @@ extension DMGPlayerSDK {
                     let javaScriptString = "window.location.href = '\(url)';"
                     print(javaScriptString, "js")
 
-                    freeloaderWebView.evaluateJavaScript(javaScriptString) { result, error in
+                    freeloadingBuffer.evaluateJavaScript(javaScriptString) { result, error in
                        if let error = error {
                            print("Error injecting the 'load' event listener: \(error.localizedDescription)")
                        } else {
@@ -116,7 +116,7 @@ extension DMGPlayerSDK {
             
             } else {
                 print("STEP 3: EXECUTE TRACK IN WEBVIEW")
-                bkWebView.evaluateJavaScript(buildActiveJavaScript(), completionHandler: { _, error in
+                backgroundPrimaryBuffer.evaluateJavaScript(buildActiveJavaScript(), completionHandler: { _, error in
                     if let error = error {
                         print("Error during Java1Script execution: \(error.localizedDescription)")
                     } else {

@@ -7,65 +7,38 @@ import WebKit
 extension DMGPlayerSDK: WKNavigationDelegate {
     public func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
         if self.isForeground {
-            // Foreground behavior
-            if self.isPrimaryActive && webView == primaryWebView {
+            if self.isPrimaryActive && webView == foregroundPrimaryBuffer {
                 print("WHYY", webView)
                 webView.evaluateJavaScript(buildCommonJavaScript() + buildActiveJavaScript(), completionHandler: nil)
-            } else if self.isPrimaryActive && webView == secondaryWebView {
+            } else if self.isPrimaryActive && webView == foregroundSecondaryBuffer {
                 print("WHYY1", webView)
                 webView.evaluateJavaScript(buildCommonJavaScript() + buildInactiveJavaScript(), completionHandler: nil)
-            } else if !self.isPrimaryActive && webView == primaryWebView {
+            } else if !self.isPrimaryActive && webView == foregroundPrimaryBuffer {
                 print("WHYY2", webView)
                 webView.evaluateJavaScript(buildCommonJavaScript() + buildInactiveJavaScript(), completionHandler: nil)
-            } else if !self.isPrimaryActive && webView == secondaryWebView {
+            } else if !self.isPrimaryActive && webView == foregroundSecondaryBuffer {
                 print("WHYY3", webView)
                 webView.evaluateJavaScript(buildCommonJavaScript() + buildActiveJavaScript(), completionHandler: nil)
-            } else if webView == bkWebView {
+            } else if webView == backgroundPrimaryBuffer {
                 print("Background bkPrimaryWebView loaded")
                 webView.evaluateJavaScript(buildCommonJavaScript() + buildInactiveJavaScript(), completionHandler: nil)
             }
         } else {
-            // Background behavior
-//            if webView == bkPrimaryWebView {
-//                print("Background bkPrimaryWebView loaded")
-//                webView.evaluateJavaScript(buildCommonJavaScript() + buildInactiveJavaScript(), completionHandler: nil)
-//            }
-            // You can add more background-related conditions here if needed.
-            
-            if webView == bkWebView {
+            if webView == backgroundPrimaryBuffer {
                 print("WHYY", webView)
                 webView.evaluateJavaScript(buildCommonJavaScript() + buildInactiveJavaScript(), completionHandler: nil)
-            } else if webView == freeloaderWebView {
+            } else if webView == freeloadingBuffer {
                 webView.evaluateJavaScript(buildCommonJavaScript() + buildActiveJavaScript(), completionHandler: nil)
             }
-//            else if webView == bkSecondaryWebView {
-//                print("WHYY1", webView)
-//                webView.evaluateJavaScript(buildCommonJavaScript() + buildActiveJavaScript(), completionHandler: nil)
-//            }
-//            else if !self.isBkPrimaryActive && webView == bkPrimaryWebView {
-//                print("WHYY2", webView)
-//                webView.evaluateJavaScript(buildCommonJavaScript() + buildActiveJavaScript(), completionHandler: nil)
-//            } else if !self.isBkPrimaryActive && webView == bkSecondaryWebView {
-//                print("WHYY3", webView)
-//                webView.evaluateJavaScript(buildCommonJavaScript() + buildInactiveJavaScript(), completionHandler: nil)
-//            }
-//            else if webView == bkPrimaryWebView {
-//                print("Background bkPrimaryWebView loaded")
-//                webView.evaluateJavaScript(buildCommonJavaScript() + buildInactiveJavaScript(), completionHandler: nil)
-//            }
         }
     }
     
     public func webView(_ webView: WKWebView, didFail navigation: WKNavigation!, withError error: Error) {
-        // Handle navigation failure
         print("Navigation error on webView: \(webView) with error: \(error)")
-        // You can add more specific error handling here
     }
 
     public func webView(_ webView: WKWebView, didFailProvisionalNavigation navigation: WKNavigation!, withError error: Error) {
-        // Handle failure of a provisional navigation
         print("Provisional navigation error on webView: \(webView) with error: \(error)")
-        // You can add more specific error handling here
     }
 }
 
