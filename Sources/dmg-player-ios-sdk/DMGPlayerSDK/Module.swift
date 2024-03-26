@@ -12,6 +12,7 @@ public class DMGPlayerSDK: NSObject, ObservableObject, WKScriptMessageHandler {
     public var bkWebView: WKWebView
     public var index: Int
     public var isPaused: Bool
+    public var buffer: [URL] = []
     @Published var isForeground: Bool = false
     @Published var hasPreloadedNextWebview: Bool = true
     @Published var isPrimaryActive: Bool = true
@@ -22,6 +23,7 @@ public class DMGPlayerSDK: NSObject, ObservableObject, WKScriptMessageHandler {
     
     public override init() {
         self.queue = []
+        self.buffer = []
         self.primaryWebView = WKWebView()
         self.secondaryWebView = WKWebView()
         self.freeloaderWebView = WKWebView()

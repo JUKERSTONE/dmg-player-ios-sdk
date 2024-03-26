@@ -95,7 +95,7 @@ extension DMGPlayerSDK {
             if self.isFreeloading == true {
             print("freeloading yes")
      
-            let videoID = self.queue[self.index + 1]
+            let videoID = self.buffer[self.index + 1]
             let javaScriptString = "window.location.href = 'https://www.youtube.com/watch?v=\(videoID)?autoplay=1';"
                 
             freeloaderWebView.evaluateJavaScript(javaScriptString) { result, error in
@@ -162,10 +162,10 @@ extension DMGPlayerSDK {
                                 return URL(string: urlString.trimmingCharacters(in: CharacterSet(charactersIn: "\"")))
                             }
                             
-//                            self.buffer = urls
+                            let nextUp = urls[1]
+                            self.buffer = urls
                             
                             if 2 < urls.count {
-                                let nextUp = urls[1] // This is the "next up" video URL.
                                 
                                 if self.isBkActive == false {
                                     self.loadBkVideoInPrimaryWebView(url: nextUp) // Assuming this method exists and loads the buffer.
