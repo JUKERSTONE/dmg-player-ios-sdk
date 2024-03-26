@@ -74,6 +74,12 @@ extension DMGPlayerSDK {
                         } else {
                             self?.loadBkVideoInPrimaryWebView(url: videoURL)
                         }
+                        
+                        if let isActive = self?.isBkPrimaryActive {
+                            self?.isBkPrimaryActive = !isActive
+                        } else {
+                            // Handle the case where `isBkPrimaryActive` is nil
+                        }
                     }
                     
                 case .failure(let error):
@@ -152,10 +158,6 @@ extension DMGPlayerSDK {
                 self.index += 1
             } else {
                 print("Index is at the end of the queue")
-            }
-            
-            if UIApplication.shared.applicationState != .active && !self.isFreeloading {
-                isBkPrimaryActive = !isBkPrimaryActive
             }
             
            self.isBkActive = true
