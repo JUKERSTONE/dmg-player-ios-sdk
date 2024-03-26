@@ -10,7 +10,7 @@ public class DMGPlayerSDK: NSObject, ObservableObject, WKScriptMessageHandler {
     public var foregroundSecondaryBuffer: WKWebView
     public var freeloadingBuffer: WKWebView
     public var backgroundPrimaryBuffer: WKWebView
-    public var backgroundSecondaryBuffer: WKWebView
+//    public var backgroundSecondaryBuffer: WKWebView
     public var index: Int
     public var isPaused: Bool
     public var buffer: [URL] = []
@@ -30,7 +30,7 @@ public class DMGPlayerSDK: NSObject, ObservableObject, WKScriptMessageHandler {
         self.foregroundSecondaryBuffer = WKWebView()
         self.freeloadingBuffer = WKWebView()
         self.backgroundPrimaryBuffer = WKWebView()
-        self.backgroundSecondaryBuffer = WKWebView()
+//        self.backgroundSecondaryBuffer = WKWebView()
         self.isPrimaryActive = true
         self.isBkPrimaryActive = true
         self.isBkActive = false
@@ -66,12 +66,12 @@ public class DMGPlayerSDK: NSObject, ObservableObject, WKScriptMessageHandler {
         self.foregroundPrimaryBuffer = WKWebView(frame: .zero, configuration: config)
         self.foregroundSecondaryBuffer = WKWebView(frame: .zero, configuration: config)
         self.backgroundPrimaryBuffer = WKWebView(frame: .zero, configuration: config)
-        self.backgroundSecondaryBuffer = WKWebView(frame: .zero, configuration: config)
+//        self.backgroundSecondaryBuffer = WKWebView(frame: .zero, configuration: config)
         self.freeloadingBuffer = WKWebView(frame: .zero, configuration: bkConfig)
         self.foregroundPrimaryBuffer.navigationDelegate = self
         self.foregroundSecondaryBuffer.navigationDelegate = self
         self.backgroundPrimaryBuffer.navigationDelegate = self
-        self.backgroundSecondaryBuffer.navigationDelegate = self
+//        self.backgroundSecondaryBuffer.navigationDelegate = self
         self.freeloadingBuffer.navigationDelegate = self
         
         if let url = URL(string: "https://google.com") {
