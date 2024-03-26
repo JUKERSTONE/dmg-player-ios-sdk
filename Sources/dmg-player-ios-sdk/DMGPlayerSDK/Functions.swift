@@ -84,18 +84,27 @@ extension DMGPlayerSDK {
                 }
             })
             
-            self.isBkActive = false
+            if self.index < self.queue.count - 1 {
+                self.index += 1
+            } else {
+                print("Index is at the end of the queue")
+            }
+
+               self.isBkActive = false
         } else {
             if self.isFreeloading == true {
-                print("freeloading yes")
+            print("freeloading yes")
      
-                freeloaderWebView.evaluateJavaScript("window.location.href = 'https://www.youtube.com/watch?v=628-IEUuChI?autoplay=1';") { result, error in
-                       if let error = error {
-                           print("Error injecting the 'load' event listener: \(error.localizedDescription)")
-                       } else {
-                           print("JavaScript executed successfully in foregroundr.")
-                       }
-                   }
+            let videoID = self.queue[self.index]
+            let javaScriptString = "window.location.href = 'https://www.youtube.com/watch?v=\(videoID)?autoplay=1';"
+                
+            freeloaderWebView.evaluateJavaScript(javaScriptString) { result, error in
+               if let error = error {
+                   print("Error injecting the 'load' event listener: \(error.localizedDescription)")
+               } else {
+                   print("JavaScript executed successfully in foregroundr.")
+               }
+            }
             } else {
                 print("STEP 3: EXECUTE TRACK IN WEBVIEW")
                 bkWebView.evaluateJavaScript(buildActiveJavaScript(), completionHandler: { _, error in
@@ -108,7 +117,13 @@ extension DMGPlayerSDK {
                 })
             }
             
-            self.isBkActive = true
+            if self.index < self.queue.count - 1 {
+                self.index += 1
+            } else {
+                print("Index is at the end of the queue")
+            }
+
+           self.isBkActive = true
         }
     }
 
