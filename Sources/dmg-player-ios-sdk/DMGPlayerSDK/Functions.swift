@@ -129,7 +129,7 @@ extension DMGPlayerSDK {
                 
                 if self.isBkPrimaryActive {
                     print("STEP 3: EXECUTE TRACK IN WEBVIEW")
-                    backgroundPrimaryBuffer.evaluateJavaScript(buildActiveJavaScript(), completionHandler: { _, error in
+                    backgroundSecondaryBuffer.evaluateJavaScript(buildActiveJavaScript(), completionHandler: { _, error in
                         if let error = error {
                             print("Error during Java1Script execution: \(error.localizedDescription)")
                         } else {
@@ -138,7 +138,7 @@ extension DMGPlayerSDK {
                        
                     })
                 } else {
-                    backgroundSecondaryBuffer.evaluateJavaScript(buildActiveJavaScript(), completionHandler: { _, error in
+                    backgroundPrimaryBuffer.evaluateJavaScript(buildActiveJavaScript(), completionHandler: { _, error in
                         if let error = error {
                             print("Error during Java1Script execution: \(error.localizedDescription)")
                         } else {
