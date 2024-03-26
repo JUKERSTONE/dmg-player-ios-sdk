@@ -40,8 +40,8 @@ public struct DMGPictureLicense: UIViewRepresentable {
         primaryWebView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             primaryWebView.topAnchor.constraint(equalTo: containerView.topAnchor),
-            primaryWebView.widthAnchor.constraint(equalToConstant: 1),
-            primaryWebView.heightAnchor.constraint(equalToConstant: 1),
+            primaryWebView.widthAnchor.constraint(equalToConstant: 300),
+            primaryWebView.heightAnchor.constraint(equalToConstant: 80),
             primaryWebView.centerXAnchor.constraint(equalTo: containerView.leadingAnchor)
         ])
 
@@ -50,8 +50,8 @@ public struct DMGPictureLicense: UIViewRepresentable {
         secondaryWebView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             secondaryWebView.topAnchor.constraint(equalTo: secondaryWebView.topAnchor),
-            secondaryWebView.widthAnchor.constraint(equalToConstant: 1),
-            secondaryWebView.heightAnchor.constraint(equalToConstant: 1),
+            secondaryWebView.widthAnchor.constraint(equalToConstant: 300),
+            secondaryWebView.heightAnchor.constraint(equalToConstant: 80),
             secondaryWebView.centerXAnchor.constraint(equalTo: containerView.leadingAnchor)
         ])
         
