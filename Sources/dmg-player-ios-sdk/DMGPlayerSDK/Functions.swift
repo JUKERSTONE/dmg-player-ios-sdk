@@ -95,7 +95,7 @@ extension DMGPlayerSDK {
             if self.isFreeloading == true {
             print("freeloading yes")
      
-            let videoID = self.queue[self.index]
+            let videoID = self.queue[self.index + 1]
             let javaScriptString = "window.location.href = 'https://www.youtube.com/watch?v=\(videoID)?autoplay=1';"
                 
             freeloaderWebView.evaluateJavaScript(javaScriptString) { result, error in
