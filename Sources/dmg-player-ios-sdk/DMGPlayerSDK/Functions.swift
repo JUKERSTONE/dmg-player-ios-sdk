@@ -154,8 +154,8 @@ extension DMGPlayerSDK {
                 print("Index is at the end of the queue")
             }
             
-            if UIApplication.shared.applicationState != .active {
-                self.isBkPrimaryActive == !self.isBkPrimaryActive
+            if UIApplication.shared.applicationState != .active && !self.isFreeloading {
+                self.isBkPrimaryActive = !self.isBkPrimaryActive
             }
             
            self.isBkActive = true
