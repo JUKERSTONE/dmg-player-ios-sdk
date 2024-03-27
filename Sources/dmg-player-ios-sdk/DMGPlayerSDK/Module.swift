@@ -42,8 +42,6 @@ public class DMGPlayerSDK: NSObject, ObservableObject, WKScriptMessageHandler {
 
         super.init()
         
-//        configureAudioSession()
-        
         let preferences = WKPreferences()
         let config = WKWebViewConfiguration()
         let bkConfig = WKWebViewConfiguration()
@@ -134,16 +132,6 @@ public class DMGPlayerSDK: NSObject, ObservableObject, WKScriptMessageHandler {
         isForeground = false
         print("is Background")
     }
-    
-//    private func configureAudioSession() {
-//        do {
-//            try AVAudioSession.sharedInstance().setCategory(.playback, mode: .default, options: [])
-//            try AVAudioSession.sharedInstance().setActive(true)
-//        } catch {
-//            print("Failed to configure the audio session: \(error.localizedDescription)")
-//        }
-//    }
-
     
     public func playNow(isrc: String) {
             self.isBufferActive = false

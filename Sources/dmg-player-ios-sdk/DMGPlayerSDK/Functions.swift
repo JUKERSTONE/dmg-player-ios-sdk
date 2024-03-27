@@ -8,7 +8,7 @@ extension DMGPlayerSDK {
     func loadRunner(webView: WKWebView) {
         let url = self.buffer[self.index + 1]
         let javaScriptString = "window.location.href = '\(url)';"
-        // isFreeloading primary?
+
         webView.evaluateJavaScript(javaScriptString) { result, error in
             if let error = error {
                 print("Error injecting the 'load' event listener: \(error.localizedDescription)")
@@ -54,17 +54,13 @@ extension DMGPlayerSDK {
         } else {
             if self.isFreeRunning == true {
                 if self.index + 1 < self.buffer.count {
-                    let url = self.buffer[self.index + 1]
-                    let javaScriptString = "window.location.href = '\(url)';"
-                    // isFreeloading primary?
-                    backgroundRunningPrimaryBuffer.evaluateJavaScript(javaScriptString) { result, error in
-                       if let error = error {
-                           print("Error injecting the 'load' event listener: \(error.localizedDescription)")
-                       } else {
-                           print("JavaScript executed successfully in foregroundr.")
-                       }
+                    if self.isPrimaryRunnerActive {
+                        self.loadRunner(webView: self.backgroundRunningPrimaryBuffer)
+                        self.isPrimaryRunnerActive = false
+                    } else {
+                        self.loadRunner(webView: self.backgroundRunningSecondaryBuffer)
+                        self.isPrimaryRunnerActive = true
                     }
-
                 } else {
                     print("Index is out of range of the buffer array")
                 }
