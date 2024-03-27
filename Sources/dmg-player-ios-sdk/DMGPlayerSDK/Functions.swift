@@ -5,10 +5,10 @@ import WebKit
 
 @available(iOS 13.0, *)
 extension DMGPlayerSDK {
-    func loadBkVideoInPrimaryWebView(url: URL) {
+    func loadBkBuffer(url: URL) {
         let request = URLRequest(url: url)
         print("bk load")
-        backgroundPrimaryBuffer.load(request)
+        backgroundBuffer.load(request)
     }
     
     func loadVideoInPrimaryWebView(url: URL) {
@@ -43,8 +43,8 @@ extension DMGPlayerSDK {
                 if self.index + 1 < self.buffer.count {
                     let url = self.buffer[self.index + 1]
                     let javaScriptString = "window.location.href = '\(url)';"
-
-                    freeloadingBuffer.evaluateJavaScript(javaScriptString) { result, error in
+                    // isFreeloading primary?
+                    backgroundRunningPrimaryBuffer.evaluateJavaScript(javaScriptString) { result, error in
                        if let error = error {
                            print("Error injecting the 'load' event listener: \(error.localizedDescription)")
                        } else {
@@ -56,7 +56,7 @@ extension DMGPlayerSDK {
                     print("Index is out of range of the buffer array")
                 }
             } else {
-                backgroundPrimaryBuffer.evaluateJavaScript(buildActiveJavaScript(), completionHandler: { _, error in
+                backgroundBuffer.evaluateJavaScript(buildActiveJavaScript(), completionHandler: { _, error in
                     if let error = error {
                         print("Error during Java1Script execution: \(error.localizedDescription)")
                     } else {
@@ -111,7 +111,7 @@ extension DMGPlayerSDK {
                             if 2 < urls.count {
                                 
                                 if self.isBkActive == false {
-                                    self.loadBkVideoInPrimaryWebView(url: nextUp)
+                                    self.loadBkBuffer(url: nextUp)
                                 }
                                 
                                 if self.isPrimaryActive {

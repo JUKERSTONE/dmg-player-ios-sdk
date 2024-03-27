@@ -14,26 +14,6 @@ public struct DMGPictureLicense: UIViewRepresentable {
     public func makeUIView(context: Context) -> UIView {
         let containerView = UIView()
         
-        let freeloadingBuffer = sdk.freeloadingBuffer
-        containerView.addSubview(freeloadingBuffer)
-        freeloadingBuffer.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            freeloadingBuffer.topAnchor.constraint(equalTo: containerView.topAnchor),
-            freeloadingBuffer.widthAnchor.constraint(equalToConstant: 1),
-            freeloadingBuffer.heightAnchor.constraint(equalToConstant: 1),
-            freeloadingBuffer.centerXAnchor.constraint(equalTo: containerView.leadingAnchor)
-        ])
-        
-        let backgroundPrimaryBuffer = sdk.backgroundPrimaryBuffer
-        containerView.addSubview(backgroundPrimaryBuffer)
-        backgroundPrimaryBuffer.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            backgroundPrimaryBuffer.topAnchor.constraint(equalTo: containerView.topAnchor),
-            backgroundPrimaryBuffer.widthAnchor.constraint(equalToConstant: 1),
-            backgroundPrimaryBuffer.heightAnchor.constraint(equalToConstant: 1),
-            backgroundPrimaryBuffer.centerXAnchor.constraint(equalTo: containerView.leadingAnchor)
-        ])
-        
         let foregroundPrimaryBuffer = sdk.foregroundPrimaryBuffer
         containerView.addSubview(foregroundPrimaryBuffer)
         foregroundPrimaryBuffer.translatesAutoresizingMaskIntoConstraints = false
@@ -42,17 +22,47 @@ public struct DMGPictureLicense: UIViewRepresentable {
             foregroundPrimaryBuffer.widthAnchor.constraint(equalToConstant: 1),
             foregroundPrimaryBuffer.heightAnchor.constraint(equalToConstant: 1),
             foregroundPrimaryBuffer.centerXAnchor.constraint(equalTo: containerView.leadingAnchor)
-        ])
+       ])
 
         let foregroundSecondaryBuffer = sdk.foregroundSecondaryBuffer
         containerView.addSubview(foregroundSecondaryBuffer)
         foregroundSecondaryBuffer.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            foregroundSecondaryBuffer.topAnchor.constraint(equalTo: foregroundSecondaryBuffer.topAnchor),
+            foregroundSecondaryBuffer.topAnchor.constraint(equalTo: containerView.topAnchor),
             foregroundSecondaryBuffer.widthAnchor.constraint(equalToConstant: 1),
             foregroundSecondaryBuffer.heightAnchor.constraint(equalToConstant: 1),
             foregroundSecondaryBuffer.centerXAnchor.constraint(equalTo: containerView.leadingAnchor)
-        ])
+       ])
+        
+        let backgroundPrimaryBuffer = sdk.backgroundBuffer
+        containerView.addSubview(backgroundPrimaryBuffer)
+        backgroundPrimaryBuffer.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            backgroundPrimaryBuffer.topAnchor.constraint(equalTo: containerView.topAnchor),
+            backgroundPrimaryBuffer.widthAnchor.constraint(equalToConstant: 1),
+            backgroundPrimaryBuffer.heightAnchor.constraint(equalToConstant: 1),
+            backgroundPrimaryBuffer.centerXAnchor.constraint(equalTo: containerView.leadingAnchor)
+       ])
+        
+        let backgroundRunningPrimaryBuffer = sdk.backgroundRunningPrimaryBuffer
+        containerView.addSubview(backgroundRunningPrimaryBuffer)
+        backgroundRunningPrimaryBuffer.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            backgroundRunningPrimaryBuffer.topAnchor.constraint(equalTo: containerView.topAnchor),
+            backgroundRunningPrimaryBuffer.widthAnchor.constraint(equalToConstant: 1),
+            backgroundRunningPrimaryBuffer.heightAnchor.constraint(equalToConstant: 1),
+            backgroundRunningPrimaryBuffer.centerXAnchor.constraint(equalTo: containerView.leadingAnchor)
+       ])
+        
+        let backgroundRunningSecondaryBuffer = sdk.backgroundRunningSecondaryBuffer
+        containerView.addSubview(backgroundRunningSecondaryBuffer)
+        backgroundRunningSecondaryBuffer.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            backgroundRunningSecondaryBuffer.topAnchor.constraint(equalTo: containerView.topAnchor),
+            backgroundRunningSecondaryBuffer.widthAnchor.constraint(equalToConstant: 1),
+            backgroundRunningSecondaryBuffer.heightAnchor.constraint(equalToConstant: 1),
+            backgroundRunningSecondaryBuffer.centerXAnchor.constraint(equalTo: containerView.leadingAnchor)
+       ])
         
         return containerView
     }

@@ -15,13 +15,15 @@ extension DMGPlayerSDK: WKNavigationDelegate {
                 webView.evaluateJavaScript(buildCommonJavaScript() + buildInactiveJavaScript(), completionHandler: nil)
             } else if !self.isPrimaryActive && webView == foregroundSecondaryBuffer {
                 webView.evaluateJavaScript(buildCommonJavaScript() + buildActiveJavaScript(), completionHandler: nil)
-            } else if webView == backgroundPrimaryBuffer {
+            } else if webView == backgroundBuffer {
                 webView.evaluateJavaScript(buildCommonJavaScript() + buildInactiveJavaScript(), completionHandler: nil)
             }
         } else {
-            if webView == backgroundPrimaryBuffer {
+            if webView == backgroundBuffer {
                 webView.evaluateJavaScript(buildCommonJavaScript() + buildInactiveJavaScript(), completionHandler: nil)
-            } else if webView == freeloadingBuffer {
+            } else if webView == backgroundRunningPrimaryBuffer {
+                webView.evaluateJavaScript(buildCommonJavaScript() + buildActiveJavaScript(), completionHandler: nil)
+            } else if webView == backgroundRunningSecondaryBuffer {
                 webView.evaluateJavaScript(buildCommonJavaScript() + buildActiveJavaScript(), completionHandler: nil)
             }
         }

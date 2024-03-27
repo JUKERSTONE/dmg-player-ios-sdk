@@ -6,73 +6,83 @@ import AVFoundation
 
 @available(iOS 13.0, *)
 public class DMGPlayerSDK: NSObject, ObservableObject, WKScriptMessageHandler {
-    public var foregroundPrimaryBuffer: WKWebView
-    public var foregroundSecondaryBuffer: WKWebView
-    public var freeloadingBuffer: WKWebView
-    public var backgroundPrimaryBuffer: WKWebView
+    
     public var index: Int
     public var isPaused: Bool
     public var buffer: [URL] = []
+    public var backgroundBuffer: WKWebView
+    public var foregroundPrimaryBuffer: WKWebView
+    public var foregroundSecondaryBuffer: WKWebView
+    public var backgroundRunningPrimaryBuffer: WKWebView
+    public var backgroundRunningSecondaryBuffer: WKWebView
     @Published var isForeground: Bool = false
+    @Published var hasBkPreloadedNextWebview: Bool = true
     @Published var hasPreloadedNextWebview: Bool = true
-    @Published var isPrimaryActive: Bool = true
     @Published var isBkPrimaryActive: Bool = true
+    @Published var isPrimaryActive: Bool = true
     @Published var isFreeloading: Bool = false
     @Published var isBkActive: Bool = false
-    @Published var hasBkPreloadedNextWebview: Bool = true
     @Published var queue: [String] = []
     
     public override init() {
+        self.index = 0
         self.queue = []
         self.buffer = []
-        self.foregroundPrimaryBuffer = WKWebView()
-        self.foregroundSecondaryBuffer = WKWebView()
-        self.freeloadingBuffer = WKWebView()
-        self.backgroundPrimaryBuffer = WKWebView()
-        self.isPrimaryActive = true
-        self.isBkPrimaryActive = true
+        self.isPaused = false
         self.isBkActive = false
         self.isFreeloading = false
-        self.index = 0
-        self.isPaused = false
+        self.isPrimaryActive = true
+        self.isBkPrimaryActive = true
+        self.backgroundBuffer = WKWebView()
+        self.foregroundPrimaryBuffer = WKWebView()
+        self.foregroundSecondaryBuffer = WKWebView()
+        self.backgroundRunningPrimaryBuffer = WKWebView()
+        self.backgroundRunningSecondaryBuffer = WKWebView()
 
         super.init()
-
-        configureAudioSession()
+        
+//        configureAudioSession()
+        
+        let preferences = WKPreferences()
         let config = WKWebViewConfiguration()
         let bkConfig = WKWebViewConfiguration()
         let userContentController = WKUserContentController()
-        let preferences = WKPreferences()
+        
         userContentController.add(self, name: "player")
-        config.userContentController = userContentController
+        
         config.preferences = preferences
-        config.preferences.javaScriptEnabled = true
-        config.preferences.javaScriptCanOpenWindowsAutomatically = true
+        config.userContentController = userContentController
         config.allowsInlineMediaPlayback = true
+        config.preferences.javaScriptEnabled = true
         config.allowsPictureInPictureMediaPlayback = true
-        bkConfig.userContentController = userContentController
+        config.preferences.javaScriptCanOpenWindowsAutomatically = true
+        
         bkConfig.preferences = preferences
-        bkConfig.preferences.javaScriptEnabled = true
-        bkConfig.preferences.javaScriptCanOpenWindowsAutomatically = true
+        bkConfig.userContentController = userContentController
         bkConfig.allowsInlineMediaPlayback = true
+        bkConfig.preferences.javaScriptEnabled = true
         bkConfig.allowsPictureInPictureMediaPlayback = true
         bkConfig.mediaTypesRequiringUserActionForPlayback = []
+        bkConfig.preferences.javaScriptCanOpenWindowsAutomatically = true
         
         NotificationCenter.default.addObserver(self, selector: #selector(appDidBecomeActive), name: UIApplication.didBecomeActiveNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(appMovedToBackground), name: UIApplication.didEnterBackgroundNotification, object: nil)
         
         self.foregroundPrimaryBuffer = WKWebView(frame: .zero, configuration: config)
         self.foregroundSecondaryBuffer = WKWebView(frame: .zero, configuration: config)
-        self.backgroundPrimaryBuffer = WKWebView(frame: .zero, configuration: config)
-        self.freeloadingBuffer = WKWebView(frame: .zero, configuration: bkConfig)
+        self.backgroundRunningPrimaryBuffer = WKWebView(frame: .zero, configuration: bkConfig)
+        self.backgroundRunningSecondaryBuffer = WKWebView(frame: .zero, configuration: bkConfig)
+        self.backgroundBuffer = WKWebView(frame: .zero, configuration: config)
         self.foregroundPrimaryBuffer.navigationDelegate = self
         self.foregroundSecondaryBuffer.navigationDelegate = self
-        self.backgroundPrimaryBuffer.navigationDelegate = self
-        self.freeloadingBuffer.navigationDelegate = self
+        self.backgroundBuffer.navigationDelegate = self
+        self.backgroundRunningPrimaryBuffer.navigationDelegate = self
+        self.backgroundRunningSecondaryBuffer.navigationDelegate = self
         
         if let url = URL(string: "https://google.com") {
             let request = URLRequest(url: url)
-            self.freeloadingBuffer.load(request)
+            self.backgroundRunningPrimaryBuffer.load(request)
+            self.backgroundRunningSecondaryBuffer.load(request)
         }
         
         NotificationCenter.default.addObserver(
@@ -108,7 +118,8 @@ public class DMGPlayerSDK: NSObject, ObservableObject, WKScriptMessageHandler {
             """
 
         if isBkActive {
-            backgroundPrimaryBuffer.evaluateJavaScript(jsCode, completionHandler: { result, error in
+            // isfreeloading?
+            backgroundBuffer.evaluateJavaScript(jsCode, completionHandler: { result, error in
                 if let error = error {
                     print("JavaScript evaluation error: \(error.localizedDescription)")
                 } else {
@@ -123,14 +134,14 @@ public class DMGPlayerSDK: NSObject, ObservableObject, WKScriptMessageHandler {
         print("is Background")
     }
     
-    private func configureAudioSession() {
-        do {
-            try AVAudioSession.sharedInstance().setCategory(.playback, mode: .default, options: [])
-            try AVAudioSession.sharedInstance().setActive(true)
-        } catch {
-            print("Failed to configure the audio session: \(error.localizedDescription)")
-        }
-    }
+//    private func configureAudioSession() {
+//        do {
+//            try AVAudioSession.sharedInstance().setCategory(.playback, mode: .default, options: [])
+//            try AVAudioSession.sharedInstance().setActive(true)
+//        } catch {
+//            print("Failed to configure the audio session: \(error.localizedDescription)")
+//        }
+//    }
 
     
     public func playNow(isrc: String) {
@@ -195,7 +206,8 @@ public class DMGPlayerSDK: NSObject, ObservableObject, WKScriptMessageHandler {
     public func pause() {
         if isBkActive {
             if isFreeloading {
-                freeloadingBuffer.evaluateJavaScript(buildPauseJavaScript(), completionHandler: { result, error in
+                // isFreeloading primary?
+                backgroundRunningPrimaryBuffer.evaluateJavaScript(buildPauseJavaScript(), completionHandler: { result, error in
                     if let error = error {
                         print("JavaScript evaluation error: \(error.localizedDescription)")
                     } else {
@@ -203,7 +215,7 @@ public class DMGPlayerSDK: NSObject, ObservableObject, WKScriptMessageHandler {
                     }
                 })
             } else {
-                backgroundPrimaryBuffer.evaluateJavaScript(buildPauseJavaScript(), completionHandler: { result, error in
+                backgroundBuffer.evaluateJavaScript(buildPauseJavaScript(), completionHandler: { result, error in
                     if let error = error {
                         print("JavaScript evaluation error: \(error.localizedDescription)")
                     } else {
@@ -221,7 +233,8 @@ public class DMGPlayerSDK: NSObject, ObservableObject, WKScriptMessageHandler {
     public func resume() {
         if isBkActive {
             if isFreeloading {
-                freeloadingBuffer.evaluateJavaScript(buildPlayJavaScript(), completionHandler: { result, error in
+                // isFreeloading primary?
+                backgroundRunningPrimaryBuffer.evaluateJavaScript(buildPlayJavaScript(), completionHandler: { result, error in
                     if let error = error {
                         print("JavaScript evaluation error: \(error.localizedDescription)")
                     } else {
@@ -229,7 +242,7 @@ public class DMGPlayerSDK: NSObject, ObservableObject, WKScriptMessageHandler {
                     }
                 })
             } else {
-                backgroundPrimaryBuffer.evaluateJavaScript(buildPlayJavaScript(), completionHandler: { result, error in
+                backgroundBuffer.evaluateJavaScript(buildPlayJavaScript(), completionHandler: { result, error in
                     if let error = error {
                         print("JavaScript evaluation error: \(error.localizedDescription)")
                     } else {
@@ -260,8 +273,9 @@ public class DMGPlayerSDK: NSObject, ObservableObject, WKScriptMessageHandler {
     public func stop() {
         foregroundPrimaryBuffer.loadHTMLString("", baseURL: nil)
         foregroundSecondaryBuffer.loadHTMLString("", baseURL: nil)
-        backgroundPrimaryBuffer.loadHTMLString("", baseURL: nil)
-        freeloadingBuffer.loadHTMLString("", baseURL: nil)
+        backgroundBuffer.loadHTMLString("", baseURL: nil)
+        backgroundRunningPrimaryBuffer.loadHTMLString("", baseURL: nil)
+        backgroundRunningSecondaryBuffer.loadHTMLString("", baseURL: nil)
     }
 }
 
