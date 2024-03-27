@@ -30,14 +30,24 @@ extension DMGPlayerSDK {
 
             switch eventType {
             case "videoProgress":
-                if let progressData = messageDict["data"] as? Double {
-                    print(progressData, "pg")
-//                    if progressData > 80.0 && !self.hasPreloadedNextWebview {
-////                        self.preloadNextWebView()
-////                        self.hasPreloadedNextWebview = true
-//                    }
+                if let dataDict = messageDict["data"] as? [String: Any] {
+                    if let progress = dataDict["progress"] as? Double,
+                       let currentTime = dataDict["currentTime"] as? Double,
+                       let duration = dataDict["duration"] as? Double {
+                        
+                        print("Progress: \(progress)%")
+                        print("Current Time: \(currentTime) seconds")
+                        print("Duration: \(duration) seconds")
+
+                        if progress >= 80.0 && !self.hasPreloadedNextWebview {
+//                            self.preloadNextWebview()
+//                            self.hasPreloadedNextWebview = true
+                        }
+                    } else {
+                        print("The 'data' for 'videoProgress' does not contain valid 'progress', 'currentTime', or 'duration'.")
+                    }
                 } else {
-                    print("The 'data' for 'videoProgress' is not a Double or not present in the message body.")
+                    print("The 'data' for 'videoProgress' is not a dictionary or not present in the message body.")
                 }
             case "enablePiP":
                 if let data = messageDict["data"] as? Double {

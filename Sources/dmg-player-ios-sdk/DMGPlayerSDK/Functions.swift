@@ -201,9 +201,17 @@ public func buildCommonJavaScript() -> String {
         });
         
         window.trakStarVideo.addEventListener('timeupdate', () => {
+            const currentTime = window.trakStarVideo.currentTime;
+            const duration = window.trakStarVideo.duration;
+            const progress = (currentTime / duration) * 100; // This calculates the progress percentage
+
             window.webkit.messageHandlers.player.postMessage(JSON.stringify({
                 eventType: 'videoProgress',
-                data: (window.trakStarVideo.currentTime / window.trakStarVideo.duration) * 100
+                data: {
+                    currentTime: currentTime, // Current time of the video in seconds
+                    duration: duration,       // Total duration of the video in seconds
+                    progress: progress        // Progress percentage of the video
+                }
             }));
         });
         
