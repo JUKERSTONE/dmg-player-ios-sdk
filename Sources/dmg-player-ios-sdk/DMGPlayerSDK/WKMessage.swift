@@ -42,6 +42,10 @@ extension DMGPlayerSDK {
                         if progress >= 80.0 && !self.hasPreloadedNextWebview {
 //                            self.preloadNextWebview()
 //                            self.hasPreloadedNextWebview = true
+                        } else if currentTime >= duration - 5 {
+                            print("free run")
+//                            self.preloadNextWebview()
+//                            self.hasPreloadedNextWebview = true
                         }
                     } else {
                         print("The 'data' for 'videoProgress' does not contain valid 'progress', 'currentTime', or 'duration'.")

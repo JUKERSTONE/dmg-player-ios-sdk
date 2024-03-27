@@ -5,18 +5,18 @@ import WebKit
 
 @available(iOS 13.0, *)
 extension DMGPlayerSDK {
-    func loadBkBuffer(url: URL) {
+    func loadBackgroundBuffer(url: URL) {
         let request = URLRequest(url: url)
         print("bk load")
         backgroundBuffer.load(request)
     }
     
-    func loadVideoInPrimaryWebView(url: URL) {
+    func loadPrimaryBuffer(url: URL) {
         let request = URLRequest(url: url)
         foregroundPrimaryBuffer.load(request)
     }
     
-    func loadVideoInSecondaryWebView(url: URL) {
+    func loadSecondaryBuffer(url: URL) {
         let request = URLRequest(url: url)
         foregroundSecondaryBuffer.load(request)
     }
@@ -111,13 +111,13 @@ extension DMGPlayerSDK {
                             if 2 < urls.count {
                                 
                                 if self.isBkActive == false {
-                                    self.loadBkBuffer(url: nextUp)
+                                    self.loadBackgroundBuffer(url: nextUp)
                                 }
                                 
                                 if self.isPrimaryActive {
-                                    self.loadVideoInSecondaryWebView(url: nextUp)
+                                    self.loadSecondaryBuffer(url: nextUp)
                                 } else {
-                                    self.loadVideoInPrimaryWebView(url: nextUp)
+                                    self.loadPrimaryBuffer(url: nextUp)
                                 }
                             }
                         }

@@ -174,9 +174,9 @@ public class DMGPlayerSDK: NSObject, ObservableObject, WKScriptMessageHandler {
                     
                         DispatchQueue.main.async { [weak self] in
                             if self?.isPrimaryActive == true {
-                                self?.loadVideoInPrimaryWebView(url: videoURL)
+                                self?.loadPrimaryBuffer(url: videoURL)
                             } else {
-                            	self?.loadVideoInSecondaryWebView(url: videoURL)
+                            	self?.loadSecondaryBuffer(url: videoURL)
                             }
 
                         }
