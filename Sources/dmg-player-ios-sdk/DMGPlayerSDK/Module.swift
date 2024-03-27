@@ -15,14 +15,16 @@ public class DMGPlayerSDK: NSObject, ObservableObject, WKScriptMessageHandler {
     public var foregroundSecondaryBuffer: WKWebView
     public var backgroundRunningPrimaryBuffer: WKWebView
     public var backgroundRunningSecondaryBuffer: WKWebView
+    
+    @Published var queue: [String] = []
     @Published var isForeground: Bool = false
-    @Published var hasPreloadedNextWebview: Bool = true
-    @Published var hasLoadedNextRunner: Bool = false
-    @Published var isPrimaryRunnerActive: Bool = true
-    @Published var isPrimaryActive: Bool = true
     @Published var isFreeRunning: Bool = false
     @Published var isBufferActive: Bool = false
-    @Published var queue: [String] = []
+    @Published var isPrimaryActive: Bool = true
+    @Published var hasLoadedNextRunner: Bool = false
+    @Published var isPrimaryRunnerActive: Bool = true
+    @Published var hasPreloadedNextWebview: Bool = true
+    
     
     public override init() {
         self.index = 0
@@ -32,8 +34,8 @@ public class DMGPlayerSDK: NSObject, ObservableObject, WKScriptMessageHandler {
         self.isBufferActive = false
         self.isFreeRunning = false
         self.isPrimaryActive = true
-        self.isPrimaryRunnerActive = true
         self.hasLoadedNextRunner = false
+        self.isPrimaryRunnerActive = true
         self.backgroundBuffer = WKWebView()
         self.foregroundPrimaryBuffer = WKWebView()
         self.foregroundSecondaryBuffer = WKWebView()
@@ -45,8 +47,8 @@ public class DMGPlayerSDK: NSObject, ObservableObject, WKScriptMessageHandler {
         let preferences = WKPreferences()
         let config = WKWebViewConfiguration()
         let bkConfig = WKWebViewConfiguration()
-        let userContentController = WKUserContentController()
         
+        let userContentController = WKUserContentController()
         userContentController.add(self, name: "player")
         
         config.preferences = preferences
@@ -64,19 +66,18 @@ public class DMGPlayerSDK: NSObject, ObservableObject, WKScriptMessageHandler {
         bkConfig.mediaTypesRequiringUserActionForPlayback = []
         bkConfig.preferences.javaScriptCanOpenWindowsAutomatically = true
         
-        NotificationCenter.default.addObserver(self, selector: #selector(appDidBecomeActive), name: UIApplication.didBecomeActiveNotification, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(appMovedToBackground), name: UIApplication.didEnterBackgroundNotification, object: nil)
         
-        self.foregroundPrimaryBuffer = WKWebView(frame: .zero, configuration: config)
-        self.foregroundSecondaryBuffer = WKWebView(frame: .zero, configuration: config)
-        self.backgroundRunningPrimaryBuffer = WKWebView(frame: .zero, configuration: bkConfig)
         self.backgroundRunningSecondaryBuffer = WKWebView(frame: .zero, configuration: bkConfig)
+        self.backgroundRunningPrimaryBuffer = WKWebView(frame: .zero, configuration: bkConfig)
+        self.foregroundSecondaryBuffer = WKWebView(frame: .zero, configuration: config)
+        self.foregroundPrimaryBuffer = WKWebView(frame: .zero, configuration: config)
         self.backgroundBuffer = WKWebView(frame: .zero, configuration: config)
-        self.foregroundPrimaryBuffer.navigationDelegate = self
-        self.foregroundSecondaryBuffer.navigationDelegate = self
-        self.backgroundBuffer.navigationDelegate = self
-        self.backgroundRunningPrimaryBuffer.navigationDelegate = self
+    
         self.backgroundRunningSecondaryBuffer.navigationDelegate = self
+        self.backgroundRunningPrimaryBuffer.navigationDelegate = self
+        self.foregroundSecondaryBuffer.navigationDelegate = self
+        self.foregroundPrimaryBuffer.navigationDelegate = self
+        self.backgroundBuffer.navigationDelegate = self
         
         if let url = URL(string: "https://google.com") {
             let request = URLRequest(url: url)
@@ -84,13 +85,10 @@ public class DMGPlayerSDK: NSObject, ObservableObject, WKScriptMessageHandler {
             self.backgroundRunningSecondaryBuffer.load(request)
         }
         
-        NotificationCenter.default.addObserver(
-            self,
-            selector: #selector(appMovedToBackground),
-            name: UIApplication.didEnterBackgroundNotification,
-            object: nil
-        )
+        NotificationCenter.default.addObserver(self, selector: #selector(appDidBecomeActive), name: UIApplication.didBecomeActiveNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(appMovedToBackground), name: UIApplication.didEnterBackgroundNotification, object: nil)
     }
+    
     
     @objc private func appDidBecomeActive() {
         isForeground = true

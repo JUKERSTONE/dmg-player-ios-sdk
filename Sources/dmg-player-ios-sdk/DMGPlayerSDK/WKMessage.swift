@@ -39,6 +39,7 @@ extension DMGPlayerSDK {
                             self.hasLoadedNextRunner = false
 //                            self.preloadNextWebview()
 //                            self.hasPreloadedNextWebview = true
+                            print("posible: ->")
                         } else if currentTime >= duration - 5 && !hasLoadedNextRunner {
                             print("runway")
                             if self.isFreeRunning {
@@ -68,7 +69,7 @@ extension DMGPlayerSDK {
                 }
             case "videoEnded":
                 if self.isFreeRunning {
-                    return
+                    return print("RETURN Free running video end")
                 }
                 
                 if self.isPrimaryActive {
