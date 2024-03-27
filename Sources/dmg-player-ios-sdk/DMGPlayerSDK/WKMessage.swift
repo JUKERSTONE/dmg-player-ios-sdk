@@ -51,8 +51,8 @@ extension DMGPlayerSDK {
                                     self.loadRunner(webView: self.backgroundRunningSecondaryBuffer)
                                     self.isPrimaryRunnerActive = true
                                 }
+                                self.hasLoadedNextRunner = true
                             }
-                            self.hasLoadedNextRunner = true
                         }
                     } else {
                         print("The 'data' for 'videoProgress' does not contain valid 'progress', 'currentTime', or 'duration'.")
@@ -67,6 +67,10 @@ extension DMGPlayerSDK {
                     print("Error PiP")
                 }
             case "videoEnded":
+                if self.isFreeRunning {
+                    return
+                }
+                
                 if self.isPrimaryActive {
                     self.isPrimaryActive = false
                     if hasPreloadedNextWebview {
