@@ -40,6 +40,7 @@ extension DMGPlayerSDK {
 //                            self.preloadNextWebview()
 //                            self.hasPreloadedNextWebview = true
                         } else if currentTime >= duration - 5 && !hasLoadedNextRunner {
+                            print("runway")
                             if self.isFreeRunning {
                                 if self.isPrimaryRunnerActive {
                                     print("pri.runner")
