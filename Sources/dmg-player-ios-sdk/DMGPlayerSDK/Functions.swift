@@ -5,6 +5,19 @@ import WebKit
 
 @available(iOS 13.0, *)
 extension DMGPlayerSDK {
+    func loadRunner(webView: WKWebView) {
+        let url = self.buffer[self.index + 1]
+        let javaScriptString = "window.location.href = '\(url)';"
+        // isFreeloading primary?
+        webView.evaluateJavaScript(javaScriptString) { result, error in
+            if let error = error {
+                print("Error injecting the 'load' event listener: \(error.localizedDescription)")
+            } else {
+                print("JavaScript executed successfully in foregroundr.")
+            }
+        }
+    }
+    
     func loadBackgroundBuffer(url: URL) {
         let request = URLRequest(url: url)
         print("bk load")
@@ -37,9 +50,9 @@ extension DMGPlayerSDK {
                 print("Index is at the end of the queue")
             }
 
-               self.isBkActive = false
+               self.isBufferActive = false
         } else {
-            if self.isFreeloading == true {
+            if self.isFreeRunning == true {
                 if self.index + 1 < self.buffer.count {
                     let url = self.buffer[self.index + 1]
                     let javaScriptString = "window.location.href = '\(url)';"
@@ -64,7 +77,7 @@ extension DMGPlayerSDK {
                     }
                 })
                 
-                self.isFreeloading = true
+                self.isFreeRunning = true
             }
             
             if self.index < self.queue.count - 1 {
@@ -73,7 +86,7 @@ extension DMGPlayerSDK {
                 print("Index is at the end of the queue")
             }
             
-           self.isBkActive = true
+           self.isBufferActive = true
         }
     }
 
@@ -110,7 +123,7 @@ extension DMGPlayerSDK {
                             
                             if 2 < urls.count {
                                 
-                                if self.isBkActive == false {
+                                if self.isBufferActive == false {
                                     self.loadBackgroundBuffer(url: nextUp)
                                 }
                                 

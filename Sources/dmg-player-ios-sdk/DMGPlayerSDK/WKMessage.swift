@@ -42,10 +42,17 @@ extension DMGPlayerSDK {
                         if progress >= 80.0 && !self.hasPreloadedNextWebview {
 //                            self.preloadNextWebview()
 //                            self.hasPreloadedNextWebview = true
-                        } else if currentTime >= duration - 5 {
-                            print("free run")
-//                            self.preloadNextWebview()
-//                            self.hasPreloadedNextWebview = true
+                        } else if currentTime >= duration - 5 && !hasLoadedNextRunner {
+                            if self.isFreeRunning {
+                                if self.isPrimaryRunnerActive {
+                                    self.loadRunner(webView: self.backgroundRunningPrimaryBuffer)
+                                    self.isPrimaryRunnerActive = false
+                                } else {
+                                    self.loadRunner(webView: self.backgroundRunningSecondaryBuffer)
+                                    self.isPrimaryRunnerActive = true
+                                }
+                            }
+                            self.hasLoadedNextRunner = true
                         }
                     } else {
                         print("The 'data' for 'videoProgress' does not contain valid 'progress', 'currentTime', or 'duration'.")

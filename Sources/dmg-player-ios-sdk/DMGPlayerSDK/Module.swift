@@ -16,12 +16,12 @@ public class DMGPlayerSDK: NSObject, ObservableObject, WKScriptMessageHandler {
     public var backgroundRunningPrimaryBuffer: WKWebView
     public var backgroundRunningSecondaryBuffer: WKWebView
     @Published var isForeground: Bool = false
-    @Published var hasBkPreloadedNextWebview: Bool = true
     @Published var hasPreloadedNextWebview: Bool = true
-    @Published var isBkPrimaryActive: Bool = true
+    @Published var hasLoadedNextRunner: Bool = false
+    @Published var isPrimaryRunnerActive: Bool = true
     @Published var isPrimaryActive: Bool = true
-    @Published var isFreeloading: Bool = false
-    @Published var isBkActive: Bool = false
+    @Published var isFreeRunning: Bool = false
+    @Published var isBufferActive: Bool = false
     @Published var queue: [String] = []
     
     public override init() {
@@ -29,10 +29,11 @@ public class DMGPlayerSDK: NSObject, ObservableObject, WKScriptMessageHandler {
         self.queue = []
         self.buffer = []
         self.isPaused = false
-        self.isBkActive = false
-        self.isFreeloading = false
+        self.isBufferActive = false
+        self.isFreeRunning = false
         self.isPrimaryActive = true
-        self.isBkPrimaryActive = true
+        self.isPrimaryRunnerActive = true
+        self.hasLoadedNextRunner = false
         self.backgroundBuffer = WKWebView()
         self.foregroundPrimaryBuffer = WKWebView()
         self.foregroundSecondaryBuffer = WKWebView()
@@ -117,7 +118,7 @@ public class DMGPlayerSDK: NSObject, ObservableObject, WKScriptMessageHandler {
             });
             """
 
-        if isBkActive {
+        if isBufferActive {
             // isfreeloading?
             backgroundBuffer.evaluateJavaScript(jsCode, completionHandler: { result, error in
                 if let error = error {
@@ -145,7 +146,7 @@ public class DMGPlayerSDK: NSObject, ObservableObject, WKScriptMessageHandler {
 
     
     public func playNow(isrc: String) {
-            self.isBkActive = false
+            self.isBufferActive = false
             queue.insert(isrc, at: 0)
         
             let apiService = APIService.shared
@@ -204,8 +205,8 @@ public class DMGPlayerSDK: NSObject, ObservableObject, WKScriptMessageHandler {
     }
 
     public func pause() {
-        if isBkActive {
-            if isFreeloading {
+        if isBufferActive {
+            if isFreeRunning {
                 // isFreeloading primary?
                 backgroundRunningPrimaryBuffer.evaluateJavaScript(buildPauseJavaScript(), completionHandler: { result, error in
                     if let error = error {
@@ -231,8 +232,8 @@ public class DMGPlayerSDK: NSObject, ObservableObject, WKScriptMessageHandler {
     }
     
     public func resume() {
-        if isBkActive {
-            if isFreeloading {
+        if isBufferActive {
+            if isFreeRunning {
                 // isFreeloading primary?
                 backgroundRunningPrimaryBuffer.evaluateJavaScript(buildPlayJavaScript(), completionHandler: { result, error in
                     if let error = error {
