@@ -42,9 +42,11 @@ extension DMGPlayerSDK {
                         } else if currentTime >= duration - 5 && !hasLoadedNextRunner {
                             if self.isFreeRunning {
                                 if self.isPrimaryRunnerActive {
+                                    print("pri.runner")
                                     self.loadRunner(webView: self.backgroundRunningPrimaryBuffer)
                                     self.isPrimaryRunnerActive = false
                                 } else {
+                                    print("sec.runner")
                                     self.loadRunner(webView: self.backgroundRunningSecondaryBuffer)
                                     self.isPrimaryRunnerActive = true
                                 }
