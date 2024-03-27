@@ -223,6 +223,7 @@ public class DMGPlayerSDK: NSObject, ObservableObject, WKScriptMessageHandler {
         if isBufferActive {
             if isFreeRunning {
                 // isFreeloading primary?
+                
                 backgroundRunningPrimaryBuffer.evaluateJavaScript(buildPlayJavaScript(), completionHandler: { result, error in
                     if let error = error {
                         print("JavaScript evaluation error: \(error.localizedDescription)")
