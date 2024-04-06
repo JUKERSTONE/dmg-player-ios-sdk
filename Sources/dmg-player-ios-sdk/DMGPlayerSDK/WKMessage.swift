@@ -35,12 +35,7 @@ extension DMGPlayerSDK {
                        let currentTime = dataDict["currentTime"] as? Double,
                        let duration = dataDict["duration"] as? Double {
 
-                        if progress >= 80.0 && !self.hasPreloadedNextWebview {
-                            self.hasLoadedNextRunner = false
-//                            self.preloadNextWebview()
-//                            self.hasPreloadedNextWebview = true
-                            print("posible: ->")
-                        } else if currentTime >= duration - 5 && !hasLoadedNextRunner {
+                        if currentTime >= duration - 5 && !hasLoadedNextRunner {
                             print("runway")
                             if self.isFreeRunning {
                                 if self.isPrimaryRunnerActive {
@@ -74,15 +69,9 @@ extension DMGPlayerSDK {
                 
                 if self.isPrimaryActive {
                     self.isPrimaryActive = false
-                    if hasPreloadedNextWebview {
-                        self.hasPreloadedNextWebview = false
-                    }
                     self.play(webView: self.foregroundSecondaryBuffer)
                 } else {
                     self.isPrimaryActive = true
-                    if hasPreloadedNextWebview {
-                        self.hasPreloadedNextWebview = false
-                    }
                     self.play(webView: self.foregroundPrimaryBuffer)
                 }
             default:
