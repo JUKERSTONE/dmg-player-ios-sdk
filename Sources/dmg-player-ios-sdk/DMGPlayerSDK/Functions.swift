@@ -12,7 +12,7 @@ extension DMGPlayerSDK {
             print("Index is at the end of the queue")
         }
         
-        let url = self.buffer[self.index + 1]
+        let url = self.buffer[self.index]
         let javaScriptString = "window.location.href = '\(url)';"
 
         webView.evaluateJavaScript(javaScriptString) { result, error in
