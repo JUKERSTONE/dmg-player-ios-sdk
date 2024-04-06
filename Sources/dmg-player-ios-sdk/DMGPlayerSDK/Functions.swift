@@ -2,6 +2,7 @@
 
 import SwiftUI
 import WebKit
+import AVFAudio
 
 @available(iOS 13.0, *)
 extension DMGPlayerSDK {
@@ -151,12 +152,17 @@ extension DMGPlayerSDK {
         }
 }
 
+public func configureAudioSession() {
+    do {
+        try AVAudioSession.sharedInstance().setCategory(.playback, mode: .default)
+        try AVAudioSession.sharedInstance().setActive(true)
+    } catch {
+        print("Failed to set audio session category. Error: \(error)")
+    }
+}
+
 public func buildActiveJavaScript() -> String {
     return """
-    if (!window.trakStarVideo) {
-        window.trakStarVideo = document.getElementsByTagName('video')[0];
-    }
-    
     window.trakStarVideo.muted = false;
     window.trakStarVideo.play();
     window.trakStarVideo.requestPictureInPicture().then(() => {

@@ -43,6 +43,8 @@ public class DMGPlayerSDK: NSObject, ObservableObject, WKScriptMessageHandler {
 
         super.init()
         
+        configureAudioSession()
+        
         let preferences = WKPreferences()
         let config = WKWebViewConfiguration()
         let bkConfig = WKWebViewConfiguration()
