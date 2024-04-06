@@ -91,32 +91,10 @@ public class DMGPlayerSDK: NSObject, ObservableObject, WKScriptMessageHandler {
     
     @objc private func appDidBecomeActive() {
         isForeground = true
-        
-        let jsCode = """
-            if (!window.trakStarVideo) {
-                window.trakStarVideo = document.getElementsByTagName('video')[0];
-            }
-
-            window.trakStarVideo.requestPictureInPicture().then(() => {
-                const message = {
-                    eventType: 'enablePiP',
-                    data: 'PiP initiated successfully.'
-                };
-                window.webkit.messageHandlers.player.postMessage(JSON.stringify(message));
-            }).catch(error => {
-                const message = {
-                    eventType: 'enablePiP',
-                    data: 'PiP initiation failed: ' + error.message
-                };
-                window.webkit.messageHandlers.player.postMessage(JSON.stringify(message));
-            });
-            """
 
         if isBufferActive {
-            // isfreeloading?
-            
-            
-            backgroundBuffer.evaluateJavaScript(jsCode, completionHandler: { result, error in
+            print("background buffer")
+            backgroundBuffer.evaluateJavaScript(buildActiveJavaScript(), completionHandler: { result, error in
                 if let error = error {
                     print("JavaScript evaluation error: \(error.localizedDescription)")
                 } else {
@@ -126,7 +104,8 @@ public class DMGPlayerSDK: NSObject, ObservableObject, WKScriptMessageHandler {
         } else if isFreeRunning {
             if self.index + 1 < self.buffer.count {
                 if self.isPrimaryRunnerActive {
-                    backgroundRunningPrimaryBuffer.evaluateJavaScript(jsCode, completionHandler: { result, error in
+                    print("backgroundRunningPrimaryBuffer")
+                    backgroundRunningPrimaryBuffer.evaluateJavaScript(buildActiveJavaScript(), completionHandler: { result, error in
                         if let error = error {
                             print("JavaScript evaluation error: \(error.localizedDescription)")
                         } else {
@@ -135,7 +114,8 @@ public class DMGPlayerSDK: NSObject, ObservableObject, WKScriptMessageHandler {
                 })
                 self.isPrimaryRunnerActive = false
                 } else {
-                    backgroundRunningSecondaryBuffer.evaluateJavaScript(jsCode, completionHandler: { result, error in
+                    print("backgroundRunningSecondaryBuffer")
+                    backgroundRunningSecondaryBuffer.evaluateJavaScript(buildActiveJavaScript(), completionHandler: { result, error in
                         if let error = error {
                             print("JavaScript evaluation error: \(error.localizedDescription)")
                         } else {
