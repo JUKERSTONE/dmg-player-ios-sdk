@@ -26,7 +26,6 @@ extension DMGPlayerSDK {
     
     func loadBackgroundBuffer(url: URL) {
         let request = URLRequest(url: url)
-        print("bk load")
         backgroundBuffer.load(request)
     }
     
@@ -107,7 +106,7 @@ extension DMGPlayerSDK {
                 return
             }
 
-            if let jsonString = apiService.json(from: buffer) {
+            if let jsonString = apiService.parseJSON(from: buffer) {
                 print("JSON String to be sent: \(jsonString)")
             }
 
@@ -239,58 +238,3 @@ public func buildCommonJavaScript() -> String {
         true;
     """
 }
-
-//    func preloadNextWebView() {
-//        guard index + 1 < queue.count else {
-//            print("Not enough elements in queue to preload")
-//            return
-//        }
-//
-//        let nextIsrc = queue[index + 1]
-//
-//        let apiService = APIService.shared
-//        let urlString = "https://europe-west1-trx-traklist.cloudfunctions.net/TRX_DEVELOPER/trx/music/\(nextIsrc)"
-//
-//        guard let url = URL(string: urlString) else {
-//            print("Invalid URL")
-//            return
-//        }
-//
-//        apiService.fetchData(from: url) { [weak self] result in
-//            DispatchQueue.main.async {
-//                switch result {
-//                case .success(let data):
-//                    guard let urlStringWithQuotes = String(data: data, encoding: .utf8) else {
-//                        print("The data received could not be converted to a string.")
-//                        return
-//                    }
-//
-//                    print(urlStringWithQuotes)
-//                    let urlString = urlStringWithQuotes.trimmingCharacters(in: CharacterSet(charactersIn: "\""))
-//
-//                    guard let videoURL = URL(string: urlString) else {
-//                        print("The cleaned string is not a valid URL: \(urlString)")
-//                        return
-//                    }
-//
-//                    print("preload bk")
-//                    if self?.isBkActive == true {
-//                        if self?.isBkPrimaryActive == true {
-//                            self?.loadBkVideoInSecondaryWebView(url: videoURL)
-//                        } else {
-//                            self?.loadBkVideoInPrimaryWebView(url: videoURL)
-//                        }
-//
-//                        if let isActive = self?.isBkPrimaryActive {
-//                            self?.isBkPrimaryActive = !isActive
-//                        } else {
-//                            // Handle the case where `isBkPrimaryActive` is nil
-//                        }
-//                    }
-//
-//                case .failure(let error):
-//                    print("Error fetching data: \(error)")
-//                }
-//            }
-//        }
-//    }

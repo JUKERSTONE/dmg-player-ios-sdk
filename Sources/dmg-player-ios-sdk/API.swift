@@ -45,19 +45,8 @@ public class APIService {
         }
         task.resume()
     }
-    
-    func parseJSON<T: Decodable>(_ data: Data, type: T.Type) -> T? {
-        let decoder = JSONDecoder()
-        do {
-            let response = try decoder.decode(T.self, from: data)
-            return response
-        } catch {
-            print("Error decoding JSON: \(error)")
-            return nil
-        }
-    }
-    
-    func json(from object:Any) -> String? {
+
+    func parseJSON(from object:Any) -> String? {
         guard let data = try? JSONSerialization.data(withJSONObject: object, options: []) else {
             return nil
         }

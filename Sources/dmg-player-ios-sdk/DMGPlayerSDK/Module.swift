@@ -128,7 +128,6 @@ public class DMGPlayerSDK: NSObject, ObservableObject, WKScriptMessageHandler {
     
     @objc private func appMovedToBackground() {
         isForeground = false
-        print("is Background")
     }
     
     public func playNow(isrc: String) {

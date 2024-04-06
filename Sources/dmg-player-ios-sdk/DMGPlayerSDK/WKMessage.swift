@@ -37,18 +37,12 @@ extension DMGPlayerSDK {
 
                         if progress >= 80.0 && self.hasLoadedNextRunner && currentTime < duration - 5 {
                             self.hasLoadedNextRunner = false
-//                            self.preloadNextWebview()
-//                            self.hasPreloadedNextWebview = true
-                            print("hasLoadedNextRunner reset: ->")
                         } else if currentTime >= duration - 5 && !hasLoadedNextRunner && self.isBufferActive {
-                            print("runway")
                             if self.isFreeRunning {
                                 if self.isPrimaryRunnerActive {
-                                    print("pri.runner")
                                     self.loadRunner(webView: self.backgroundRunningPrimaryBuffer)
                                     self.isPrimaryRunnerActive = false
                                 } else {
-                                    print("sec.runner")
                                     self.loadRunner(webView: self.backgroundRunningSecondaryBuffer)
                                     self.isPrimaryRunnerActive = true
                                 }
@@ -69,7 +63,7 @@ extension DMGPlayerSDK {
                 }
             case "videoEnded":
                 if self.isFreeRunning {
-                    return print("RETURN Free running video end")
+                    return
                 }
                 
                 if self.isPrimaryActive {
