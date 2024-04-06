@@ -35,7 +35,12 @@ extension DMGPlayerSDK {
                        let currentTime = dataDict["currentTime"] as? Double,
                        let duration = dataDict["duration"] as? Double {
 
-                        if currentTime >= duration - 5 && !hasLoadedNextRunner && self.isBufferActive {
+                        if progress >= 80.0 && self.hasLoadedNextRunner {
+                            self.hasLoadedNextRunner = false
+//                            self.preloadNextWebview()
+//                            self.hasPreloadedNextWebview = true
+                            print("hasLoadedNextRunner reset: ->")
+                        } else if currentTime >= duration - 5 && !hasLoadedNextRunner && self.isBufferActive {
                             print("runway")
                             if self.isFreeRunning {
                                 if self.isPrimaryRunnerActive {
