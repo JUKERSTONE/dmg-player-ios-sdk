@@ -35,7 +35,7 @@ extension DMGPlayerSDK {
                        let currentTime = dataDict["currentTime"] as? Double,
                        let duration = dataDict["duration"] as? Double {
 
-                        if progress >= 80.0 && self.hasLoadedNextRunner {
+                        if progress >= 80.0 && self.hasLoadedNextRunner && currentTime < duration - 5 {
                             self.hasLoadedNextRunner = false
 //                            self.preloadNextWebview()
 //                            self.hasPreloadedNextWebview = true
