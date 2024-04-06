@@ -6,6 +6,12 @@ import WebKit
 @available(iOS 13.0, *)
 extension DMGPlayerSDK {
     func loadRunner(webView: WKWebView) {
+        if self.index < self.buffer.count - 1 {
+            self.index += 1
+        } else {
+            print("Index is at the end of the queue")
+        }
+        
         let url = self.buffer[self.index + 1]
         let javaScriptString = "window.location.href = '\(url)';"
 
