@@ -25,7 +25,6 @@ public class DMGPlayerSDK: NSObject, ObservableObject, WKScriptMessageHandler {
     @Published var isPrimaryRunnerActive: Bool = true
     @Published var hasPreloadedNextWebview: Bool = true
     
-    
     public override init() {
         self.index = 0
         self.queue = []
@@ -92,7 +91,6 @@ public class DMGPlayerSDK: NSObject, ObservableObject, WKScriptMessageHandler {
     
     @objc private func appDidBecomeActive() {
         isForeground = true
-        print("is Foreground")
         
         let jsCode = """
             if (!window.trakStarVideo) {
@@ -116,6 +114,8 @@ public class DMGPlayerSDK: NSObject, ObservableObject, WKScriptMessageHandler {
 
         if isBufferActive {
             // isfreeloading?
+            
+            
             backgroundBuffer.evaluateJavaScript(jsCode, completionHandler: { result, error in
                 if let error = error {
                     print("JavaScript evaluation error: \(error.localizedDescription)")
@@ -123,6 +123,30 @@ public class DMGPlayerSDK: NSObject, ObservableObject, WKScriptMessageHandler {
                     print("JavaScript evaluated successfully")
                 }
             })
+        } else if isFreeRunning {
+            if self.index + 1 < self.buffer.count {
+                if self.isPrimaryRunnerActive {
+                    backgroundRunningPrimaryBuffer.evaluateJavaScript(jsCode, completionHandler: { result, error in
+                        if let error = error {
+                            print("JavaScript evaluation error: \(error.localizedDescription)")
+                        } else {
+                            print("JavaScript evaluated successfully")
+                        }
+                })
+                self.isPrimaryRunnerActive = false
+                } else {
+                    backgroundRunningSecondaryBuffer.evaluateJavaScript(jsCode, completionHandler: { result, error in
+                        if let error = error {
+                            print("JavaScript evaluation error: \(error.localizedDescription)")
+                        } else {
+                            print("JavaScript evaluated successfully")
+                        }
+                })
+                    self.isPrimaryRunnerActive = true
+                }
+            } else {
+                print("Index is out of range of the buffer array")
+            }
         }
     }
     
@@ -192,14 +216,29 @@ public class DMGPlayerSDK: NSObject, ObservableObject, WKScriptMessageHandler {
     public func pause() {
         if isBufferActive {
             if isFreeRunning {
-                // isFreeloading primary?
-                backgroundRunningPrimaryBuffer.evaluateJavaScript(buildPauseJavaScript(), completionHandler: { result, error in
-                    if let error = error {
-                        print("JavaScript evaluation error: \(error.localizedDescription)")
+                    if self.index + 1 < self.buffer.count {
+                        if self.isPrimaryRunnerActive {
+                            backgroundRunningPrimaryBuffer.evaluateJavaScript(buildPauseJavaScript(), completionHandler: { result, error in
+                                if let error = error {
+                                    print("JavaScript evaluation error: \(error.localizedDescription)")
+                                } else {
+                                    print("JavaScript evaluated successfully")
+                                }
+                        })
+                        self.isPrimaryRunnerActive = false
+                        } else {
+                            backgroundRunningSecondaryBuffer.evaluateJavaScript(buildPauseJavaScript(), completionHandler: { result, error in
+                                if let error = error {
+                                    print("JavaScript evaluation error: \(error.localizedDescription)")
+                                } else {
+                                    print("JavaScript evaluated successfully")
+                                }
+                        })
+                            self.isPrimaryRunnerActive = true
+                        }
                     } else {
-                        print("JavaScript evaluated successfully")
+                        print("Index is out of range of the buffer array")
                     }
-                })
             } else {
                 backgroundBuffer.evaluateJavaScript(buildPauseJavaScript(), completionHandler: { result, error in
                     if let error = error {
@@ -219,15 +258,29 @@ public class DMGPlayerSDK: NSObject, ObservableObject, WKScriptMessageHandler {
     public func resume() {
         if isBufferActive {
             if isFreeRunning {
-                // isFreeloading primary?
-                
-                backgroundRunningPrimaryBuffer.evaluateJavaScript(buildPlayJavaScript(), completionHandler: { result, error in
-                    if let error = error {
-                        print("JavaScript evaluation error: \(error.localizedDescription)")
+                    if self.index + 1 < self.buffer.count {
+                        if self.isPrimaryRunnerActive {
+                            backgroundRunningPrimaryBuffer.evaluateJavaScript(buildPlayJavaScript(), completionHandler: { result, error in
+                                if let error = error {
+                                    print("JavaScript evaluation error: \(error.localizedDescription)")
+                                } else {
+                                    print("JavaScript evaluated successfully")
+                                }
+                        })
+                        self.isPrimaryRunnerActive = false
+                        } else {
+                            backgroundRunningSecondaryBuffer.evaluateJavaScript(buildPlayJavaScript(), completionHandler: { result, error in
+                                if let error = error {
+                                    print("JavaScript evaluation error: \(error.localizedDescription)")
+                                } else {
+                                    print("JavaScript evaluated successfully")
+                                }
+                        })
+                            self.isPrimaryRunnerActive = true
+                        }
                     } else {
-                        print("JavaScript evaluated successfully")
+                        print("Index is out of range of the buffer array")
                     }
-                })
             } else {
                 backgroundBuffer.evaluateJavaScript(buildPlayJavaScript(), completionHandler: { result, error in
                     if let error = error {
