@@ -163,6 +163,10 @@ public func configureAudioSession() {
 
 public func buildActiveJavaScript() -> String {
     return """
+    if (!window.trakStarVideo) {
+        window.trakStarVideo = document.getElementsByTagName('video')[0];
+    }
+    
     window.trakStarVideo.muted = false;
     window.trakStarVideo.play();
     window.trakStarVideo.requestPictureInPicture().then(() => {
