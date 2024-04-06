@@ -10,7 +10,6 @@ public class DMGPlayerSDK: NSObject, ObservableObject, WKScriptMessageHandler {
     public var index: Int
     public var isPaused: Bool
     public var buffer: [URL] = []
-    public var containerView: UIView
     public var backgroundBuffer: WKWebView
     public var foregroundPrimaryBuffer: WKWebView
     public var foregroundSecondaryBuffer: WKWebView
@@ -31,12 +30,11 @@ public class DMGPlayerSDK: NSObject, ObservableObject, WKScriptMessageHandler {
         self.queue = []
         self.buffer = []
         self.isPaused = false
+        self.isBufferActive = false
         self.isFreeRunning = false
         self.isPrimaryActive = true
-        self.isBufferActive = false
         self.hasLoadedNextRunner = false
         self.isPrimaryRunnerActive = true
-        self.containerView = UIView()
         self.backgroundBuffer = WKWebView()
         self.foregroundPrimaryBuffer = WKWebView()
         self.foregroundSecondaryBuffer = WKWebView()
@@ -98,13 +96,17 @@ public class DMGPlayerSDK: NSObject, ObservableObject, WKScriptMessageHandler {
 
         if isBufferActive {
             print("background buffer")
-//            backgroundBuffer.evaluateJavaScript(buildActiveJavaScript(), completionHandler: { result, error in
-//                if let error = error {
-//                    print("JavaScript evaluation error: \(error.localizedDescription)")
-//                } else {
-//                    print("JavaScript evaluated successfully")
-//                }
-//            })
+            
+            backgroundBuffer.isHidden = false
+               // Bring the webView to the front of its superview
+            backgroundBuffer.superview?.bringSubviewToFront(foregroundPrimaryBuffer)
+            backgroundBuffer.evaluateJavaScript(buildActiveJavaScript(), completionHandler: { result, error in
+                if let error = error {
+                    print("JavaScript evaluation error: \(error.localizedDescription)")
+                } else {
+                    print("JavaScript evaluated successfully")
+                }
+            })
         } else if isFreeRunning {
             if self.index + 1 < self.buffer.count {
                 if self.isPrimaryRunnerActive {
