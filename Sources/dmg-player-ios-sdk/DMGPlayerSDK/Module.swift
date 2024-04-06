@@ -99,7 +99,7 @@ public class DMGPlayerSDK: NSObject, ObservableObject, WKScriptMessageHandler {
             
             backgroundBuffer.isHidden = false
                // Bring the webView to the front of its superview
-            backgroundBuffer.superview?.bringSubviewToFront(foregroundPrimaryBuffer)
+            backgroundBuffer.superview?.bringSubviewToFront(backgroundBuffer)
             backgroundBuffer.evaluateJavaScript(buildActiveJavaScript(), completionHandler: { result, error in
                 if let error = error {
                     print("JavaScript evaluation error: \(error.localizedDescription)")
