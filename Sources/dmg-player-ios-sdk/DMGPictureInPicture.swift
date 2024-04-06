@@ -34,14 +34,14 @@ public struct DMGPictureLicense: UIViewRepresentable {
             foregroundSecondaryBuffer.centerXAnchor.constraint(equalTo: containerView.leadingAnchor)
        ])
         
-        let backgroundPrimaryBuffer = sdk.backgroundBuffer
-        containerView.addSubview(backgroundPrimaryBuffer)
-        backgroundPrimaryBuffer.translatesAutoresizingMaskIntoConstraints = false
+        let backgroundBuffer = sdk.backgroundBuffer
+        containerView.addSubview(backgroundBuffer)
+        backgroundBuffer.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            backgroundPrimaryBuffer.topAnchor.constraint(equalTo: containerView.topAnchor),
-            backgroundPrimaryBuffer.widthAnchor.constraint(equalToConstant: 1),
-            backgroundPrimaryBuffer.heightAnchor.constraint(equalToConstant: 1),
-            backgroundPrimaryBuffer.centerXAnchor.constraint(equalTo: containerView.leadingAnchor)
+            backgroundBuffer.topAnchor.constraint(equalTo: containerView.topAnchor),
+            backgroundBuffer.widthAnchor.constraint(equalToConstant: 1),
+            backgroundBuffer.heightAnchor.constraint(equalToConstant: 1),
+            backgroundBuffer.centerXAnchor.constraint(equalTo: containerView.leadingAnchor)
        ])
         
         let backgroundRunningPrimaryBuffer = sdk.backgroundRunningPrimaryBuffer
