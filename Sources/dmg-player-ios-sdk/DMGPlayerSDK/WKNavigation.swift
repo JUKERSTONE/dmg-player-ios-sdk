@@ -17,6 +17,8 @@ extension DMGPlayerSDK: WKNavigationDelegate {
                 webView.evaluateJavaScript(buildCommonJavaScript() + buildActiveJavaScript(), completionHandler: nil)
             } else if webView == backgroundBuffer {
                 webView.evaluateJavaScript(buildCommonJavaScript() + buildInactiveJavaScript(), completionHandler: nil)
+            } else if webView == pictureBuffer {
+                webView.evaluateJavaScript(buildCommonJavaScript() + buildInactiveJavaScript(), completionHandler: nil)
             }
         } else {
             if webView == backgroundBuffer {
@@ -25,6 +27,8 @@ extension DMGPlayerSDK: WKNavigationDelegate {
                 webView.evaluateJavaScript(buildCommonJavaScript() + buildActiveJavaScript(), completionHandler: nil)
             } else if webView == backgroundRunningSecondaryBuffer {
                 webView.evaluateJavaScript(buildCommonJavaScript() + buildActiveJavaScript(), completionHandler: nil)
+            } else if webView == pictureBuffer {
+                webView.evaluateJavaScript(buildCommonJavaScript() + buildInactiveJavaScript(), completionHandler: nil)
             }
         }
     }

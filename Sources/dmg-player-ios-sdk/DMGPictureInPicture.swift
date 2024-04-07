@@ -93,9 +93,9 @@ public struct DMGPictureLicense: UIViewRepresentable {
         let currentTimeSubscriber = sdk.$pictureCurrentTime
         
         currentTimeSubscriber.sink { [weak sdk] newTime in
-            guard let self = sdk else { return }
+            guard let sdk = sdk else { return }
             
-            sdk?.synchronisePictureBuffer(time: newTime)
+            sdk.synchronisePictureBuffer(time: newTime)
         }
     }
 }
