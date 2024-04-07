@@ -10,6 +10,7 @@ public class DMGPlayerSDK: NSObject, ObservableObject, WKScriptMessageHandler {
     public var index: Int
     public var isPaused: Bool
     public var buffer: [URL] = []
+    public var pictureBuffer: WKWebView
     public var backgroundBuffer: WKWebView
     public var foregroundPrimaryBuffer: WKWebView
     public var foregroundSecondaryBuffer: WKWebView
@@ -35,6 +36,7 @@ public class DMGPlayerSDK: NSObject, ObservableObject, WKScriptMessageHandler {
         self.isPrimaryActive = true
         self.hasLoadedNextRunner = false
         self.isPrimaryRunnerActive = true
+        self.pictureBuffer = WKWebView()
         self.backgroundBuffer = WKWebView()
         self.foregroundPrimaryBuffer = WKWebView()
         self.foregroundSecondaryBuffer = WKWebView()
@@ -67,18 +69,19 @@ public class DMGPlayerSDK: NSObject, ObservableObject, WKScriptMessageHandler {
         bkConfig.mediaTypesRequiringUserActionForPlayback = []
         bkConfig.preferences.javaScriptCanOpenWindowsAutomatically = true
         
-        
         self.backgroundRunningSecondaryBuffer = WKWebView(frame: .zero, configuration: bkConfig)
         self.backgroundRunningPrimaryBuffer = WKWebView(frame: .zero, configuration: bkConfig)
         self.foregroundSecondaryBuffer = WKWebView(frame: .zero, configuration: config)
         self.foregroundPrimaryBuffer = WKWebView(frame: .zero, configuration: config)
         self.backgroundBuffer = WKWebView(frame: .zero, configuration: config)
+        self.pictureBuffer = WKWebView(frame: .zero, configuration: config)
     
         self.backgroundRunningSecondaryBuffer.navigationDelegate = self
         self.backgroundRunningPrimaryBuffer.navigationDelegate = self
         self.foregroundSecondaryBuffer.navigationDelegate = self
         self.foregroundPrimaryBuffer.navigationDelegate = self
         self.backgroundBuffer.navigationDelegate = self
+        self.pictureBuffer.navigationDelegate = self
         
         if let url = URL(string: "https://google.com") {
             let request = URLRequest(url: url)
@@ -96,10 +99,10 @@ public class DMGPlayerSDK: NSObject, ObservableObject, WKScriptMessageHandler {
 
         if isBufferActive {
             print("background buffer")
-            
-            backgroundBuffer.isHidden = false
-               // Bring the webView to the front of its superview
-            backgroundBuffer.superview?.bringSubviewToFront(backgroundBuffer)
+//
+//            backgroundBuffer.isHidden = false
+//               // Bring the webView to the front of its superview
+//            backgroundBuffer.superview?.bringSubviewToFront(backgroundBuffer)
             backgroundBuffer.evaluateJavaScript(buildActiveJavaScript(), completionHandler: { result, error in
                 if let error = error {
                     print("JavaScript evaluation error: \(error.localizedDescription)")

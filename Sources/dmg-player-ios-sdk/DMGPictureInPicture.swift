@@ -14,6 +14,16 @@ public struct DMGPictureLicense: UIViewRepresentable {
     public func makeUIView(context: Context) -> UIView {
         let containerView = UIView()
         
+//        let pictureBuffer = sdk.pictureBuffer
+//        containerView.addSubview(pictureBuffer)
+//        pictureBuffer.translatesAutoresizingMaskIntoConstraints = false
+//        NSLayoutConstraint.activate([
+//            pictureBuffer.topAnchor.constraint(equalTo: containerView.topAnchor),
+//            pictureBuffer.widthAnchor.constraint(equalToConstant: 1),
+//            pictureBuffer.heightAnchor.constraint(equalToConstant: 1),
+//            pictureBuffer.centerXAnchor.constraint(equalTo: containerView.leadingAnchor)
+//       ])
+        
         let foregroundPrimaryBuffer = sdk.foregroundPrimaryBuffer
         containerView.addSubview(foregroundPrimaryBuffer)
         foregroundPrimaryBuffer.translatesAutoresizingMaskIntoConstraints = false

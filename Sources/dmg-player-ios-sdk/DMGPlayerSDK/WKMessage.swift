@@ -57,7 +57,7 @@ extension DMGPlayerSDK {
                 }
             case "enablePiP":
                 if let data = messageDict["data"] as? Double {
-                    print("data")
+                    print(data, "Pip Data")
                 } else {
                     print("Error PiP")
                 }
