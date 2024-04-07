@@ -18,6 +18,7 @@ public class DMGPlayerSDK: NSObject, ObservableObject, WKScriptMessageHandler {
     public var backgroundRunningSecondaryBuffer: WKWebView
     
     @Published var queue: [String] = []
+    @Published var pictureCurrentTime : Double
     @Published var isForeground: Bool = false
     @Published var isFreeRunning: Bool = false
     @Published var isBufferActive: Bool = false
@@ -36,6 +37,7 @@ public class DMGPlayerSDK: NSObject, ObservableObject, WKScriptMessageHandler {
         self.isPrimaryActive = true
         self.hasLoadedNextRunner = false
         self.isPrimaryRunnerActive = true
+        self.pictureCurrentTime = 0
         self.pictureBuffer = WKWebView()
         self.backgroundBuffer = WKWebView()
         self.foregroundPrimaryBuffer = WKWebView()
@@ -85,6 +87,8 @@ public class DMGPlayerSDK: NSObject, ObservableObject, WKScriptMessageHandler {
         
         if let url = URL(string: "https://google.com") {
             let request = URLRequest(url: url)
+            
+            self.pictureBuffer.load(request)
             self.backgroundRunningPrimaryBuffer.load(request)
             self.backgroundRunningSecondaryBuffer.load(request)
         }
@@ -103,7 +107,7 @@ public class DMGPlayerSDK: NSObject, ObservableObject, WKScriptMessageHandler {
 //            backgroundBuffer.isHidden = false
 //               // Bring the webView to the front of its superview
 //            backgroundBuffer.superview?.bringSubviewToFront(backgroundBuffer)
-            backgroundBuffer.evaluateJavaScript(buildActiveJavaScript(), completionHandler: { result, error in
+            pictureBuffer.evaluateJavaScript(buildActiveJavaScript(), completionHandler: { result, error in
                 if let error = error {
                     print("JavaScript evaluation error: \(error.localizedDescription)")
                 } else {
@@ -111,10 +115,9 @@ public class DMGPlayerSDK: NSObject, ObservableObject, WKScriptMessageHandler {
                 }
             })
         } else if isFreeRunning {
-            if self.index + 1 < self.buffer.count {
                 if self.isPrimaryRunnerActive {
                     print("backgroundRunningPrimaryBuffer")
-                    backgroundRunningPrimaryBuffer.evaluateJavaScript(buildActiveJavaScript(), completionHandler: { result, error in
+                    pictureBuffer.evaluateJavaScript(buildActiveJavaScript(), completionHandler: { result, error in
                         if let error = error {
                             print("JavaScript evaluation error: \(error.localizedDescription)")
                         } else {
@@ -124,7 +127,7 @@ public class DMGPlayerSDK: NSObject, ObservableObject, WKScriptMessageHandler {
                 self.isPrimaryRunnerActive = false
                 } else {
                     print("backgroundRunningSecondaryBuffer")
-                    backgroundRunningSecondaryBuffer.evaluateJavaScript(buildActiveJavaScript(), completionHandler: { result, error in
+                    pictureBuffer.evaluateJavaScript(buildActiveJavaScript(), completionHandler: { result, error in
                         if let error = error {
                             print("JavaScript evaluation error: \(error.localizedDescription)")
                         } else {
@@ -133,9 +136,6 @@ public class DMGPlayerSDK: NSObject, ObservableObject, WKScriptMessageHandler {
                 })
                     self.isPrimaryRunnerActive = true
                 }
-            } else {
-                print("Index is out of range of the buffer array")
-            }
         }
     }
     

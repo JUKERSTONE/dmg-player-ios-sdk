@@ -34,10 +34,23 @@ extension DMGPlayerSDK {
                     if let progress = dataDict["progress"] as? Double,
                        let currentTime = dataDict["currentTime"] as? Double,
                        let duration = dataDict["duration"] as? Double {
+                        
+                        let percentile20 = progress >= 80.0
+                        let runway = currentTime >= duration - 5
+                        
+                        if isBufferActive {
+                            self.pictureCurrentTime = currentTime
+                        } else if self.isFreeRunning == true {
+                            if self.isPrimaryRunnerActive {
+                                self.pictureCurrentTime = currentTime
+                            } else {
+                                self.pictureCurrentTime = currentTime
+                            }
+                        }
 
-                        if progress >= 80.0 && self.hasLoadedNextRunner && currentTime < duration - 5 {
+                        if percentile20 && self.hasLoadedNextRunner && !runway {
                             self.hasLoadedNextRunner = false
-                        } else if currentTime >= duration - 5 && !hasLoadedNextRunner && self.isBufferActive {
+                        } else if runway && !hasLoadedNextRunner && self.isBufferActive {
                             if self.isFreeRunning {
                                 if self.isPrimaryRunnerActive {
                                     self.loadRunner(webView: self.backgroundRunningPrimaryBuffer)

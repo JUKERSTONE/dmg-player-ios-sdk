@@ -28,6 +28,7 @@ extension DMGPlayerSDK {
     func loadBackgroundBuffer(url: URL) {
         let request = URLRequest(url: url)
         backgroundBuffer.load(request)
+        pictureBuffer.load(request)
     }
     
     func loadPrimaryBuffer(url: URL) {
@@ -38,6 +39,19 @@ extension DMGPlayerSDK {
     func loadSecondaryBuffer(url: URL) {
         let request = URLRequest(url: url)
         foregroundSecondaryBuffer.load(request)
+    }
+    
+    func synchronisePictureBuffer(time : Double) {
+        // Construct the JavaScript string to seek the video to newTime
+        let jsString = "document.querySelector('video').currentTime = \(time);"
+        // Evaluate the JavaScript in the WKWebView
+        self.pictureBuffer.evaluateJavaScript(jsString) { (result, error) in
+            if let error = error {
+                print("JavaScript evaluation error: \(error.localizedDescription)")
+            } else {
+                print("Video seeker updated to \(time) seconds.")
+            }
+        }
     }
     
     func play(webView: WKWebView) {

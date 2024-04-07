@@ -14,15 +14,15 @@ public struct DMGPictureLicense: UIViewRepresentable {
     public func makeUIView(context: Context) -> UIView {
         let containerView = UIView()
         
-//        let pictureBuffer = sdk.pictureBuffer
-//        containerView.addSubview(pictureBuffer)
-//        pictureBuffer.translatesAutoresizingMaskIntoConstraints = false
-//        NSLayoutConstraint.activate([
-//            pictureBuffer.topAnchor.constraint(equalTo: containerView.topAnchor),
-//            pictureBuffer.widthAnchor.constraint(equalToConstant: 1),
-//            pictureBuffer.heightAnchor.constraint(equalToConstant: 1),
-//            pictureBuffer.centerXAnchor.constraint(equalTo: containerView.leadingAnchor)
-//       ])
+        let pictureBuffer = sdk.pictureBuffer
+        containerView.addSubview(pictureBuffer)
+        pictureBuffer.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            pictureBuffer.topAnchor.constraint(equalTo: containerView.topAnchor),
+            pictureBuffer.widthAnchor.constraint(equalToConstant: 1),
+            pictureBuffer.heightAnchor.constraint(equalToConstant: 1),
+            pictureBuffer.centerXAnchor.constraint(equalTo: containerView.leadingAnchor)
+       ])
         
         let foregroundPrimaryBuffer = sdk.foregroundPrimaryBuffer
         containerView.addSubview(foregroundPrimaryBuffer)
@@ -88,6 +88,14 @@ public struct DMGPictureLicense: UIViewRepresentable {
             } else {
                 print("No next item to preload")
             }
+        }
+        
+        let currentTimeSubscriber = sdk.$pictureCurrentTime
+        
+        currentTimeSubscriber.sink { [weak sdk] newTime in
+            guard let self = sdk else { return }
+            
+            sdk?.synchronisePictureBuffer(time: newTime)
         }
     }
 }
