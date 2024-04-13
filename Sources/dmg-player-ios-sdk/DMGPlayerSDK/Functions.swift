@@ -29,15 +29,15 @@ extension DMGPlayerSDK {
 
         let request = URLRequest(url: url)
         backgroundBuffer.load(request)
-        
-        let javaScriptString = "window.location.href = '\(url)';"
-        pictureBuffer.evaluateJavaScript(javaScriptString) { result, error in
-            if let error = error {
-                print("Error injecting the 'load' event listener: \(error.localizedDescription)")
-            } else {
-                print("JavaScript executed successfully in foregroundr.")
-            }
-        }
+
+        // let javaScriptString = "window.location.href = '\(url)';"
+        // pictureBuffer.evaluateJavaScript(javaScriptString) { result, error in
+        //     if let error = error {
+        //         print("Error injecting the 'load' event listener: \(error.localizedDescription)")
+        //     } else {
+        //         print("JavaScript executed successfully in foregroundr.")
+        //     }
+        // }
         
     }
     
