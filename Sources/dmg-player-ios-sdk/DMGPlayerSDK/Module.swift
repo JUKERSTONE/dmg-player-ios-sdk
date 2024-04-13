@@ -107,6 +107,7 @@ public class DMGPlayerSDK: NSObject, ObservableObject, WKScriptMessageHandler {
 //            backgroundBuffer.isHidden = false
 //               // Bring the webView to the front of its superview
 //            backgroundBuffer.superview?.bringSubviewToFront(backgroundBuffer)
+            backgroundBuffer.loadHTMLString("", baseURL: nil)
             pictureBuffer.evaluateJavaScript(buildActiveJavaScript(), completionHandler: { result, error in
                 if let error = error {
                     print("JavaScript evaluation error: \(error.localizedDescription)")
@@ -117,6 +118,7 @@ public class DMGPlayerSDK: NSObject, ObservableObject, WKScriptMessageHandler {
         } else if isFreeRunning {
                 if self.isPrimaryRunnerActive {
                     print("backgroundRunningPrimaryBuffer")
+                    backgroundRunningPrimaryBuffer.loadHTMLString("", baseURL: nil)
                     pictureBuffer.evaluateJavaScript(buildActiveJavaScript(), completionHandler: { result, error in
                         if let error = error {
                             print("JavaScript evaluation error: \(error.localizedDescription)")
@@ -127,6 +129,7 @@ public class DMGPlayerSDK: NSObject, ObservableObject, WKScriptMessageHandler {
                 self.isPrimaryRunnerActive = false
                 } else {
                     print("backgroundRunningSecondaryBuffer")
+                    backgroundRunningSecondaryBuffer.loadHTMLString("", baseURL: nil)
                     pictureBuffer.evaluateJavaScript(buildActiveJavaScript(), completionHandler: { result, error in
                         if let error = error {
                             print("JavaScript evaluation error: \(error.localizedDescription)")
