@@ -26,8 +26,10 @@ extension DMGPlayerSDK {
     }
     
     func loadBackgroundBuffer(url: URL) {
-        let request = URLRequest(url: url)
 
+        let request = URLRequest(url: url)
+        backgroundBuffer.load(request)
+        
         let javaScriptString = "window.location.href = '\(url)';"
         pictureBuffer.evaluateJavaScript(javaScriptString) { result, error in
             if let error = error {
@@ -144,18 +146,15 @@ extension DMGPlayerSDK {
                             
                             let nextUp = urls[1]
                             self.buffer = urls
+                                
+                            if self.isBufferActive == false {
+                                self.loadBackgroundBuffer(url: nextUp)
+                            }
                             
-                            if 2 < urls.count {
-                                
-                                if self.isBufferActive == false {
-                                    self.loadBackgroundBuffer(url: nextUp)
-                                }
-                                
-                                if self.isPrimaryActive {
-                                    self.loadSecondaryBuffer(url: nextUp)
-                                } else {
-                                    self.loadPrimaryBuffer(url: nextUp)
-                                }
+                            if self.isPrimaryActive {
+                                self.loadSecondaryBuffer(url: nextUp)
+                            } else {
+                                self.loadPrimaryBuffer(url: nextUp)
                             }
                         }
                     } else {
