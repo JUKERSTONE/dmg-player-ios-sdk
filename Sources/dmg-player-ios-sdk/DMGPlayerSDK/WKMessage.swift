@@ -38,13 +38,15 @@ extension DMGPlayerSDK {
                         let percentile20 = progress >= 80.0
                         let runway = currentTime >= duration - 5
                         
-                        if isBufferActive {
-                            self.pictureCurrentTime = currentTime
-                        } else if self.isFreeRunning == true {
-                            if self.isPrimaryRunnerActive {
+                        if !isForeground {
+                            if isBufferActive {
                                 self.pictureCurrentTime = currentTime
-                            } else {
-                                self.pictureCurrentTime = currentTime
+                            } else if self.isFreeRunning == true {
+                                if self.isPrimaryRunnerActive {
+                                    self.pictureCurrentTime = currentTime
+                                } else {
+                                    self.pictureCurrentTime = currentTime
+                                }
                             }
                         }
 
