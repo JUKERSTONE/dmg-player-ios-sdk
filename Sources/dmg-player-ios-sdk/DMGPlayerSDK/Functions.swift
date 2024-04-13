@@ -15,6 +15,14 @@ extension DMGPlayerSDK {
         
         let url = self.buffer[self.index]
         let javaScriptString = "window.location.href = '\(url)';"
+        
+        pictureBuffer.evaluateJavaScript(javaScriptString) { result, error in
+            if let error = error {
+                print("Error injecting the 'load' event listener: \(error.localizedDescription)")
+            } else {
+                print("JavaScript executed successfully in foregroundr.")
+            }
+        }
 
         webView.evaluateJavaScript(javaScriptString) { result, error in
             if let error = error {
@@ -26,19 +34,9 @@ extension DMGPlayerSDK {
     }
     
     func loadBackgroundBuffer(url: URL) {
-
         let request = URLRequest(url: url)
         pictureBuffer.load(request)
         backgroundBuffer.load(request)
-        // let javaScriptString = "window.location.href = '\(url)';"
-        // pictureBuffer.evaluateJavaScript(javaScriptString) { result, error in
-        //     if let error = error {
-        //         print("Error injecting the 'load' event listener: \(error.localizedDescription)")
-        //     } else {
-        //         print("JavaScript executed successfully in foregroundr.")
-        //     }
-        // }
-        
     }
     
     func loadPrimaryBuffer(url: URL) {
