@@ -50,6 +50,13 @@ extension DMGPlayerSDK {
     }
     
     func synchronisePictureBuffer(time : Double) {
+        
+        // return if app is picturBuffer or
+        
+        if self.isPictureBuffer {
+            return
+        }
+        
         // Construct the JavaScript string to seek the video to newTime
         let jsString = "document.querySelector('video').currentTime = \(time);"
         // Evaluate the JavaScript in the WKWebView
