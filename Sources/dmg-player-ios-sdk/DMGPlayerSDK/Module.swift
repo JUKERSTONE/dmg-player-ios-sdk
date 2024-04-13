@@ -10,6 +10,7 @@ public class DMGPlayerSDK: NSObject, ObservableObject, WKScriptMessageHandler {
     public var index: Int
     public var isPaused: Bool
     public var buffer: [URL] = []
+    public var isPictureBuffer: Bool
     public var pictureBuffer: WKWebView
     public var backgroundBuffer: WKWebView
     public var foregroundPrimaryBuffer: WKWebView
@@ -32,9 +33,10 @@ public class DMGPlayerSDK: NSObject, ObservableObject, WKScriptMessageHandler {
         self.queue = []
         self.buffer = []
         self.isPaused = false
-        self.isBufferActive = false
         self.isFreeRunning = false
+        self.isBufferActive = false
         self.isPrimaryActive = true
+        self.isPictureBuffer = false
         self.hasLoadedNextRunner = false
         self.isPrimaryRunnerActive = true
         self.pictureCurrentTime = 0
@@ -102,11 +104,6 @@ public class DMGPlayerSDK: NSObject, ObservableObject, WKScriptMessageHandler {
         isForeground = true
 
         if isBufferActive {
-            print("background buffer")
-//
-//            backgroundBuffer.isHidden = false
-//               // Bring the webView to the front of its superview
-//            backgroundBuffer.superview?.bringSubviewToFront(backgroundBuffer)
             pictureBuffer.evaluateJavaScript(buildActiveJavaScript(), completionHandler: { result, error in
                 if let error = error {
                     print("JavaScript evaluation error: \(error.localizedDescription)")
@@ -115,28 +112,28 @@ public class DMGPlayerSDK: NSObject, ObservableObject, WKScriptMessageHandler {
                 }
             })
         } else if isFreeRunning {
-                if self.isPrimaryRunnerActive {
-                    print("backgroundRunningPrimaryBuffer")
-                    pictureBuffer.evaluateJavaScript(buildActiveJavaScript(), completionHandler: { result, error in
-                        if let error = error {
-                            print("JavaScript evaluation error: \(error.localizedDescription)")
-                        } else {
-                            print("JavaScript evaluated successfully")
-                        }
+            if self.isPrimaryRunnerActive {
+                pictureBuffer.evaluateJavaScript(buildActiveJavaScript(), completionHandler: { result, error in
+                    if let error = error {
+                        print("JavaScript evaluation error: \(error.localizedDescription)")
+                    } else {
+                        print("JavaScript evaluated successfully")
+                    }
                 })
                 self.isPrimaryRunnerActive = false
-                } else {
-                    print("backgroundRunningSecondaryBuffer")
-                    pictureBuffer.evaluateJavaScript(buildActiveJavaScript(), completionHandler: { result, error in
-                        if let error = error {
-                            print("JavaScript evaluation error: \(error.localizedDescription)")
-                        } else {
-                            print("JavaScript evaluated successfully")
-                        }
+            } else {
+                pictureBuffer.evaluateJavaScript(buildActiveJavaScript(), completionHandler: { result, error in
+                    if let error = error {
+                        print("JavaScript evaluation error: \(error.localizedDescription)")
+                    } else {
+                        print("JavaScript evaluated successfully")
+                    }
                 })
-                    self.isPrimaryRunnerActive = true
-                }
+                self.isPrimaryRunnerActive = true
+            }
         }
+        
+        self.isPictureBuffer = true
     }
     
     @objc private func appMovedToBackground() {
