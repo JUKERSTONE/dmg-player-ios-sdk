@@ -1,4 +1,7 @@
-// WKMessage.swift
+/**
+ WKMessage.swift
+ © 2024 Jukerstone. All rights reserved.
+ */
 
 import Foundation
 import WebKit

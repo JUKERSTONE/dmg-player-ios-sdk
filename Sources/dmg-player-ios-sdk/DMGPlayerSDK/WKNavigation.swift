@@ -1,4 +1,7 @@
-// WKNavigation.swift
+/**
+ WKNavigation.swift
+ © 2024 Jukerstone. All rights reserved.
+ */
 
 import SwiftUI
 import WebKit

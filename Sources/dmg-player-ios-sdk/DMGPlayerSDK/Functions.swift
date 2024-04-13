@@ -1,4 +1,7 @@
-// Functions.swift
+/**
+ Functions.swift
+ © 2024 Jukerstone. All rights reserved.
+ */
 
 import SwiftUI
 import WebKit
@@ -50,16 +53,12 @@ extension DMGPlayerSDK {
     }
     
     func synchronisePictureBuffer(time : Double) {
-        
-        // return if app is picturBuffer or
-        
         if self.isPictureBuffer {
             return
         }
         
-        // Construct the JavaScript string to seek the video to newTime
         let jsString = "document.querySelector('video').currentTime = \(time);"
-        // Evaluate the JavaScript in the WKWebView
+        
         self.pictureBuffer.evaluateJavaScript(jsString) { (result, error) in
             if let error = error {
                 print("JavaScript evaluation error: \(error.localizedDescription)")

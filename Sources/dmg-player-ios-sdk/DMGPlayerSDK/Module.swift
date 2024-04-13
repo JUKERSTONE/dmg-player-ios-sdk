@@ -1,4 +1,7 @@
-// Module.swift
+/**
+ Module.swift
+ © 2024 Jukerstone. All rights reserved.
+ */
 
 import SwiftUI
 import WebKit

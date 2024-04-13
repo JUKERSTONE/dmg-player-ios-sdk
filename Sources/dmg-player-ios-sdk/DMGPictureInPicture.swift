@@ -1,4 +1,7 @@
-// DMGPictureInPicture.swift
+/**
+ DMGPictureInPicture.swift
+ © 2024 Jukerstone. All rights reserved.
+ */
 
 import SwiftUI
 import WebKit
