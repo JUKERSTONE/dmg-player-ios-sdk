@@ -88,7 +88,7 @@ public class DMGPlayerSDK: NSObject, ObservableObject, WKScriptMessageHandler {
         if let url = URL(string: "https://google.com") {
             let request = URLRequest(url: url)
             
-            self.pictureBuffer.load(request)
+//            self.pictureBuffer.load(request)
             self.backgroundRunningPrimaryBuffer.load(request)
             self.backgroundRunningSecondaryBuffer.load(request)
         }
