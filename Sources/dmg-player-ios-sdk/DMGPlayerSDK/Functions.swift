@@ -107,6 +107,7 @@ extension DMGPlayerSDK {
                     }
                 })
                 
+                self.isPictureBuffer = false
                 self.isFreeRunning = true
             }
             

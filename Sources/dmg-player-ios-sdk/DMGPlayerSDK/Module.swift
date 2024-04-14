@@ -136,6 +136,17 @@ public class DMGPlayerSDK: NSObject, ObservableObject, WKScriptMessageHandler {
             }
         }
         
+        let url = self.buffer[self.index + 1] // check bounds
+        let javaScriptString = "window.location.href = '\(url)';"
+        
+        backgroundBuffer.evaluateJavaScript(javaScriptString, completionHandler: { result, error in
+            if let error = error {
+                print("JavaScript evaluation error: \(error.localizedDescription)")
+            } else {
+                print("JavaScript evaluated successfully")
+            }
+        })
+        
         self.isPictureBuffer = true
     }
     
