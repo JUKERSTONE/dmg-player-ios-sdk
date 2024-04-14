@@ -55,7 +55,7 @@ extension DMGPlayerSDK {
 
                         if percentile20 && self.hasLoadedNextRunner && !runway {
                             self.hasLoadedNextRunner = false
-                        } else if runway && !hasLoadedNextRunner && self.isBufferActive {
+                        } else if runway && !hasLoadedNextRunner && self.isBufferActive && !self.isPictureBuffer {
                             if self.isFreeRunning {
                                 if self.isPrimaryRunnerActive {
                                     self.loadRunner(webView: self.backgroundRunningPrimaryBuffer)
