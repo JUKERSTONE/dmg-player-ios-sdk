@@ -102,9 +102,9 @@ extension DMGPlayerSDK {
                 print("made it")
                 backgroundBuffer.evaluateJavaScript(buildActiveJavaScript(), completionHandler: { _, error in
                     if let error = error {
-                        print("Error during Java1Script execution: \(error.localizedDescription)")
+                        print("Error during bk play js: \(error.localizedDescription)")
                     } else {
-                        print("JavaScript executed successfully in foreground.")
+                        print("JavaScript executed successfully for bk.")
                     }
                 })
                 
