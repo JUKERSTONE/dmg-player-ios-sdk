@@ -140,13 +140,16 @@ public class DMGPlayerSDK: NSObject, ObservableObject, WKScriptMessageHandler {
             let url = self.buffer[self.index + 1]
             let javaScriptString = "window.location.href = '\(url)';"
             
-            backgroundBuffer.evaluateJavaScript(javaScriptString, completionHandler: { result, error in
-                if let error = error {
-                    print("JavaScript evaluation error: \(error.localizedDescription)")
-                } else {
-                    print("JavaScript evaluated successfully")
-                }
-            })
+//            backgroundBuffer.evaluateJavaScript(javaScriptString, completionHandler: { result, error in
+//                if let error = error {
+//                    print("JavaScript evaluation error: \(error.localizedDescription)")
+//                } else {
+//                    print("JavaScript evaluated successfully")
+//                }
+//            })
+            
+            let request = URLRequest(url: url)
+            backgroundBuffer.load(request)
         } else {
             // Handle the situation where self.index + 1 would be out of bounds
             // This could be resetting the index, or some other error handling
