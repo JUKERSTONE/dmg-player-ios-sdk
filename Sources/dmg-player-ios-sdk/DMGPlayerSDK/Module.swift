@@ -156,6 +156,7 @@ public class DMGPlayerSDK: NSObject, ObservableObject, WKScriptMessageHandler {
         }
 
         self.isPictureBuffer = true
+        self.isFreeRunning = false
     }
     
     @objc private func appMovedToBackground() {

@@ -99,6 +99,10 @@ extension DMGPlayerSDK {
                     print("Index is out of range of the buffer array")
                 }
             } else {
+                self.isBufferActive = true
+                self.isPictureBuffer = false
+                self.isFreeRunning = true
+                
                 backgroundBuffer.evaluateJavaScript(buildActiveJavaScript(), completionHandler: { _, error in
                     if let error = error {
                         print("Error during Java1Script execution: \(error.localizedDescription)")
@@ -106,9 +110,6 @@ extension DMGPlayerSDK {
                         print("JavaScript executed successfully in foreground.")
                     }
                 })
-                
-                self.isPictureBuffer = false
-                self.isFreeRunning = true
             }
             
             if self.index < self.queue.count - 1 {
@@ -117,7 +118,7 @@ extension DMGPlayerSDK {
                 print("Index is at the end of the queue")
             }
             
-           self.isBufferActive = true
+           
         }
     }
 
