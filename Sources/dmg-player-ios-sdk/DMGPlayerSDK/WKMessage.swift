@@ -84,6 +84,10 @@ extension DMGPlayerSDK {
                     return
                 }
                 
+                if self.isPictureBuffer {
+                    self.loadPicture()
+                }
+                
                 if self.isPrimaryActive {
                     self.isPrimaryActive = false
                     self.play(webView: self.foregroundSecondaryBuffer)

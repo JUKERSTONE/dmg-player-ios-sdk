@@ -36,6 +36,18 @@ extension DMGPlayerSDK {
         }
     }
     
+    func loadPicture() {
+        if self.index + 1 < self.buffer.count {
+            let url = self.buffer[self.index + 1]
+            let request = URLRequest(url: url)
+            
+            pictureBuffer.load(request)
+        } else {
+            // Handle the situation where self.index + 1 would be out of bounds
+            // This could be resetting the index, or some other error handling
+        }
+    }
+    
     func loadBackgroundBuffer(url: URL) {
         let request = URLRequest(url: url)
         pictureBuffer.load(request)
@@ -118,8 +130,6 @@ extension DMGPlayerSDK {
             } else {
                 print("Index is at the end of the queue")
             }
-            
-           
         }
     }
 
