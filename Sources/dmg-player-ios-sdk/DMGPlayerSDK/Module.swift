@@ -147,7 +147,6 @@ public class DMGPlayerSDK: NSObject, ObservableObject, WKScriptMessageHandler {
         }
 
         self.isPictureBuffer = true
-        // maybe here
         self.isFreeRunning = false
     }
     
