@@ -109,9 +109,6 @@ public class DMGPlayerSDK: NSObject, ObservableObject, WKScriptMessageHandler {
         
         if self.index + 1 < self.buffer.count {
             
-            self.isPictureBuffer = true
-            self.isFreeRunning = false
-            
             if isBufferActive {
                 pictureBuffer.evaluateJavaScript(buildActiveJavaScript(), completionHandler: { result, error in
                     if let error = error {
@@ -141,6 +138,9 @@ public class DMGPlayerSDK: NSObject, ObservableObject, WKScriptMessageHandler {
                     self.isPrimaryRunnerActive = true
                 }
             }
+            
+            self.isPictureBuffer = true
+            self.isFreeRunning = false
             
             let url = self.buffer[self.index + 1]
             let request = URLRequest(url: url)

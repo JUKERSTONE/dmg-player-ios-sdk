@@ -42,6 +42,8 @@ extension DMGPlayerSDK {
             let request = URLRequest(url: url)
             
             pictureBuffer.load(request)
+            
+            self.pictureCurrentTime = 0
         } else {
             // Handle the situation where self.index + 1 would be out of bounds
             // This could be resetting the index, or some other error handling
