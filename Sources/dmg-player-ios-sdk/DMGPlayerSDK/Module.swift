@@ -106,37 +106,42 @@ public class DMGPlayerSDK: NSObject, ObservableObject, WKScriptMessageHandler {
     @objc private func appDidBecomeActive() {
         isForeground = true
 
-        if isBufferActive {
-            pictureBuffer.evaluateJavaScript(buildActiveJavaScript(), completionHandler: { result, error in
-                if let error = error {
-                    print("JavaScript evaluation error: \(error.localizedDescription)")
-                } else {
-                    print("JavaScript evaluated successfully")
-                }
-            })
-        } else if isFreeRunning {
-            if self.isPrimaryRunnerActive {
-                pictureBuffer.evaluateJavaScript(buildActiveJavaScript(), completionHandler: { result, error in
-                    if let error = error {
-                        print("JavaScript evaluation error: \(error.localizedDescription)")
-                    } else {
-                        print("JavaScript evaluated successfully")
-                    }
-                })
-                self.isPrimaryRunnerActive = false
-            } else {
-                pictureBuffer.evaluateJavaScript(buildActiveJavaScript(), completionHandler: { result, error in
-                    if let error = error {
-                        print("JavaScript evaluation error: \(error.localizedDescription)")
-                    } else {
-                        print("JavaScript evaluated successfully")
-                    }
-                })
-                self.isPrimaryRunnerActive = true
-            }
-        }
         
         if self.index + 1 < self.buffer.count {
+            
+            self.isPictureBuffer = true
+            self.isFreeRunning = false
+            
+            if isBufferActive {
+                pictureBuffer.evaluateJavaScript(buildActiveJavaScript(), completionHandler: { result, error in
+                    if let error = error {
+                        print("JavaScript evaluation error: \(error.localizedDescription)")
+                    } else {
+                        print("JavaScript evaluated successfully")
+                    }
+                })
+            } else if isFreeRunning {
+                if self.isPrimaryRunnerActive {
+                    pictureBuffer.evaluateJavaScript(buildActiveJavaScript(), completionHandler: { result, error in
+                        if let error = error {
+                            print("JavaScript evaluation error: \(error.localizedDescription)")
+                        } else {
+                            print("JavaScript evaluated successfully")
+                        }
+                    })
+                    self.isPrimaryRunnerActive = false
+                } else {
+                    pictureBuffer.evaluateJavaScript(buildActiveJavaScript(), completionHandler: { result, error in
+                        if let error = error {
+                            print("JavaScript evaluation error: \(error.localizedDescription)")
+                        } else {
+                            print("JavaScript evaluated successfully")
+                        }
+                    })
+                    self.isPrimaryRunnerActive = true
+                }
+            }
+            
             let url = self.buffer[self.index + 1]
             let request = URLRequest(url: url)
             
@@ -146,8 +151,6 @@ public class DMGPlayerSDK: NSObject, ObservableObject, WKScriptMessageHandler {
             // This could be resetting the index, or some other error handling
         }
 
-        self.isPictureBuffer = true
-        self.isFreeRunning = false
     }
     
     @objc private func appMovedToBackground() {
