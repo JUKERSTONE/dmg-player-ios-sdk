@@ -105,10 +105,8 @@ public class DMGPlayerSDK: NSObject, ObservableObject, WKScriptMessageHandler {
     
     @objc private func appDidBecomeActive() {
         isForeground = true
-
         
         if self.index + 1 < self.buffer.count {
-            
             if isBufferActive {
                 pictureBuffer.evaluateJavaScript(buildActiveJavaScript(), completionHandler: { result, error in
                     if let error = error {

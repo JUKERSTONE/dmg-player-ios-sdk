@@ -52,8 +52,8 @@ public struct DMGPictureLicense: UIViewRepresentable {
         backgroundBuffer.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             backgroundBuffer.topAnchor.constraint(equalTo: containerView.topAnchor),
-            backgroundBuffer.widthAnchor.constraint(equalToConstant: 300),
-            backgroundBuffer.heightAnchor.constraint(equalToConstant: 150),
+            backgroundBuffer.widthAnchor.constraint(equalToConstant: 800),
+            backgroundBuffer.heightAnchor.constraint(equalToConstant: 300),
             backgroundBuffer.centerXAnchor.constraint(equalTo: containerView.leadingAnchor)
        ])
         
