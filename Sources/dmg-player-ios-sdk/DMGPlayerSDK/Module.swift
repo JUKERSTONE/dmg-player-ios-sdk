@@ -138,17 +138,8 @@ public class DMGPlayerSDK: NSObject, ObservableObject, WKScriptMessageHandler {
         
         if self.index + 1 < self.buffer.count {
             let url = self.buffer[self.index + 1]
-            let javaScriptString = "window.location.href = '\(url)';"
-            
-//            backgroundBuffer.evaluateJavaScript(javaScriptString, completionHandler: { result, error in
-//                if let error = error {
-//                    print("JavaScript evaluation error: \(error.localizedDescription)")
-//                } else {
-//                    print("JavaScript evaluated successfully")
-//                }
-//            })
-            
             let request = URLRequest(url: url)
+            
             backgroundBuffer.load(request)
         } else {
             // Handle the situation where self.index + 1 would be out of bounds
@@ -156,6 +147,7 @@ public class DMGPlayerSDK: NSObject, ObservableObject, WKScriptMessageHandler {
         }
 
         self.isPictureBuffer = true
+        // maybe here
         self.isFreeRunning = false
     }
     
