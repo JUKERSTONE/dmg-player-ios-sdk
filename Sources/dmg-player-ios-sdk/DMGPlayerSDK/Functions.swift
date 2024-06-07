@@ -84,6 +84,11 @@ extension DMGPlayerSDK {
     
     func play(webView: WKWebView) {
         if UIApplication.shared.applicationState == .active {
+            if webView === self.foregroundPrimaryBuffer {
+                print("webview is primary")
+            } else if webView === self.foregroundSecondaryBuffer {
+                print("webview is secondary")
+            }
             webView.evaluateJavaScript(buildActiveJavaScript(), completionHandler: { _, error in
                 if let error = error {
                     print("Error during JavaScript execution: \(error.localizedDescription)")
