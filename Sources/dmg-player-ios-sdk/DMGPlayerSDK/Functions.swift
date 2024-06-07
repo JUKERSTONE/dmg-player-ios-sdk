@@ -176,8 +176,10 @@ extension DMGPlayerSDK {
                             }
                             
                             if self.isPrimaryActive {
+                                print("queue")
                                 self.loadSecondaryBuffer(url: nextUp)
                             } else {
+                                print("queue 1")
                                 self.loadPrimaryBuffer(url: nextUp)
                             }
                         }
