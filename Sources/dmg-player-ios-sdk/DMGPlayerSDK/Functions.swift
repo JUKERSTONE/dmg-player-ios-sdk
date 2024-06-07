@@ -9,6 +9,19 @@ import AVFAudio
 
 @available(iOS 13.0, *)
 extension DMGPlayerSDK {
+    
+    func nilBuffer(webView: WKWebView) {
+        let javaScriptString = "window.location.href = 'https://google.com';"
+
+        webView.evaluateJavaScript(javaScriptString) { result, error in
+            if let error = error {
+                print("Error injecting the 'load' event listener: \(error.localizedDescription)")
+            } else {
+                print("JavaScript executed successfully in foregroundr.")
+            }
+        }
+    }
+    
     func loadRunner(webView: WKWebView) {
         if self.index < self.buffer.count - 1 {
             self.index += 1
@@ -84,11 +97,13 @@ extension DMGPlayerSDK {
     
     func play(webView: WKWebView) {
         if UIApplication.shared.applicationState == .active {
-            if webView === self.foregroundPrimaryBuffer {
-                print("webview is primary")
-            } else if webView === self.foregroundSecondaryBuffer {
-                print("webview is secondary")
+            
+            if self.isPrimaryActive {
+                nilBuffer(webView: self.foregroundSecondaryBuffer)
+            } else {
+                nilBuffer(webView: self.foregroundPrimaryBuffer)
             }
+            
             webView.evaluateJavaScript(buildActiveJavaScript(), completionHandler: { _, error in
                 if let error = error {
                     print("Error during JavaScript execution: \(error.localizedDescription)")
@@ -169,7 +184,6 @@ extension DMGPlayerSDK {
                             }
                             
                             let nextUp = urls[self.index + 1]
-                            print(self.index, "check index")
                             self.buffer = urls
                                 
                             if self.isBufferActive == false {
