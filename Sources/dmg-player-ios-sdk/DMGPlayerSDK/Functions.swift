@@ -168,7 +168,8 @@ extension DMGPlayerSDK {
                                 return URL(string: urlString.trimmingCharacters(in: CharacterSet(charactersIn: "\"")))
                             }
                             
-                            let nextUp = urls[1]
+                            let nextUp = urls[self.index + 1]
+                            print(self.index, "check index")
                             self.buffer = urls
                                 
                             if self.isBufferActive == false {
