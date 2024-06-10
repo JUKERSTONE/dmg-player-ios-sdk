@@ -20,7 +20,6 @@ public class DMGPlayerSDK: NSObject, ObservableObject, WKScriptMessageHandler {
     @Published var queue: [String] = []
     @Published var pictureCurrentTime : Double
     @Published var isForeground: Bool = false
-    @Published var isFreeRunning: Bool = false
     @Published var isBufferActive: Bool = false
     @Published var isPrimaryActive: Bool = true
     @Published var hasLoadedNextRunner: Bool = false
@@ -32,7 +31,6 @@ public class DMGPlayerSDK: NSObject, ObservableObject, WKScriptMessageHandler {
         self.queue = []
         self.buffer = []
         self.isPaused = false
-        self.isFreeRunning = false
         self.isBufferActive = false
         self.isPrimaryActive = true
         self.isPictureBuffer = false

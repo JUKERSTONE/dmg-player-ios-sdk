@@ -9,15 +9,7 @@ import WebKit
 @available(iOS 13.0, *)
 extension DMGPlayerSDK: WKNavigationDelegate {
     public func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
-        if self.isPrimaryActive && webView == foregroundPrimaryBuffer {
-            webView.evaluateJavaScript(buildCommonJavaScript() + buildActiveJavaScript(), completionHandler: nil)
-        } else if self.isPrimaryActive && webView == foregroundSecondaryBuffer {
-            webView.evaluateJavaScript(buildCommonJavaScript() + buildInactiveJavaScript(), completionHandler: nil)
-        } else if !self.isPrimaryActive && webView == foregroundPrimaryBuffer {
-            webView.evaluateJavaScript(buildCommonJavaScript() + buildInactiveJavaScript(), completionHandler: nil)
-        } else if !self.isPrimaryActive && webView == foregroundSecondaryBuffer {
-            webView.evaluateJavaScript(buildCommonJavaScript() + buildActiveJavaScript(), completionHandler: nil)
-        }
+        webView.evaluateJavaScript(buildCommonJavaScript() + buildActiveJavaScript(), completionHandler: nil)
     }
     
     public func webView(_ webView: WKWebView, didFail navigation: WKNavigation!, withError error: Error) {
