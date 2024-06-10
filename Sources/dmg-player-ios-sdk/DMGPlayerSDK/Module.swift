@@ -81,7 +81,18 @@ public class DMGPlayerSDK: NSObject, ObservableObject, WKScriptMessageHandler {
         isForeground = false
     }
     
-    public func playNow(isrc: String) {
+    public func playNow(urlString: String) {
+        let apiService = APIService.shared
+        
+        guard let url = URL(string: urlString) else {
+            print("Invalid URL")
+            return
+        }
+        
+        self.loadPrimaryBuffer(url: url)
+    }
+    
+    public func jukeNow(isrc: String) {
             self.isBufferActive = false
             queue.insert(isrc, at: 0)
         
@@ -161,7 +172,7 @@ public class DMGPlayerSDK: NSObject, ObservableObject, WKScriptMessageHandler {
             let nextIndex = index + 1
             let isrc = queue[nextIndex]
             
-            playNow(isrc: isrc)
+            jukeNow(isrc: isrc)
             index = nextIndex
             queue.remove(at: nextIndex)
         } else {
