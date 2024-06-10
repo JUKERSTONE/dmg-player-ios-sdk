@@ -33,46 +33,7 @@ extension DMGPlayerSDK {
 
             switch eventType {
             case "videoProgress":
-                if let dataDict = messageDict["data"] as? [String: Any] {
-                    if let progress = dataDict["progress"] as? Double,
-                       let currentTime = dataDict["currentTime"] as? Double,
-                       let duration = dataDict["duration"] as? Double {
-                        
-                        let percentile20 = progress >= 80.0
-                        let runway = currentTime >= duration - 5
-                        
-                        if !isForeground {
-                            if isBufferActive {
-                                self.pictureCurrentTime = currentTime
-                            } else if self.isFreeRunning == true {
-                                if self.isPrimaryRunnerActive {
-                                    self.pictureCurrentTime = currentTime
-                                } else {
-                                    self.pictureCurrentTime = currentTime
-                                }
-                            }
-                        }
-
-                        if percentile20 && self.hasLoadedNextRunner && !runway {
-                            self.hasLoadedNextRunner = false
-                        } else if runway && !hasLoadedNextRunner && self.isBufferActive && !self.isPictureBuffer {
-                            if self.isFreeRunning {
-                                if self.isPrimaryRunnerActive {
-                                    self.loadRunner(webView: self.backgroundRunningPrimaryBuffer)
-                                    self.isPrimaryRunnerActive = false
-                                } else {
-                                    self.loadRunner(webView: self.backgroundRunningSecondaryBuffer)
-                                    self.isPrimaryRunnerActive = true
-                                }
-                                self.hasLoadedNextRunner = true
-                            }
-                        }
-                    } else {
-                        print("The 'data' for 'videoProgress' does not contain valid 'progress', 'currentTime', or 'duration'.")
-                    }
-                } else {
-                    print("The 'data' for 'videoProgress' is not a dictionary or not present in the message body.")
-                }
+                return
             case "enablePiP":
                 if let data = messageDict["data"] as? Double {
                     print(data, "Pip Data")
@@ -82,10 +43,6 @@ extension DMGPlayerSDK {
             case "videoEnded":
                 if self.isFreeRunning {
                     return
-                }
-                
-                if self.isPictureBuffer {
-                    self.loadPicture()
                 }
                 
                 if self.isPrimaryActive {

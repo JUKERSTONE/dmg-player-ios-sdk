@@ -22,53 +22,6 @@ extension DMGPlayerSDK {
         }
     }
     
-    func loadRunner(webView: WKWebView) {
-        if self.index < self.buffer.count - 1 {
-            self.index += 1
-        } else {
-            print("Index is at the end of the queue")
-        }
-        
-        let url = self.buffer[self.index]
-        let javaScriptString = "window.location.href = '\(url)';"
-
-        webView.evaluateJavaScript(javaScriptString) { result, error in
-            if let error = error {
-                print("Error injecting the 'load' event listener: \(error.localizedDescription)")
-            } else {
-                print("JavaScript executed successfully in foregroundr.")
-            }
-        }
-        
-        pictureBuffer.evaluateJavaScript(javaScriptString) { result, error in
-            if let error = error {
-                print("Error injecting the 'load' event listener: \(error.localizedDescription)")
-            } else {
-                print("JavaScript executed successfully in foregroundr.")
-            }
-        }
-    }
-    
-    func loadPicture() {
-        if self.index + 1 < self.buffer.count {
-            let url = self.buffer[self.index + 1]
-            let request = URLRequest(url: url)
-            
-            pictureBuffer.load(request)
-            
-            self.pictureCurrentTime = 0
-        } else {
-            // Handle the situation where self.index + 1 would be out of bounds
-            // This could be resetting the index, or some other error handling
-        }
-    }
-    
-    func loadBackgroundBuffer(url: URL) {
-        let request = URLRequest(url: url)
-        pictureBuffer.load(request)
-        backgroundBuffer.load(request)
-    }
-    
     func loadPrimaryBuffer(url: URL) {
         let request = URLRequest(url: url)
         foregroundPrimaryBuffer.load(request)
@@ -77,22 +30,6 @@ extension DMGPlayerSDK {
     func loadSecondaryBuffer(url: URL) {
         let request = URLRequest(url: url)
         foregroundSecondaryBuffer.load(request)
-    }
-    
-    func synchronisePictureBuffer(time : Double) {
-        if self.isPictureBuffer {
-            return
-        }
-        
-        let jsString = "document.querySelector('video').currentTime = \(time);"
-        
-        self.pictureBuffer.evaluateJavaScript(jsString) { (result, error) in
-            if let error = error {
-                print("JavaScript evaluation error: \(error.localizedDescription)")
-            } else {
-                print("Video seeker updated to \(time) seconds.")
-            }
-        }
     }
     
     func play(webView: WKWebView) {
@@ -119,39 +56,6 @@ extension DMGPlayerSDK {
             }
 
                self.isBufferActive = false
-        } else {
-            if self.isFreeRunning == true {
-                if self.index + 1 < self.buffer.count {
-                    if self.isPrimaryRunnerActive {
-                        self.loadRunner(webView: self.backgroundRunningPrimaryBuffer)
-                        self.isPrimaryRunnerActive = false
-                    } else {
-                        self.loadRunner(webView: self.backgroundRunningSecondaryBuffer)
-                        self.isPrimaryRunnerActive = true
-                    }
-                } else {
-                    print("Index is out of range of the buffer array")
-                }
-            } else {
-                print("made it")
-                backgroundBuffer.evaluateJavaScript(buildActiveJavaScript(), completionHandler: { _, error in
-                    if let error = error {
-                        print("Error during bk play js: \(error.localizedDescription)")
-                    } else {
-                        print("JavaScript executed successfully for bk.")
-                    }
-                })
-                
-                self.isBufferActive = true
-                self.isPictureBuffer = false
-                self.isFreeRunning = true
-            }
-            
-            if self.index < self.queue.count - 1 {
-                self.index += 1
-            } else {
-                print("Index is at the end of the queue")
-            }
         }
     }
 
@@ -185,10 +89,7 @@ extension DMGPlayerSDK {
                             
                             let nextUp = urls[self.index + 1]
                             self.buffer = urls
-                                
-                            if self.isBufferActive == false {
-                                self.loadBackgroundBuffer(url: nextUp)
-                            }
+                            
                             
                             if self.isPrimaryActive {
                                 print("queue")

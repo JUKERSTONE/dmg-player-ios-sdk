@@ -14,12 +14,8 @@ public class DMGPlayerSDK: NSObject, ObservableObject, WKScriptMessageHandler {
     public var isPaused: Bool
     public var buffer: [URL] = []
     public var isPictureBuffer: Bool
-    public var pictureBuffer: WKWebView
-    public var backgroundBuffer: WKWebView
     public var foregroundPrimaryBuffer: WKWebView
     public var foregroundSecondaryBuffer: WKWebView
-    public var backgroundRunningPrimaryBuffer: WKWebView
-    public var backgroundRunningSecondaryBuffer: WKWebView
     
     @Published var queue: [String] = []
     @Published var pictureCurrentTime : Double
@@ -43,12 +39,8 @@ public class DMGPlayerSDK: NSObject, ObservableObject, WKScriptMessageHandler {
         self.hasLoadedNextRunner = false
         self.isPrimaryRunnerActive = true
         self.pictureCurrentTime = 0
-        self.pictureBuffer = WKWebView()
-        self.backgroundBuffer = WKWebView()
         self.foregroundPrimaryBuffer = WKWebView()
         self.foregroundSecondaryBuffer = WKWebView()
-        self.backgroundRunningPrimaryBuffer = WKWebView()
-        self.backgroundRunningSecondaryBuffer = WKWebView()
 
         super.init()
         
@@ -76,79 +68,13 @@ public class DMGPlayerSDK: NSObject, ObservableObject, WKScriptMessageHandler {
         bkConfig.mediaTypesRequiringUserActionForPlayback = []
         bkConfig.preferences.javaScriptCanOpenWindowsAutomatically = true
         
-        self.backgroundRunningSecondaryBuffer = WKWebView(frame: .zero, configuration: bkConfig)
-        self.backgroundRunningPrimaryBuffer = WKWebView(frame: .zero, configuration: bkConfig)
         self.foregroundSecondaryBuffer = WKWebView(frame: .zero, configuration: config)
         self.foregroundPrimaryBuffer = WKWebView(frame: .zero, configuration: config)
-        self.backgroundBuffer = WKWebView(frame: .zero, configuration: config)
-        self.pictureBuffer = WKWebView(frame: .zero, configuration: config)
     
-        self.backgroundRunningSecondaryBuffer.navigationDelegate = self
-        self.backgroundRunningPrimaryBuffer.navigationDelegate = self
         self.foregroundSecondaryBuffer.navigationDelegate = self
         self.foregroundPrimaryBuffer.navigationDelegate = self
-        self.backgroundBuffer.navigationDelegate = self
-        self.pictureBuffer.navigationDelegate = self
         
-        if let url = URL(string: "https://google.com") {
-            let request = URLRequest(url: url)
-            
-//            self.pictureBuffer.load(request)
-            self.backgroundRunningPrimaryBuffer.load(request)
-            self.backgroundRunningSecondaryBuffer.load(request)
-        }
-        
-        NotificationCenter.default.addObserver(self, selector: #selector(appDidBecomeActive), name: UIApplication.didBecomeActiveNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(appMovedToBackground), name: UIApplication.didEnterBackgroundNotification, object: nil)
-    }
-    
-    
-    @objc private func appDidBecomeActive() {
-        isForeground = true
-        
-        if self.index + 1 < self.buffer.count {
-            if isBufferActive {
-                pictureBuffer.evaluateJavaScript(buildActiveJavaScript(), completionHandler: { result, error in
-                    if let error = error {
-                        print("JavaScript evaluation error: \(error.localizedDescription)")
-                    } else {
-                        print("JavaScript evaluated successfully")
-                    }
-                })
-            } else if isFreeRunning {
-                if self.isPrimaryRunnerActive {
-                    pictureBuffer.evaluateJavaScript(buildActiveJavaScript(), completionHandler: { result, error in
-                        if let error = error {
-                            print("JavaScript evaluation error: \(error.localizedDescription)")
-                        } else {
-                            print("JavaScript evaluated successfully")
-                        }
-                    })
-                    self.isPrimaryRunnerActive = false
-                } else {
-                    pictureBuffer.evaluateJavaScript(buildActiveJavaScript(), completionHandler: { result, error in
-                        if let error = error {
-                            print("JavaScript evaluation error: \(error.localizedDescription)")
-                        } else {
-                            print("JavaScript evaluated successfully")
-                        }
-                    })
-                    self.isPrimaryRunnerActive = true
-                }
-            }
-            
-            self.isPictureBuffer = true
-            self.isFreeRunning = false
-            
-            let url = self.buffer[self.index + 1]
-            let request = URLRequest(url: url)
-            
-            backgroundBuffer.load(request)
-        } else {
-            // Handle the situation where self.index + 1 would be out of bounds
-            // This could be resetting the index, or some other error handling
-        }
-
     }
     
     @objc private func appMovedToBackground() {
@@ -215,41 +141,7 @@ public class DMGPlayerSDK: NSObject, ObservableObject, WKScriptMessageHandler {
     }
 
     public func pause() {
-        if isBufferActive {
-            if isFreeRunning {
-                    if self.index + 1 < self.buffer.count {
-                        if self.isPrimaryRunnerActive {
-                            backgroundRunningPrimaryBuffer.evaluateJavaScript(buildPauseJavaScript(), completionHandler: { result, error in
-                                if let error = error {
-                                    print("JavaScript evaluation error: \(error.localizedDescription)")
-                                } else {
-                                    print("JavaScript evaluated successfully")
-                                }
-                        })
-                        self.isPrimaryRunnerActive = false
-                        } else {
-                            backgroundRunningSecondaryBuffer.evaluateJavaScript(buildPauseJavaScript(), completionHandler: { result, error in
-                                if let error = error {
-                                    print("JavaScript evaluation error: \(error.localizedDescription)")
-                                } else {
-                                    print("JavaScript evaluated successfully")
-                                }
-                        })
-                            self.isPrimaryRunnerActive = true
-                        }
-                    } else {
-                        print("Index is out of range of the buffer array")
-                    }
-            } else {
-                backgroundBuffer.evaluateJavaScript(buildPauseJavaScript(), completionHandler: { result, error in
-                    if let error = error {
-                        print("JavaScript evaluation error: \(error.localizedDescription)")
-                    } else {
-                        print("JavaScript evaluated successfully")
-                    }
-                })
-            }
-        } else if isPrimaryActive {
+        if isPrimaryActive {
             foregroundPrimaryBuffer.evaluateJavaScript(buildPauseJavaScript(), completionHandler: nil)
         } else {
             foregroundSecondaryBuffer.evaluateJavaScript(buildPauseJavaScript(), completionHandler: nil)
@@ -257,41 +149,7 @@ public class DMGPlayerSDK: NSObject, ObservableObject, WKScriptMessageHandler {
     }
     
     public func resume() {
-        if isBufferActive {
-            if isFreeRunning {
-                    if self.index + 1 < self.buffer.count {
-                        if self.isPrimaryRunnerActive {
-                            backgroundRunningPrimaryBuffer.evaluateJavaScript(buildPlayJavaScript(), completionHandler: { result, error in
-                                if let error = error {
-                                    print("JavaScript evaluation error: \(error.localizedDescription)")
-                                } else {
-                                    print("JavaScript evaluated successfully")
-                                }
-                        })
-                        self.isPrimaryRunnerActive = false
-                        } else {
-                            backgroundRunningSecondaryBuffer.evaluateJavaScript(buildPlayJavaScript(), completionHandler: { result, error in
-                                if let error = error {
-                                    print("JavaScript evaluation error: \(error.localizedDescription)")
-                                } else {
-                                    print("JavaScript evaluated successfully")
-                                }
-                        })
-                            self.isPrimaryRunnerActive = true
-                        }
-                    } else {
-                        print("Index is out of range of the buffer array")
-                    }
-            } else {
-                backgroundBuffer.evaluateJavaScript(buildPlayJavaScript(), completionHandler: { result, error in
-                    if let error = error {
-                        print("JavaScript evaluation error: \(error.localizedDescription)")
-                    } else {
-                        print("JavaScript evaluated successfully")
-                    }
-                })
-            }
-        } else if isPrimaryActive {
+        if isPrimaryActive {
             foregroundPrimaryBuffer.evaluateJavaScript(buildPlayJavaScript(), completionHandler: nil)
         } else {
             foregroundSecondaryBuffer.evaluateJavaScript(buildPlayJavaScript(), completionHandler: nil)
@@ -314,9 +172,6 @@ public class DMGPlayerSDK: NSObject, ObservableObject, WKScriptMessageHandler {
     public func stop() {
         foregroundPrimaryBuffer.loadHTMLString("", baseURL: nil)
         foregroundSecondaryBuffer.loadHTMLString("", baseURL: nil)
-        backgroundBuffer.loadHTMLString("", baseURL: nil)
-        backgroundRunningPrimaryBuffer.loadHTMLString("", baseURL: nil)
-        backgroundRunningSecondaryBuffer.loadHTMLString("", baseURL: nil)
     }
 }
 

@@ -17,16 +17,6 @@ public struct DMGPictureLicense: UIViewRepresentable {
     public func makeUIView(context: Context) -> UIView {
         let containerView = UIView()
         
-        let pictureBuffer = sdk.pictureBuffer
-        containerView.addSubview(pictureBuffer)
-        pictureBuffer.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            pictureBuffer.topAnchor.constraint(equalTo: containerView.topAnchor),
-            pictureBuffer.widthAnchor.constraint(equalToConstant: 100),
-            pictureBuffer.heightAnchor.constraint(equalToConstant: 200),
-            pictureBuffer.centerXAnchor.constraint(equalTo: containerView.leadingAnchor)
-       ])
-        
         let foregroundPrimaryBuffer = sdk.foregroundPrimaryBuffer
         containerView.addSubview(foregroundPrimaryBuffer)
         foregroundPrimaryBuffer.translatesAutoresizingMaskIntoConstraints = false
@@ -47,36 +37,6 @@ public struct DMGPictureLicense: UIViewRepresentable {
             foregroundSecondaryBuffer.centerXAnchor.constraint(equalTo: containerView.trailingAnchor)
        ])
         
-        let backgroundBuffer = sdk.backgroundBuffer
-        containerView.addSubview(backgroundBuffer)
-        backgroundBuffer.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            backgroundBuffer.topAnchor.constraint(equalTo: containerView.centerYAnchor),
-            backgroundBuffer.widthAnchor.constraint(equalToConstant: 100),
-            backgroundBuffer.heightAnchor.constraint(equalToConstant: 200),
-            backgroundBuffer.centerXAnchor.constraint(equalTo: containerView.leadingAnchor)
-       ])
-        
-        let backgroundRunningPrimaryBuffer = sdk.backgroundRunningPrimaryBuffer
-        containerView.addSubview(backgroundRunningPrimaryBuffer)
-        backgroundRunningPrimaryBuffer.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            backgroundRunningPrimaryBuffer.topAnchor.constraint(equalTo: containerView.centerYAnchor),
-            backgroundRunningPrimaryBuffer.widthAnchor.constraint(equalToConstant: 100),
-            backgroundRunningPrimaryBuffer.heightAnchor.constraint(equalToConstant: 200),
-            backgroundRunningPrimaryBuffer.centerXAnchor.constraint(equalTo: containerView.centerXAnchor)
-       ])
-        
-        let backgroundRunningSecondaryBuffer = sdk.backgroundRunningSecondaryBuffer
-        containerView.addSubview(backgroundRunningSecondaryBuffer)
-        backgroundRunningSecondaryBuffer.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            backgroundRunningSecondaryBuffer.topAnchor.constraint(equalTo: containerView.centerYAnchor),
-            backgroundRunningSecondaryBuffer.widthAnchor.constraint(equalToConstant: 100),
-            backgroundRunningSecondaryBuffer.heightAnchor.constraint(equalToConstant: 200),
-            backgroundRunningSecondaryBuffer.centerXAnchor.constraint(equalTo: containerView.trailingAnchor)
-       ])
-        
         return containerView
     }
     
@@ -91,14 +51,6 @@ public struct DMGPictureLicense: UIViewRepresentable {
             } else {
                 print("No next item to preload")
             }
-        }
-        
-        let currentTimeSubscriber = sdk.$pictureCurrentTime
-        
-        currentTimeSubscriber.sink { [weak sdk] newTime in
-            guard let sdk = sdk else { return }
-            
-            sdk.synchronisePictureBuffer(time: newTime)
         }
     }
 }
