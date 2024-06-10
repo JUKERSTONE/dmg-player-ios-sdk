@@ -41,17 +41,7 @@ extension DMGPlayerSDK {
                     print("Error PiP")
                 }
             case "videoEnded":
-                if self.isFreeRunning {
-                    return
-                }
-                
-                if self.isPrimaryActive {
-                    self.isPrimaryActive = false
-                    self.play(webView: self.foregroundSecondaryBuffer)
-                } else {
-                    self.isPrimaryActive = true
-                    self.play(webView: self.foregroundPrimaryBuffer)
-                }
+                return
             default:
                 print("Unknown event type received: \(eventType)")
             }
